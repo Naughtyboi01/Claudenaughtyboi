@@ -6,7 +6,10 @@
   'use strict';
 
   /* ── config ─────────────────────────────────────────────── */
-  const FRAME_COUNT = 96;
+  // The standalone build injects window.__FRAMES (data URIs) ahead of this
+  // script; everything downstream is identical either way.
+  const EMBEDDED    = Array.isArray(window.__FRAMES) ? window.__FRAMES : null;
+  const FRAME_COUNT = EMBEDDED ? EMBEDDED.length : 96;
   const FRAME_PAD   = 4;
   const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const COARSE  = matchMedia('(hover: none), (pointer: coarse)').matches;
@@ -98,7 +101,7 @@
   const useSmall = state.vw < 900 || conn.saveData === true ||
                    /2g/.test(conn.effectiveType || '');
   const SET = useSmall ? 'sm' : 'lg';
-  const src = i => `assets/frames/${SET}/${pad(i + 1, FRAME_PAD)}.jpg`;
+  const src = i => EMBEDDED ? EMBEDDED[i] : `assets/frames/${SET}/${pad(i + 1, FRAME_PAD)}.jpg`;
 
   const frames  = new Array(FRAME_COUNT);
   const ready   = new Array(FRAME_COUNT).fill(false);

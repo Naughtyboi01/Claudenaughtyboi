@@ -73,6 +73,32 @@ assets/
 python3 -m http.server 8000   # any static server; file:// works too
 ```
 
+## Offline
+
+The page makes no network requests at runtime, so the folder already works with
+no connection — including straight off `file://`.
+
+For a version you can email, carry on a stick, or open with nothing else
+alongside it, `airmax95-offline.html` is the **whole site as one file**: styles,
+fonts, all 96 hero frames, the stills and the video, inlined. 8.6 MB, opens in
+about a second from disk since nothing is fetched.
+
+Rebuild it after any edit:
+
+```bash
+python3 build-offline.py                # -> airmax95-offline.html (1280px frames)
+python3 build-offline.py --frames sm    # ~4 MB, 720px frames
+```
+
+Two things worth knowing about that build:
+
+- Frames go in as a `window.__FRAMES` array of data URIs; `main.js` detects it
+  and skips its path-based loading, so both builds share one codebase.
+- The video is inlined as base64 and handed over as a **Blob URL**, not a data:
+  URI — Safari wants byte-range requests for media and will not reliably play a
+  data: URI video. The video also carries a poster, so the Air section still
+  reads as designed if a browser can't decode H.264.
+
 ## Credits
 
 An independent design study. Not affiliated with or endorsed by Nike, Inc.

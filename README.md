@@ -99,6 +99,18 @@ Two things worth knowing about that build:
   data: URI video. The video also carries a poster, so the Air section still
   reads as designed if a browser can't decode H.264.
 
+## Demo
+
+`demo/air-max-95-demo.mp4` — an 83-second walkthrough of the offline file,
+recorded at 1440×900 straight off `file://`. The scroll is driven by an eased
+timeline whose stops come from the page's measured geometry, so each one lands
+where it should: the hero scrub, the Air callout timed to the close-up, all four
+anatomy chapters, the archive rail, and the reserve panel.
+
+One caveat: the Air section's background shows its poster rather than the
+playing loop, because the headless Chromium used to record has no H.264 decoder.
+In a real browser that footage plays.
+
 ## Credits
 
 An independent design study. Not affiliated with or endorsed by Nike, Inc.

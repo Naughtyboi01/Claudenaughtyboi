@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AIR MAX 95 — The Anatomy of Air</title>
+<meta name="description" content="A study of the Nike Air Max 95. Designed by Sergio Lozano in 1995. Gradient layers, visible forefoot Air, and the anatomy that started it all." />
+<meta name="theme-color" content="#0b0b0c" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' fill='%23d7ff3b' text-anchor='middle'%3E95%3C/text%3E%3C/svg%3E" />
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/instrument-serif-400.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-var.woff2" crossorigin />
+<link rel="preload" as="image" href="assets/frames/lg/0001.jpg" />
+<link rel="stylesheet" href="assets/css/fonts.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
+
+<noscript>
+  <style>
+    /* the scroll engine never boots — hand the page back to the reader */
+    body.is-loading { overflow: auto; height: auto; }
+    .loader, .hero__track { display: none; }
+    .hero { min-height: auto; }
+    .hero::after {
+      content: "";
+      display: block;
+      height: 78vh;
+      background: url("assets/img/hero-poster.jpg") center / cover no-repeat;
+    }
+    [data-reveal], [data-split] .ch, [data-split-lines] .ln > span, .beat { opacity: 1; transform: none; }
+    [data-words] .w { opacity: 1; }
+    .anatomy { height: auto; }
+    .anatomy__pin { position: static; height: auto; padding-block: 90px; }
+    .archive { height: auto; }
+    .archive__pin { position: static; height: auto; padding-block: 90px; }
+    .archive__viewport { overflow-x: auto; }
+    .ana__text { max-height: none; opacity: 1; }
+  </style>
+</noscript>
+</head>
+<body class="is-loading">
+
+<!-- ═══════════════════════════ PRELOADER ═══════════════════════════ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <div class="loader__mark">
+      <span class="loader__word">AIR</span>
+      <span class="loader__word">MAX</span>
+      <span class="loader__word loader__word--num">95</span>
+    </div>
+    <div class="loader__meta">
+      <span class="mono">LOADING SEQUENCE</span>
+      <span class="mono loader__count"><i id="loaderCount">0</i>%</span>
+    </div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ CURSOR ═══════════════════════════ -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+</div>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" data-magnetic>
+    <span class="nav__swoosh" aria-hidden="true">
+      <svg viewBox="0 0 100 36" fill="none"><path d="M99.2.7 26.6 31.4Q17.4 35.3 11.1 35.3q-7.1 0-10.3-5-2-3.2-.4-8.2 1.6-5 6.9-11.8 4.4-5.5 14.2-15.1-3.6 5.8-5 9.9-2.7 7.7 2 11.2 2.2 1.6 6 1.6 3 0 6.9-1L99.2.7Z" fill="currentColor"/></svg>
+    </span>
+    <span class="mono">AIR MAX 95</span>
+  </a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#anatomy" data-magnetic><span>Anatomy</span></a>
+    <a href="#materials" data-magnetic><span>Materials</span></a>
+    <a href="#archive" data-magnetic><span>Archive</span></a>
+    <a href="#reserve" data-magnetic><span>Reserve</span></a>
+  </nav>
+  <a href="#reserve" class="nav__cta" data-magnetic>
+    <span class="mono">Reserve</span>
+    <i class="dot"></i>
+  </a>
+</header>
+
+<main id="top">
+
+<!-- ═══════════════════════════ HERO — SCROLL SCRUB ═══════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero__track" id="heroTrack">
+    <div class="hero__stage">
+
+      <canvas class="hero__canvas" id="heroCanvas" aria-label="Nike Air Max 95 rotating study"></canvas>
+      <div class="hero__grain" aria-hidden="true"></div>
+      <div class="hero__vignette" aria-hidden="true"></div>
+
+      <!-- BEAT 01 — Wordmark -->
+      <div class="beat beat--1" data-beat="1">
+        <div class="hero__eyebrow mono"><i class="dot"></i> EST. 1995 · SERGIO LOZANO</div>
+        <h1 class="hero__title">
+          <span class="line" data-split>AIR&nbsp;MAX</span>
+          <span class="line line--num" data-split>95</span>
+        </h1>
+        <div class="hero__sub mono">A STUDY IN HUMAN ANATOMY</div>
+      </div>
+
+      <!-- BEAT 02 — Statement -->
+      <div class="beat beat--2" data-beat="2">
+        <p class="beat__lede">
+          He drew the <em>spine</em>, then the ribs,<br />
+          then the skin — and shaped a shoe<br />
+          around the body that wears it.
+        </p>
+      </div>
+
+      <!-- BEAT 03 — Air callout -->
+      <div class="beat beat--3" data-beat="3">
+        <div class="callout">
+          <span class="callout__rule" aria-hidden="true"></span>
+          <div class="callout__body">
+            <span class="mono callout__idx">03 — DETAIL</span>
+            <h2 class="callout__title">Visible Air,<br />underfoot &amp; forward.</h2>
+            <p class="callout__text">The first Nike to expose an Air unit in the forefoot. Pressurised gas, held in a window, carrying every step.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BEAT 04 — End card -->
+      <div class="beat beat--4" data-beat="4">
+        <h2 class="beat__end">
+          <span class="line" data-split>THE ANATOMY</span>
+          <span class="line line--it" data-split>of Air</span>
+        </h2>
+      </div>
+
+      <!-- HUD -->
+      <div class="hud" aria-hidden="true">
+        <div class="hud__left mono">
+          <span class="hud__label">SEQ</span>
+          <span class="hud__val" id="hudFrame">000</span>
+          <span class="hud__sep">/</span>
+          <span class="hud__val" id="hudTotal">000</span>
+        </div>
+        <div class="hud__rail"><i id="hudRail"></i></div>
+        <div class="hud__right mono">
+          <span id="hudPhase">PROFILE</span>
+        </div>
+      </div>
+
+      <div class="scrollcue" id="scrollCue" aria-hidden="true">
+        <span class="mono">SCROLL</span>
+        <span class="scrollcue__line"><i></i></span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ MARQUEE ═══════════════════════════ -->
+<section class="marquee" aria-hidden="true">
+  <div class="marquee__row" data-marquee data-speed="0.6">
+    <span>GRADIENT LAYERS</span><i>◆</i><span>VISIBLE FOREFOOT AIR</span><i>◆</i><span>3M REFLECTIVE</span><i>◆</i>
+    <span>NYLON MESH</span><i>◆</i><span>DESIGNED 1995</span><i>◆</i>
+    <span>GRADIENT LAYERS</span><i>◆</i><span>VISIBLE FOREFOOT AIR</span><i>◆</i><span>3M REFLECTIVE</span><i>◆</i>
+    <span>NYLON MESH</span><i>◆</i><span>DESIGNED 1995</span><i>◆</i>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ MANIFESTO ═══════════════════════════ -->
+<section class="manifesto" id="manifesto">
+  <div class="shell">
+    <span class="sect-idx mono">01 / ORIGIN</span>
+    <p class="manifesto__text" data-words>
+      In 1995 Sergio Lozano looked away from the running track and into the body itself.
+      The layered panels became <em>ribs</em>. The mesh, <em>muscle fibre</em>. The lace loops,
+      <em>the eyelets of a spine</em>. Then he cut a window into the sole and let you see
+      the air that carries you.
+    </p>
+    <div class="manifesto__foot">
+      <div class="sig">
+        <span class="sig__name">Sergio Lozano</span>
+        <span class="mono sig__role">Designer · Nike Air Max 95</span>
+      </div>
+      <div class="manifesto__stat">
+        <span class="stat__num" data-count="1995">1995</span>
+        <span class="mono">YEAR OF RELEASE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ ANATOMY — PINNED HOTSPOTS ═══════════════════════════ -->
+<section class="anatomy" id="anatomy">
+  <div class="anatomy__pin">
+    <div class="anatomy__stage">
+      <figure class="anatomy__fig">
+        <div class="anatomy__media">
+          <img src="assets/img/anatomy-profile.jpg" alt="Profile study of the Air Max 95" id="anatomyImg" />
+          <div class="anatomy__spots" id="anatomySpots">
+            <button class="spot" style="--x:33%; --y:52%" data-spot="0" aria-label="Gradient panels"><i></i></button>
+            <button class="spot" style="--x:41%; --y:22%" data-spot="1" aria-label="Nylon mesh"><i></i></button>
+            <button class="spot" style="--x:58%; --y:82%" data-spot="2" aria-label="Visible Air"><i></i></button>
+            <button class="spot" style="--x:76%; --y:89%" data-spot="3" aria-label="Waffle outsole"><i></i></button>
+          </div>
+        </div>
+        <figcaption class="anatomy__cap mono">
+          <span>FIG. 02 — LATERAL PROFILE</span>
+          <span id="anaCap">A1 · GRADIENT RIBCAGE</span>
+        </figcaption>
+      </figure>
+      <div class="anatomy__panel">
+        <span class="sect-idx mono">02 / ANATOMY</span>
+        <ol class="anatomy__list" id="anatomyList">
+          <li class="ana is-active" data-ana="0">
+            <span class="ana__idx mono">A1</span>
+            <h3 class="ana__title">Gradient Ribcage</h3>
+            <p class="ana__text">Five stacked panels fade light to dark — built to hide the scuffs of the city and read as one continuous body.</p>
+          </li>
+          <li class="ana" data-ana="1">
+            <span class="ana__idx mono">A2</span>
+            <h3 class="ana__title">Muscle Fibre Mesh</h3>
+            <p class="ana__text">An open nylon weave laid over the midfoot, breathing where the foot flexes hardest.</p>
+          </li>
+          <li class="ana" data-ana="2">
+            <span class="ana__idx mono">A3</span>
+            <h3 class="ana__title">Visible Forefoot Air</h3>
+            <p class="ana__text">Pressurised Air, exposed for the first time under the toes. Cushioning you can look straight through.</p>
+          </li>
+          <li class="ana" data-ana="3">
+            <span class="ana__idx mono">A4</span>
+            <h3 class="ana__title">Eroded Waffle</h3>
+            <p class="ana__text">A tread drawn from desert floor after rain — channels cut by water, translated into rubber.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ MATERIALS ═══════════════════════════ -->
+<section class="materials" id="materials">
+  <div class="shell">
+    <header class="sect-head">
+      <span class="sect-idx mono">03 / MATERIALS</span>
+      <h2 class="sect-title" data-split-lines>Built from<br /><em>five</em> honest layers.</h2>
+    </header>
+  </div>
+  <div class="mat-grid">
+    <article class="mat" data-reveal>
+      <div class="mat__media"><img src="assets/img/detail-lace.jpg" alt="Lace and eyelet detail" data-parallax /></div>
+      <div class="mat__meta">
+        <span class="mono">M.01</span>
+        <h3>Waxed Flat Lace</h3>
+        <p>Woven flat, waxed lightly, threaded through soft-lock loops that hold tension without biting.</p>
+      </div>
+    </article>
+    <article class="mat mat--tall" data-reveal>
+      <div class="mat__media"><img src="assets/img/detail-air.jpg" alt="Visible Air unit detail" data-parallax /></div>
+      <div class="mat__meta">
+        <span class="mono">M.02</span>
+        <h3>Pressurised Air</h3>
+        <p>A sealed window of gas set into polyurethane — the structural heart of the silhouette.</p>
+      </div>
+    </article>
+    <article class="mat" data-reveal>
+      <div class="mat__media"><img src="assets/img/detail-tongue.jpg" alt="Air Max tongue badge" data-parallax /></div>
+      <div class="mat__meta">
+        <span class="mono">M.03</span>
+        <h3>Debossed Badge</h3>
+        <p>The wordmark pressed rather than printed — a mark you find with your thumb before your eye.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ AIR — VIDEO LOOP ═══════════════════════════ -->
+<section class="air" id="air">
+  <video class="air__video" id="airVideo" src="assets/media/air-max-95.mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <div class="air__scrim" aria-hidden="true"></div>
+  <div class="air__copy">
+    <span class="sect-idx mono">04 / AIR</span>
+    <h2 class="air__title" data-split-lines>Twenty-four<br />pounds per<br /><em>square inch.</em></h2>
+    <p class="air__text">Nitrogen held under tension in a urethane skin. It does not compress into nothing, and it does not come back tired.</p>
+    <div class="air__stats">
+      <div><span class="stat__num">1st</span><span class="mono">VISIBLE FOREFOOT AIR</span></div>
+      <div><span class="stat__num">30</span><span class="mono">YEARS IN ROTATION</span></div>
+      <div><span class="stat__num">∞</span><span class="mono">RETURN OF ENERGY</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ ARCHIVE — HORIZONTAL ═══════════════════════════ -->
+<section class="archive" id="archive">
+  <div class="archive__pin">
+    <div class="archive__viewport">
+      <div class="archive__rail" id="archiveRail">
+
+        <div class="arch-intro">
+          <span class="sect-idx mono">05 / ARCHIVE</span>
+          <h2 class="sect-title">Four<br /><em>editions.</em></h2>
+          <p class="arch-intro__text">Selected finishes from the house archive. Each built on the same skeleton, dressed in a different weather.</p>
+          <span class="mono arch-intro__cue">DRAG · SCROLL →</span>
+        </div>
+
+        <article class="card" style="--c1:#e9e4dc; --c2:#b9ad9b; --c3:#6f6a63">
+          <div class="card__swatch"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="card__body">
+            <span class="mono card__idx">ED. 01</span>
+            <h3>Bone Gradient</h3>
+            <p class="mono">SAIL / LIGHT BONE / STONE</p>
+          </div>
+        </article>
+
+        <article class="card" style="--c1:#d8d8d6; --c2:#8f9296; --c3:#2f3236">
+          <div class="card__swatch"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="card__body">
+            <span class="mono card__idx">ED. 02</span>
+            <h3>Neon Original</h3>
+            <p class="mono">GRANITE / VOLT / BLACK</p>
+          </div>
+          <span class="card__flag" style="--flag:var(--volt)"></span>
+        </article>
+
+        <article class="card" style="--c1:#c9b9a4; --c2:#8d7b66; --c3:#4a4139">
+          <div class="card__swatch"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="card__body">
+            <span class="mono card__idx">ED. 03</span>
+            <h3>Desert Erosion</h3>
+            <p class="mono">SANDDRIFT / KHAKI / EARTH</p>
+          </div>
+        </article>
+
+        <article class="card" style="--c1:#3a3d42; --c2:#22252a; --c3:#0d0e10">
+          <div class="card__swatch"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="card__body">
+            <span class="mono card__idx">ED. 04</span>
+            <h3>Obsidian Noir</h3>
+            <p class="mono">ANTHRACITE / OIL GREY / BLACK</p>
+          </div>
+        </article>
+
+        <div class="arch-out">
+          <span class="mono">END OF ARCHIVE</span>
+          <a href="#reserve" class="btn btn--ghost" data-magnetic><span>Reserve a pair</span></a>
+        </div>
+
+      </div>
+    </div>
+    <div class="archive__prog"><i id="archiveProg"></i></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SPEC ═══════════════════════════ -->
+<section class="spec" id="spec">
+  <div class="shell">
+    <header class="sect-head">
+      <span class="sect-idx mono">06 / SPECIFICATION</span>
+      <h2 class="sect-title" data-split-lines>The measure<br />of the thing.</h2>
+    </header>
+    <dl class="spec__table">
+      <div class="spec__row" data-reveal><dt class="mono">SILHOUETTE</dt><dd>Air Max 95 — low, layered, anatomical</dd></div>
+      <div class="spec__row" data-reveal><dt class="mono">DESIGNER</dt><dd>Sergio Lozano, 1995</dd></div>
+      <div class="spec__row" data-reveal><dt class="mono">UPPER</dt><dd>Graded suede, nylon mesh, synthetic overlay</dd></div>
+      <div class="spec__row" data-reveal><dt class="mono">CUSHIONING</dt><dd>Visible Max Air — heel and forefoot</dd></div>
+      <div class="spec__row" data-reveal><dt class="mono">MIDSOLE</dt><dd>Polyurethane, sculpted spine profile</dd></div>
+      <div class="spec__row" data-reveal><dt class="mono">OUTSOLE</dt><dd>Waffle rubber, eroded channel tread</dd></div>
+      <div class="spec__row" data-reveal><dt class="mono">FINISH</dt><dd>Debossed tongue badge, 3M reflective accents</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ RESERVE ═══════════════════════════ -->
+<section class="reserve" id="reserve">
+  <div class="shell reserve__inner">
+    <span class="sect-idx mono">07 / RESERVE</span>
+    <h2 class="reserve__title">
+      <span class="line" data-split>SECURE</span>
+      <span class="line line--it" data-split>your pair</span>
+    </h2>
+    <p class="reserve__text">A limited release. Enter your details to hold a size for forty-eight hours.</p>
+
+    <form class="rform" id="rform" novalidate>
+      <div class="rform__field">
+        <label for="email" class="mono">EMAIL</label>
+        <input type="email" id="email" name="email" placeholder="you@studio.com" autocomplete="email" required />
+      </div>
+      <div class="rform__field rform__field--sm">
+        <label for="size" class="mono">UK SIZE</label>
+        <select id="size" name="size">
+          <option>6</option><option>7</option><option selected>8</option>
+          <option>9</option><option>10</option><option>11</option><option>12</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn--solid" data-magnetic><span>Hold my size</span><i class="dot"></i></button>
+      <p class="rform__note mono" id="rformNote" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="foot">
+  <div class="foot__mark" aria-hidden="true">
+    <span data-marquee data-speed="0.35">AIR MAX 95 · AIR MAX 95 · AIR MAX 95 · AIR MAX 95 · </span>
+  </div>
+  <div class="shell foot__grid">
+    <div class="foot__col">
+      <span class="mono foot__label">CONCEPT</span>
+      <p>An independent design study of the Air Max 95. Not affiliated with or endorsed by Nike, Inc.</p>
+    </div>
+    <div class="foot__col">
+      <span class="mono foot__label">INDEX</span>
+      <ul>
+        <li><a href="#manifesto">Origin</a></li>
+        <li><a href="#anatomy">Anatomy</a></li>
+        <li><a href="#materials">Materials</a></li>
+        <li><a href="#archive">Archive</a></li>
+        <li><a href="#spec">Specification</a></li>
+      </ul>
+    </div>
+    <div class="foot__col">
+      <span class="mono foot__label">COLOPHON</span>
+      <p>Instrument Serif · Inter · JetBrains Mono. Built with a hand-written scroll engine — no framework, no library.</p>
+    </div>
+    <div class="foot__col foot__col--end">
+      <button class="btn btn--ghost" data-scroll-top data-magnetic><span>Back to top ↑</span></button>
+      <span class="mono foot__copy">© 1995 — <i id="year"></i></span>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

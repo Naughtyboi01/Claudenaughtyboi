@@ -115,6 +115,42 @@ sends nothing anywhere — wire it to a real order system before launch.
 python3 -m http.server 8000   # any static server; file:// works too
 ```
 
+## Offline — the whole site as one file
+
+The page makes no network requests at runtime, so the folder already works
+with no connection. For a version you can email, put on a stick, or open with
+nothing else beside it, there are two single-file builds:
+
+| File | Size | For |
+|---|---|---|
+| `house-of-rocky-offline.html` | 10.6 MB | Desktop — 1000px hero frames, full-size stills |
+| `house-of-rocky-offline-mobile.html` | 5.8 MB | Phones and sharing — 620px frames, stills capped at 900px |
+
+Both are the complete site: styles, fonts, all 109 hero frames, the stills and
+the film. Open either straight off `file://` — it loads in about a second
+because nothing is fetched, and every section behaves exactly as it does when
+served.
+
+Rebuild after any edit:
+
+```bash
+python3 build-offline.py                   # desktop
+python3 build-offline.py --preset mobile   # lighter
+python3 build-offline.py --site airmax95   # the older study
+```
+
+Three things worth knowing about that build:
+
+- Frames go in as a `window.__FRAMES` array of data URIs; `main.js` detects it
+  and skips its path-based loading, so both builds share one codebase.
+- The video is inlined as base64 and handed over as a **Blob URL**, not a
+  `data:` URI — Safari wants byte-range requests for media and will not
+  reliably play a `data:` URI video.
+- `@import`ed stylesheets are **spliced in as text**, not embedded as data
+  URIs. A browser only applies an imported sheet served as `text/css`, and a
+  base64 blob arrives as `application/octet-stream` — which silently drops
+  every `@font-face` and falls the page back to system serifs.
+
 ## Also in this repo
 
 `airmax95.html` and `assets/` are an earlier, unrelated design study, kept

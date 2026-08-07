@@ -32,7 +32,11 @@
      1 · HERO FRAME SEQUENCE
      ============================================================ */
 
-  var FRAMES = 109;
+  /* The single-file offline build inlines the sequence as data: URIs on
+     window.__FRAMES. When that is present it replaces the path-based
+     loading below, so both builds share this file unchanged. */
+  var EMBED  = (window.__FRAMES && window.__FRAMES.length) ? window.__FRAMES : null;
+  var FRAMES = EMBED ? EMBED.length : 109;
 
   var canvas  = $('#hero-canvas');
   var hero    = $('#hero');
@@ -54,6 +58,7 @@
   var loaded = 0;
 
   function src(i) {
+    if (EMBED) return EMBED[i];
     return 'rocky/frames/' + dir + '/' + String(i + 1).padStart(4, '0') + '.jpg';
   }
 

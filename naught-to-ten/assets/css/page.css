@@ -1,0 +1,161 @@
+/* ==========================================================================
+   Naught to Ten — sub-page layer
+   Loaded only by /contact/, /work/, /privacy/ and /terms/. The one-pager
+   never sees any of this.
+   ========================================================================== */
+
+/* These pages have no scrubbed hero, so the nav is present from the first
+   paint rather than being revealed by the loader. */
+.nav--static{transform:none}
+
+body.page{background:var(--porcelain)}
+
+/* ── page hero ──────────────────────────────────────────────────────────── */
+.phero{
+  padding:calc(84px + clamp(50px,9vh,120px)) var(--gut) clamp(44px,7vh,90px);
+  border-bottom:1px solid var(--line-l);
+}
+.phero--dark{background:var(--ink);color:var(--porcelain);border-bottom-color:var(--line-d)}
+.phero--dark .sec__k{color:var(--dim-d)}
+
+.crumbs{
+  display:flex;align-items:center;gap:9px;margin-bottom:clamp(22px,3.4vw,40px);
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim-l);
+}
+.phero--dark .crumbs{color:var(--dim-d)}
+.crumbs a{transition:color .3s}
+.crumbs a:hover{color:currentColor;text-decoration:underline;text-underline-offset:3px}
+.crumbs span[aria-current]{opacity:.75}
+
+.phero__h{
+  font-size:clamp(40px,8vw,132px);line-height:.9;letter-spacing:-.05em;font-weight:500;
+}
+.phero__h em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em}
+.phero__lead{
+  margin-top:clamp(18px,2.4vw,30px);max-width:54ch;
+  font-size:clamp(15px,1.25vw,19px);line-height:1.55;letter-spacing:-.012em;color:var(--dim-l);
+}
+.phero--dark .phero__lead{color:var(--dim-d)}
+
+/* ── contact ────────────────────────────────────────────────────────────── */
+.contact{
+  padding:clamp(56px,9vh,120px) var(--gut) clamp(80px,12vh,150px);
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+  gap:clamp(40px,6vw,110px);align-items:start;
+}
+.contact__form .sec__k{margin-bottom:clamp(22px,3vw,36px)}
+/* the form component is inked on the one-pager; here it sits on porcelain */
+.contact__form .field{border-bottom-color:var(--line-l)}
+.contact__form .field label{color:var(--dim-l)}
+.contact__form .field input,
+.contact__form .field select,
+.contact__form .field textarea{color:var(--ink)}
+.contact__form .field input::placeholder,
+.contact__form .field textarea::placeholder{color:rgba(10,10,11,.32)}
+.contact__form .field select option{background:var(--porcelain);color:var(--ink)}
+.contact__form .form__note{color:var(--dim-l)}
+.contact__form .form{grid-template-columns:1fr 1fr;margin-top:0}
+.contact__form .field--wide{grid-column:1/-1}
+
+.card__panel{
+  border-top:1px solid var(--line-l);
+}
+.card__panel h2{
+  font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim-l);padding:clamp(16px,2vw,22px) 0 0;
+}
+.nap{margin:clamp(14px,1.8vw,20px) 0 clamp(28px,4vw,46px)}
+.nap dt{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim-l);margin-bottom:6px;
+}
+.nap dd{
+  margin-bottom:clamp(16px,2vw,24px);
+  font-size:clamp(15px,1.25vw,19px);line-height:1.45;letter-spacing:-.02em;
+}
+.nap dd:last-child{margin-bottom:0}
+.nap a{border-bottom:1px solid var(--line-l);transition:border-color .3s}
+.nap a:hover{border-bottom-color:var(--ink)}
+.nap address{font-style:normal}
+
+@media (max-width:920px){
+  .contact{grid-template-columns:1fr;gap:44px}
+}
+@media (max-width:560px){
+  .contact__form .form{grid-template-columns:1fr}
+}
+
+/* ── work index ─────────────────────────────────────────────────────────── */
+.works{
+  padding:clamp(56px,9vh,110px) var(--gut) clamp(80px,12vh,150px);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,3.4vw,60px) clamp(20px,2.6vw,44px);
+}
+.wcard{display:flex;flex-direction:column}
+.wcard__img{
+  aspect-ratio:4/5;overflow:hidden;background:var(--slate);
+}
+.wcard__img img{
+  width:100%;height:100%;object-fit:cover;
+  filter:grayscale(.32) contrast(1.04);
+  transition:filter .7s var(--ease),transform .9s var(--ease);
+}
+.wcard:hover .wcard__img img{filter:none;transform:scale(1.03)}
+.wcard__m{
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  padding-top:14px;margin-top:14px;border-top:1px solid var(--line-l);
+}
+.wcard__m h2{font-size:clamp(18px,1.7vw,26px);font-weight:500;letter-spacing:-.032em}
+.wcard__m i{
+  font-family:var(--mono);font-style:normal;font-size:10px;letter-spacing:.14em;
+  color:var(--dim-l);
+}
+.wcard__d{
+  margin-top:9px;font-size:14px;line-height:1.5;letter-spacing:-.008em;color:var(--dim-l);
+}
+.wcard__tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.wcard__tags li{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 10px;border:1px solid var(--line-l);border-radius:100px;color:var(--dim-l);
+}
+@media (max-width:1000px){.works{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.works{grid-template-columns:1fr}}
+
+/* ── prose (privacy, terms) ─────────────────────────────────────────────── */
+.prose{
+  padding:clamp(56px,9vh,110px) var(--gut) clamp(80px,12vh,150px);
+  max-width:78ch;
+}
+.prose h2{
+  margin:clamp(38px,5vw,64px) 0 clamp(12px,1.4vw,18px);
+  font-size:clamp(22px,2.4vw,34px);line-height:1.1;letter-spacing:-.035em;font-weight:500;
+}
+.prose h2:first-child{margin-top:0}
+.prose h3{
+  margin:clamp(22px,2.6vw,32px) 0 8px;
+  font-size:clamp(16px,1.4vw,20px);letter-spacing:-.025em;font-weight:500;
+}
+.prose p,.prose li{
+  font-size:clamp(14.5px,1.15vw,17px);line-height:1.65;letter-spacing:-.008em;color:var(--dim-l);
+}
+.prose p{margin-bottom:clamp(12px,1.4vw,18px)}
+.prose ul{margin:0 0 clamp(12px,1.4vw,18px);padding-left:1.1em;list-style:disc}
+.prose li{margin-bottom:7px;padding-left:.2em}
+.prose li::marker{color:rgba(10,10,11,.3)}
+.prose a{border-bottom:1px solid var(--line-l);transition:border-color .3s}
+.prose a:hover{border-bottom-color:var(--ink)}
+.prose__meta{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim-l);padding-bottom:clamp(26px,3.4vw,44px);
+  border-bottom:1px solid var(--line-l);margin-bottom:clamp(34px,4.6vw,60px);
+}
+
+/* ── next-page rail ─────────────────────────────────────────────────────── */
+.nextup{
+  border-top:1px solid var(--line-l);
+  padding:clamp(40px,6vh,80px) var(--gut);
+  display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.nextup p{
+  font-size:clamp(22px,3vw,44px);line-height:1.05;letter-spacing:-.04em;font-weight:500;
+}

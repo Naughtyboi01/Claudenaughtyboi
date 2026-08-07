@@ -1,15 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IE">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Naught to Ten — Web design studio</title>
-<meta name="description" content="Naught to Ten is a web design studio. We take brands from nothing to fully realised: strategy, identity, interface, motion and engineering, in one continuous move.">
+
+<title>Naught to Ten — Web Design Studio in Galway, Ireland</title>
+<meta name="description" content="Founder-led web design studio in Mervue, Galway. Brand identity, interface design, motion and front-end engineering for owner-led Irish businesses.">
+<link rel="canonical" href="https://naughttoten.ie/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="Joshua Naughton">
+<meta name="geo.region" content="IE-G">
+<meta name="geo.placename" content="Galway">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Naught to Ten">
+<meta property="og:locale" content="en_IE">
+<meta property="og:url" content="https://naughttoten.ie/">
+<meta property="og:title" content="Naught to Ten — Web Design Studio in Galway, Ireland">
+<meta property="og:description" content="Founder-led web design studio in Mervue, Galway. Brand identity, interface design, motion and front-end engineering for owner-led businesses across Ireland.">
+<meta property="og:image" content="https://naughttoten.ie/assets/og/og-default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Naught to Ten — web design studio, Galway">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Naught to Ten — Web Design Studio in Galway, Ireland">
+<meta name="twitter:description" content="Founder-led web design studio in Mervue, Galway. From naught to ten.">
+<meta name="twitter:image" content="https://naughttoten.ie/assets/og/og-default.jpg">
+
 <meta name="theme-color" content="#0A0A0B">
-<link rel="preconnect" href="/">
+<link rel="icon" href="assets/logo/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<!-- the fonts and the first hero frame gate what the visitor actually sees -->
+<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/img/hero-poster.jpg" as="image" fetchpriority="high">
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/style.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A0B'/%3E%3Ctext x='16' y='22' font-family='Helvetica,Arial' font-size='15' font-weight='600' fill='%23F2F1EE' text-anchor='middle'%3E10%3C/text%3E%3C/svg%3E">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://naughttoten.ie/#studio",
+      "name": "Naught to Ten",
+      "alternateName": "Naught to Ten Web Design",
+      "description": "Founder-led web design studio in Mervue, Galway. Brand identity, interface design, motion and front-end engineering for owner-led businesses across Ireland.",
+      "url": "https://naughttoten.ie/",
+      "logo": "https://naughttoten.ie/assets/logo/wordmark-dark.png",
+      "image": "https://naughttoten.ie/assets/og/og-default.jpg",
+      "email": "naughttoten@outlook.ie",
+      "telephone": "+353894470626",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "14 Michael Collins",
+        "addressLocality": "Mervue",
+        "addressRegion": "County Galway",
+        "addressCountry": "IE"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Galway" },
+        { "@type": "Country", "name": "Ireland" }
+      ],
+      "founder": {
+        "@type": "Person",
+        "@id": "https://naughttoten.ie/#joshua",
+        "name": "Joshua Naughton",
+        "jobTitle": "Founder & CEO",
+        "worksFor": { "@id": "https://naughttoten.ie/#studio" },
+        "sameAs": ["https://www.instagram.com/jozua.wav/"]
+      },
+      "sameAs": ["https://www.instagram.com/jozua.wav/"],
+      "knowsAbout": [
+        "Web design", "Brand identity", "Art direction", "UX architecture",
+        "User interface design", "Motion design", "Front-end engineering",
+        "Search engine optimisation", "Web performance"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services, naught to ten",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Discovery & Strategy" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Brand Identity" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Art Direction" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UX Architecture" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Interface Design" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Motion & Interaction" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Front-End Engineering" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Content & Copy" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Performance & SEO" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Launch & Evolution" } }
+        ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://naughttoten.ie/#website",
+      "url": "https://naughttoten.ie/",
+      "name": "Naught to Ten",
+      "inLanguage": "en-IE",
+      "publisher": { "@id": "https://naughttoten.ie/#studio" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://naughttoten.ie/#webpage",
+      "url": "https://naughttoten.ie/",
+      "name": "Naught to Ten — Web Design Studio in Galway, Ireland",
+      "isPartOf": { "@id": "https://naughttoten.ie/#website" },
+      "about": { "@id": "https://naughttoten.ie/#studio" },
+      "primaryImageOfPage": "https://naughttoten.ie/assets/og/og-default.jpg"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -35,7 +141,7 @@
     <a href="#founder"><i>04</i>Founder</a>
     <a href="#studio"><i>05</i>Studio</a>
   </nav>
-  <a class="nav__cta" href="#start"><span>Start a project</span></a>
+  <a class="nav__cta" href="contact/"><span>Start a project</span></a>
 </header>
 
 <main id="top">
@@ -79,6 +185,7 @@
           <span class="lede__l" data-split>Naught</span>
           <span class="lede__l lede__l--serif" data-split>to</span>
           <span class="lede__l" data-split>Ten</span>
+          <span class="vh"> — web design studio in Galway, Ireland</span>
         </h1>
         <p class="hero__sub">We build the presence your brand should have had all along.</p>
       </div>
@@ -114,7 +221,8 @@
 </section>
 
 <!-- ───────────────────────────── 01 · manifesto ──────────────────────── -->
-<section class="manifesto" id="manifesto" aria-label="Manifesto">
+<section class="manifesto" id="manifesto" aria-labelledby="manifesto-h">
+  <h2 class="vh" id="manifesto-h">How we work</h2>
   <p class="sec__k"><i>—</i>Manifesto</p>
   <p class="manifesto__t" data-ignite>
     Most websites are assembled. We would rather <em>compose</em> one: a single idea, carried without compromise from the first grid line to the last frame of motion, until the thing feels inevitable.
@@ -229,8 +337,9 @@
 </section>
 
 <!-- ───────────────────────────── 03 · film ───────────────────────────── -->
-<section class="film" id="film" aria-label="Studio film">
-  <video class="film__v" id="filmV" src="assets/media/naught-to-ten-loop.mp4"
+<section class="film" id="film" aria-labelledby="film-h">
+  <h2 class="vh" id="film-h">Why the website matters most</h2>
+  <video class="film__v" id="filmV" aria-label="Studio film: a chrome figure resolving in a white studio" src="assets/media/naught-to-ten-loop.mp4"
          poster="assets/img/loop-poster.jpg" muted loop playsinline preload="none"></video>
   <div class="film__scrim" aria-hidden="true"></div>
   <div class="film__copy">
@@ -308,7 +417,8 @@
 </section>
 
 <!-- ───────────────────────────── 06 · founder ────────────────────────── -->
-<section class="founder" id="founder" aria-label="Founder">
+<section class="founder" id="founder" aria-labelledby="founder-h">
+  <h2 class="vh" id="founder-h">Joshua Naughton, founder of Naught to Ten</h2>
   <p class="sec__k"><i>—</i>Founder</p>
 
   <div class="founder__top">
@@ -399,7 +509,7 @@
   <div class="foot__cols">
     <div><h4>Studio</h4><a href="mailto:naughttoten@outlook.ie">naughttoten@outlook.ie</a><a href="tel:+353894470626">+353 89 447 0626</a><span>14 Michael Collins<br>Mervue, Galway · Ireland</span></div>
     <div><h4>Elsewhere</h4><a href="https://www.instagram.com/jozua.wav/" rel="me noopener" target="_blank">Instagram — @jozua.wav</a><a href="mailto:naughttoten@outlook.ie">Email the studio</a><a href="tel:+353894470626">Call the studio</a></div>
-    <div><h4>Index</h4><a href="#scale">Services</a><a href="#process">Process</a><a href="#work">Work</a><a href="#start">Enquiries</a></div>
+    <div><h4>Index</h4><a href="#scale">Services</a><a href="work/">Work</a><a href="contact/">Contact</a><a href="privacy/">Privacy</a><a href="terms/">Terms</a></div>
   </div>
   <div class="foot__end">
     <p>© 2026 Naught to Ten · Mervue, Galway, Ireland. Film supplied by the project owner.</p>

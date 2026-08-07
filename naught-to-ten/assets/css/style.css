@@ -75,6 +75,12 @@ body::after{
   60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,1%)}100%{transform:translate(0,0)}
 }
 
+/* Available to assistive tech and crawlers, absent from the design. */
+.vh{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
 /* ── shared type atoms ──────────────────────────────────────────────────── */
 .sec__k{
   font-family:var(--mono);font-size:11px;font-weight:500;
@@ -854,8 +860,8 @@ body::after{
   display:block;overflow:hidden;
   padding:.14em 0 .26em;margin:-.14em 0 -.26em;
 }
-[data-lines] .line>i{
-  display:block;font-style:inherit;
+[data-lines] .line>i{display:block;font-style:inherit}
+.js [data-lines] .line>i{
   transform:translateY(104%);
   transition:transform 1.05s var(--ease);
 }
@@ -863,7 +869,11 @@ body::after{
 [data-lines] .line:nth-child(2)>i{transition-delay:.09s}
 [data-lines] .line:nth-child(3)>i{transition-delay:.18s}
 
-[data-rev]{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+/* Gated on .js — set by an inline head script. Without JavaScript the
+   content must simply be visible, not hidden behind an observer that
+   will never run. A crawler that does not execute JS would otherwise
+   see an empty page. */
+.js [data-rev]{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 [data-rev].is-in{opacity:1;transform:none}
 .process__list [data-rev]:nth-child(2){transition-delay:.08s}
 .process__list [data-rev]:nth-child(3){transition-delay:.16s}

@@ -38,6 +38,11 @@ MIME = {
 
 VIDEO = 'assets/media/naught-to-ten-loop.mp4'
 VIDEO_EL = 'filmV'
+SITE = 'https://naughttoten.ie'
+# Sub-pages the one-pager links to. They are separate documents and cannot be
+# inlined, so in the bundle their links point at the live site instead of a
+# relative path that resolves to nothing on a memory stick.
+SUBPAGES = ('work/', 'contact/', 'privacy/', 'terms/')
 
 _cache: dict[Path, str] = {}
 
@@ -74,8 +79,21 @@ def build(frame_set: str, out_name: str) -> None:
                       lambda _: f'<style>\n{css}\n</style>', html, count=1)
         print(f'  · inlined {href}')
 
-    # hints that point at an origin this file no longer has
+    # hints and crawl metadata that mean nothing in a detached file
     html = re.sub(r'\s*<link rel="pre(?:load|connect)"[^>]*>', '', html)
+    html = re.sub(r'\s*<link rel="manifest"[^>]*>', '', html)
+    html = re.sub(r'\s*<link rel="canonical"[^>]*>', '', html)
+
+    # sub-page links resolve to the live site, not to a missing folder
+    for page in SUBPAGES:
+        html = html.replace(f'href="{page}"', f'href="{SITE}/{page}"')
+
+    # ── icons ────────────────────────────────────────────────────────────
+    # The tab icon should survive into the bundle, so it goes in as a data URI
+    # rather than being stripped with the other head links.
+    for icon in re.findall(r'<link rel="(?:apple-touch-)?icon"[^>]*href="(assets/[^"]+)"', html):
+        html = html.replace(f'href="{icon}"', f'href="{data_uri(ROOT / icon)}"')
+        print(f'  · inlined {icon}')
 
     # ── image references ─────────────────────────────────────────────────
     # Per attribute, not per tag — the <video> carries src and poster both.

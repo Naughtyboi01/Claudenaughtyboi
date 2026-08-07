@@ -58,10 +58,77 @@ Supporting details:
 | 07 | Studio | Editorial split with a hover-tracked spec table |
 | 08 | Start | Client-side form with inline validation and confirmation |
 
+## Pages
+
+| URL | File | Purpose |
+|---|---|---|
+| `/` | `index.html` | The one-pager |
+| `/contact/` | `contact/index.html` | Enquiry form, full NAP block, `ContactPage` + `ContactPoint` schema |
+| `/work/` | `work/index.html` | Project index, `CollectionPage` schema |
+| `/privacy/` | `privacy/index.html` | GDPR notice, written to what the site actually does |
+| `/terms/` | `terms/index.html` | Site terms and the studio's standard engagement terms |
+| — | `404.html` | Not-found page, `noindex, follow` |
+
+Sub-pages share `style.css` and add `page.css`; they load `page.js` rather
+than the one-pager's `main.js`, since none of the scroll choreography applies.
+
+## SEO
+
+Every page carries a unique title (under 60 characters) and description (under
+160), a canonical URL, Open Graph and Twitter card tags pointing at a 1200×630
+share image, `lang="en-IE"`, and JSON-LD.
+
+The structured data models the studio as a `ProfessionalService` with its real
+NAP — name, address, phone — plus `founder`, `areaServed`, `sameAs` and an
+`OfferCatalog` of the ten services. Sub-pages add `BreadcrumbList` and their
+own page type. **Placeholder figures are deliberately kept out of the
+structured data**: founding year, price range and the client list are still
+invented, and asserting them in schema is the kind of thing that gets a rich
+result pulled.
+
+`robots.txt`, `sitemap.xml` and `site.webmanifest` sit at the root. The two
+offline bundles are disallowed in robots.txt — they duplicate the whole site
+and would otherwise be indexed as near-duplicate pages.
+
+Two defects found and fixed while doing this:
+
+- **Reveal animations hid content from anything without JavaScript.** With JS
+  disabled the work page rendered zero visible cards. The hidden state is now
+  gated behind a `.js` class set by an inline head script, so no-JS gets the
+  content plainly and only the animation is lost.
+- **Split headings lost their word breaks.** `data-lines` splits on `<br>`, and
+  without a space in its place the H2 read `Four movements,twelve weeks.` to
+  anything walking `textContent`.
+
+### Changing the domain
+
+The domain appears in canonicals, OG URLs, JSON-LD `@id`s, the sitemap and
+robots.txt, and all of them must match wherever the site actually lives.
+
+```bash
+python3 set-domain.py example.ie --dry   # report
+python3 set-domain.py example.ie         # apply, then rebuild the bundles
+```
+
+## Performance
+
+The loader used to hold the first paint until all 145 frames had decoded. It
+now releases after 24 and keeps fetching behind the revealed page;
+`nearestReady()` already covered any gap the scrubber reached first.
+
+Measured at 390×844 on a throttled 1.6 Mbps / 150 ms connection:
+
+| | Time to reveal | Requests | Transferred |
+|---|---|---|---|
+| Before | 16.6 s | 160 | 3.31 MB |
+| After | 5.7 s | 39 | 1.11 MB |
+
 ## Structure
 
 ```
 index.html
+contact/  work/  privacy/  terms/     sub-pages
+robots.txt  sitemap.xml  site.webmanifest  404.html
 assets/
   css/fonts.css      self-hosted @font-face
   css/style.css
@@ -71,6 +138,10 @@ assets/
   img/               editorial crops pulled from the film
   img/founder/       portrait and contact sheet
   logo/              outlined SVG wordmarks, monogram and icon
+  og/                1200x630 share card
+  icons/             apple-touch-icon and manifest icons
+  css/page.css       sub-page layer
+  js/page.js         sub-page behaviour
   media/             the loop for the film section
 ```
 
@@ -223,6 +294,15 @@ claim. Before this goes live, replace:
   engagement.
 - **The studio spec table** — founded year, engagements per quarter, starting
   price.
+
+The `/work/` page repeats those six fictional projects and reuses crops from
+the hero film as their imagery. None of it appears in structured data, so
+nothing false is being asserted to search engines — but it is on the page, and
+a visitor will read it as true.
+
+Worth adding when there is time: a `/services/` page. The ten services are the
+highest-intent thing people actually search for, and right now they only exist
+as a pinned section on the one-pager.
 
 ## Credits
 

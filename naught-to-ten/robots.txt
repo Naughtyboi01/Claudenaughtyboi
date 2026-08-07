@@ -1,0 +1,10 @@
+# https://naughttoten.ie/robots.txt
+User-agent: *
+Allow: /
+
+# Build artefacts — the single-file bundles duplicate the whole site and would
+# otherwise be indexed as near-duplicate pages.
+Disallow: /naught-to-ten-offline-desktop.html
+Disallow: /naught-to-ten-offline-mobile.html
+
+Sitemap: https://naughttoten.ie/sitemap.xml

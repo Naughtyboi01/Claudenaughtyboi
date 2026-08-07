@@ -12,6 +12,12 @@
 /* ── constants ──────────────────────────────────────────────────────────── */
 var FRAME_COUNT = 145;
 var BOOT_TIMEOUT = 9000;
+/* Frames needed before the page is revealed. Waiting for all 145 meant
+   holding the first paint behind ~6 MB, which is a Largest Contentful Paint
+   figure no amount of markup tuning can rescue. The rest keep loading behind
+   the revealed page, and nearestReady() covers any gap the scrubber reaches
+   first. */
+var READY_FRAMES = 24;
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* The single-file offline build sets window.__FRAMES to an array of data URIs
@@ -85,12 +91,16 @@ function splitLines(el) {
     else chunks[chunks.length - 1].push(n);
   });
   el.textContent = '';
-  chunks.forEach(function (nodes) {
+  chunks.forEach(function (nodes, i) {
     var line = document.createElement('span');
     line.className = 'line';
     var inner = document.createElement('i');
     nodes.forEach(function (n) { inner.appendChild(n); });
     line.appendChild(inner);
+    /* The <br> carried the word break. Without a space in its place the
+       heading reads "Four movements,twelve weeks." to anything walking
+       textContent — crawlers and screen readers included. */
+    if (i) el.appendChild(document.createTextNode(' '));
     el.appendChild(line);
   });
 }
@@ -141,13 +151,17 @@ function loadFrames() {
   var next = 0;
   var CONCURRENCY = 8;
 
+  var gate = Math.min(READY_FRAMES, FRAME_COUNT);
+
   function bump() {
     loaded++;
-    var pct = loaded / FRAME_COUNT;
+    /* the bar tracks the reveal gate, not the full sequence, so it reads
+       as a real countdown rather than stalling at 16% */
+    var pct = Math.min(1, loaded / gate);
     if (bootBar) bootBar.style.width = (pct * 100) + '%';
     if (bootPct) bootPct.textContent = Math.round(pct * 10);
     if (loaded === 1) schedule();
-    if (loaded === FRAME_COUNT) finishBoot();
+    if (loaded >= gate) finishBoot();
   }
 
   /* In sequence order, a fixed number in flight — the first frames land

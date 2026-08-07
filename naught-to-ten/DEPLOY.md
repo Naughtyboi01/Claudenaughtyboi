@@ -4,9 +4,11 @@ Host: **Netlify**, free tier. Chosen because it deploys straight from the
 GitHub repo, gives HTTPS and a custom domain without configuration, serves the
 clean `/contact/` URLs as-is, and handles the enquiry forms with no backend.
 
-It is a US company, which is why the privacy notice names it, states where the
-data goes and sets out the transfer safeguard. That is lawful and ordinary, but
-it is only true if you do steps 5 and 6 below.
+It is a US company, which is why the privacy notice names it, says where the
+data goes, and states the safeguard: the **Standard Contractual Clauses** under
+Implementing Decision (EU) 2021/914, which Netlify pre-signs as data importer
+in its DPA. That agreement is incorporated into Netlify's terms, so it takes
+effect on signup — no separate paperwork.
 
 ---
 
@@ -61,28 +63,29 @@ have seen that happen, assume it does not work.
 Spam is handled by a honeypot field, not a CAPTCHA — deliberately, so the site
 keeps making no third-party requests.
 
-## 5. Sign the data processing agreement — required
+## 5. The data processing agreement
 
-The privacy notice says Netlify processes data under contract and under
-Standard Contractual Clauses. **That has to be true before you launch.** Accept
-Netlify's DPA in the dashboard (Team settings → generally under privacy or
-compliance) and keep a copy.
+The privacy notice states that Netlify processes data under a written agreement
+and that transfers rest on the **Standard Contractual Clauses** published under
+Implementing Decision (EU) 2021/914.
 
-Do the same for Microsoft 365 if you have not already — their DPA is part of
-the standard online services terms.
+Netlify pre-signs those clauses as data importer inside its DPA, and the DPA is
+incorporated by reference into Netlify's terms of service — so it takes effect
+when you accept the terms on signup. **Download a copy and keep it on file**;
+if you are ever asked to demonstrate the safeguard, that document is the answer.
 
-## 6. Verify what the privacy notice claims
+Do the same for Microsoft 365 if you have not already. Their DPA is part of the
+standard online services terms.
 
-The notice makes specific factual assertions. Confirm each is still true and
-correct it if not:
+## 6. Check the notice still matches reality
 
-- Netlify is certified under the **EU–US Data Privacy Framework**. Check the
-  official list at `dataprivacyframework.gov`. If it is not there, the SCCs in
-  the DPA carry the transfer on their own — reword that paragraph to say so.
+- Retention periods should match what you actually do. The notice promises form
+  submissions are cleared from Netlify within three months — set a calendar
+  reminder, or it becomes untrue by neglect.
 - The Data Protection Commission's current contact details, from
   `dataprotection.ie`.
-- Retention periods match what you actually do. Set a reminder to clear old
-  Netlify submissions, since the notice promises three months.
+- If you ever add a supplier, a tool or a tracker, the processor table and the
+  transfer section both need updating, and so does the date at the top.
 
 ## 7. Then
 

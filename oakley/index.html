@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eye Jacket — Bone / Fire Iridium</title>
+<meta name="description" content="A concept landing page for the Eye Jacket in bone with a fire iridium mirror. Scroll-scrubbed hero, built from a single eight-second product film.">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2308080a'/%3E%3Cellipse cx='16' cy='16' rx='13' ry='6' fill='none' stroke='%23ff8a33' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/instrument-serif-400-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="assets/img/hero-poster.jpg">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ───────────────────────── preloader ───────────────────────── -->
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot__inner">
+    <div class="boot__mark">OAKLEY</div>
+    <div class="boot__bar"><span id="bootFill"></span></div>
+    <div class="boot__meta">
+      <span>Eye Jacket · Bone / Fire Iridium</span>
+      <span class="mono" id="bootPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────────── nav ───────────────────────── -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" data-cursor>
+    <svg class="nav__ellipse" viewBox="0 0 34 16" aria-hidden="true"><ellipse cx="17" cy="8" rx="15.5" ry="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="17" cy="8" rx="10" ry="3.2" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".55"/></svg>
+    <span>OAKLEY</span>
+  </a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#manifesto" data-cursor>Overview</a>
+    <a href="#anatomy" data-cursor>Anatomy</a>
+    <a href="#iridium" data-cursor>Iridium</a>
+    <a href="#specs" data-cursor>Specs</a>
+  </nav>
+  <a class="btn btn--sm" href="#reserve" data-cursor>Reserve</a>
+</header>
+
+<main id="top">
+
+<!-- ───────────────────────── hero ───────────────────────── -->
+<section class="hero" id="hero" aria-label="Eye Jacket, bone with fire iridium lenses">
+  <div class="hero__track" id="heroTrack">
+    <div class="hero__stage">
+
+      <div class="hero__frame" id="heroFrame">
+        <canvas id="heroCanvas" aria-hidden="true"></canvas>
+        <img class="hero__poster" id="heroPoster" src="assets/img/hero-poster.jpg" alt="Eye Jacket sunglasses in bone with fire iridium lenses, floating against a lit studio backdrop">
+        <div class="hero__bloom" id="heroBloom" aria-hidden="true"></div>
+        <div class="hero__scan" id="heroScan" aria-hidden="true"></div>
+        <div class="hero__grade" aria-hidden="true"></div>
+        <div class="hero__scrim" id="heroScrim" aria-hidden="true"></div>
+      </div>
+
+      <div class="hero__ui">
+
+        <!-- act 1 · arrival -->
+        <div class="act act--center" id="act1">
+          <p class="eyebrow"><i>Archive — Reissued</i></p>
+          <h1 class="wordmark" id="wordmark" aria-label="Eye Jacket"></h1>
+          <p class="act__sub"><i>Bone / Fire Iridium</i></p>
+        </div>
+
+        <!-- act 2 · silhouette specs -->
+        <div class="act act--split" id="act2" aria-hidden="true">
+          <div class="rail rail--l">
+            <span class="rail__k mono">Geometry</span>
+            <span class="rail__v">Single-piece wrap</span>
+            <span class="rail__k mono">Coverage</span>
+            <span class="rail__v">Orbital, edge to edge</span>
+          </div>
+          <div class="rail rail--r">
+            <span class="rail__k mono">Optics</span>
+            <span class="rail__v">Plutonite, cast not stamped</span>
+            <span class="rail__k mono">Filtration</span>
+            <span class="rail__v">100% UVA · UVB · UVC</span>
+          </div>
+        </div>
+
+        <!-- act 3 · iridium -->
+        <div class="act act--lower" id="act3" aria-hidden="true">
+          <h2 class="act__title"><span class="ln"><i>Fire Iridium</i></span></h2>
+          <p class="act__body">A metal-oxide mirror, deposited a few atoms at a time. It does not tint the world. It edits it.</p>
+        </div>
+
+        <!-- act 4 · fit -->
+        <div class="act act--lower" id="act4" aria-hidden="true">
+          <h2 class="act__title"><span class="ln"><i>Unobtainium</i></span></h2>
+          <p class="act__body">The earsock that grips harder the more you sweat. Physics doing the opposite of what you expect.</p>
+        </div>
+
+        <!-- act 5 · handoff -->
+        <div class="act act--center" id="act5" aria-hidden="true">
+          <p class="eyebrow">The pair</p>
+          <h2 class="act__name">Eye Jacket</h2>
+          <p class="act__sub"><i>Bone / Fire Iridium</i></p>
+          <p class="act__price mono">€280</p>
+        </div>
+
+      </div>
+
+      <!-- beat rail -->
+      <div class="beats" id="beats" aria-hidden="true">
+        <div class="beat"><span class="beat__tick"></span><span class="beat__lbl mono">Silhouette</span></div>
+        <div class="beat"><span class="beat__tick"></span><span class="beat__lbl mono">Optics</span></div>
+        <div class="beat"><span class="beat__tick"></span><span class="beat__lbl mono">Iridium</span></div>
+        <div class="beat"><span class="beat__tick"></span><span class="beat__lbl mono">Fit</span></div>
+        <div class="beat"><span class="beat__tick"></span><span class="beat__lbl mono">The pair</span></div>
+      </div>
+
+      <div class="cue" id="cue" aria-hidden="true">
+        <span class="cue__lbl mono">Scroll</span>
+        <span class="cue__line"><i></i></span>
+      </div>
+
+      <div class="hero__prog" aria-hidden="true"><span id="heroProg"></span></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── manifesto ───────────────────────── -->
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <p class="sec-tag mono" data-reveal>001 — Overview</p>
+    <h2 class="manifesto__h" id="manifestoH" data-words>We did not soften it. We sharpened everything around it.</h2>
+    <div class="manifesto__cols">
+      <p data-reveal>Twenty-six years after the original, the Eye Jacket returns in bone. Same single-piece wrap. Same refusal to put a hinge anywhere the light might get in.</p>
+      <p data-reveal data-delay="1">What changed is the surface. A fire iridium mirror, laid down in a vacuum chamber, tuned for the hour when the sun sits low and everything turns to glare.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── anatomy ───────────────────────── -->
+<section class="anatomy" id="anatomy" aria-label="Anatomy">
+  <div class="anatomy__track" id="anatomyTrack">
+    <div class="anatomy__stage">
+      <figure class="anatomy__media">
+        <img id="anatomyImg" src="assets/img/macro-wide.jpg" alt="Macro view of the Eye Jacket temple, hinge-free stem and fire iridium lens">
+      </figure>
+      <div class="anatomy__veil" aria-hidden="true"></div>
+
+      <header class="anatomy__head">
+        <p class="sec-tag mono">002 — Anatomy</p>
+        <h2 class="anatomy__h"><span class="ln"><i>Four decisions.</i></span></h2>
+      </header>
+
+      <div class="hotspots" id="hotspots">
+        <div class="hs" style="--x:33%; --y:47.5%" data-side="right">
+          <span class="hs__dot"></span><span class="hs__ring"></span>
+          <div class="hs__card">
+            <span class="hs__n mono">01</span>
+            <h3>The ellipse</h3>
+            <p>Machined, then set flush into the stem. You feel a seam only where the design wants one.</p>
+          </div>
+        </div>
+        <div class="hs" style="--x:79%; --y:44%" data-side="left">
+          <span class="hs__dot"></span><span class="hs__ring"></span>
+          <div class="hs__card">
+            <span class="hs__n mono">02</span>
+            <h3>Fire iridium</h3>
+            <p>Twelve coating passes. 17% visible light transmission, and no colour shift at the edge of the curve.</p>
+          </div>
+        </div>
+        <div class="hs" style="--x:61%; --y:15%" data-side="left">
+          <span class="hs__dot"></span><span class="hs__ring"></span>
+          <div class="hs__card">
+            <span class="hs__n mono">03</span>
+            <h3>The orbital</h3>
+            <p>A closed rim carries the lens all the way round, so the frame — not the lens — takes the impact.</p>
+          </div>
+        </div>
+        <div class="hs" style="--x:13%; --y:73%" data-side="right">
+          <span class="hs__dot"></span><span class="hs__ring"></span>
+          <div class="hs__card">
+            <span class="hs__n mono">04</span>
+            <h3>The stem</h3>
+            <p>O Matter, tapered along its length. Stiff at the hinge point, springy where it meets your head.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── iridium ───────────────────────── -->
+<section class="iridium" id="iridium" aria-label="Fire Iridium">
+  <div class="iridium__media">
+    <video id="iridiumVideo" playsinline muted loop preload="metadata"
+           poster="assets/img/iridium-loop-poster.jpg"
+           aria-label="Close orbit around the fire iridium lens">
+      <source src="assets/media/iridium-loop.mp4" type="video/mp4">
+    </video>
+    <div class="iridium__wash" aria-hidden="true"></div>
+  </div>
+  <div class="iridium__copy wrap">
+    <p class="sec-tag mono" data-reveal>003 — Iridium</p>
+    <h2 class="iridium__h"><span class="ln" data-reveal><i>Light, filed down</i></span><span class="ln" data-reveal data-delay="1"><i>to the useful part.</i></span></h2>
+    <p class="iridium__p" data-reveal data-delay="2">Iridium is not a tint. It is a mirror grown on the outside of the lens in a vacuum, layer by layer, until the surface rejects exactly the wavelengths you did not ask for.</p>
+    <ul class="stats" aria-label="Lens figures">
+      <li data-reveal><b class="mono">17%</b><span>Visible light transmission</span></li>
+      <li data-reveal data-delay="1"><b class="mono">100%</b><span>UVA · UVB · UVC blocked</span></li>
+      <li data-reveal data-delay="2"><b class="mono">12</b><span>Coating passes</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────────────────────── gallery ───────────────────────── -->
+<section class="gallery" id="gallery" aria-label="Gallery">
+  <div class="gallery__track" id="galleryTrack">
+    <div class="gallery__stage">
+      <div class="gallery__head wrap">
+        <p class="sec-tag mono">004 — The film</p>
+      </div>
+      <div class="gallery__rail" id="galleryRail">
+        <figure class="card card--land"><img src="assets/img/hero-poster.jpg" alt="Front three-quarter view, floating"><figcaption class="mono">00:00 · Arrival</figcaption></figure>
+        <figure class="card card--port"><img src="assets/img/lens-fire.jpg" alt="Macro of the fire iridium lens catching a highlight"><figcaption class="mono">00:03 · The mirror</figcaption></figure>
+        <figure class="card card--land"><img src="assets/img/pair-front.jpg" alt="Head-on view of both lenses"><figcaption class="mono">00:01 · Head on</figcaption></figure>
+        <figure class="card card--port"><img src="assets/img/temple-icon.jpg" alt="Extreme macro of the temple, ellipse and orange earsock"><figcaption class="mono">00:05 · The stem</figcaption></figure>
+        <figure class="card card--land"><img src="assets/img/profile-three-quarter.jpg" alt="Three-quarter profile of the full pair"><figcaption class="mono">00:07 · The pair</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── specs ───────────────────────── -->
+<section class="specs" id="specs">
+  <div class="wrap">
+    <p class="sec-tag mono" data-reveal>005 — Specification</p>
+    <h2 class="specs__h" data-reveal>Everything measured.</h2>
+    <dl class="spec-table">
+      <div class="spec-row" data-reveal><dt>Frame</dt><dd>O Matter, bone</dd></div>
+      <div class="spec-row" data-reveal><dt>Lens</dt><dd>Plutonite, fire iridium</dd></div>
+      <div class="spec-row" data-reveal><dt>Base curve</dt><dd>8</dd></div>
+      <div class="spec-row" data-reveal><dt>Light transmission</dt><dd>17%</dd></div>
+      <div class="spec-row" data-reveal><dt>UV filtration</dt><dd>100% UVA · UVB · UVC</dd></div>
+      <div class="spec-row" data-reveal><dt>Earsock</dt><dd>Unobtainium, burnt orange</dd></div>
+      <div class="spec-row" data-reveal><dt>Icon</dt><dd>Machined ellipse, flush-set</dd></div>
+      <div class="spec-row" data-reveal><dt>Weight</dt><dd>29 g</dd></div>
+      <div class="spec-row" data-reveal><dt>Fit</dt><dd>Standard, three-point contact</dd></div>
+      <div class="spec-row" data-reveal><dt>Case</dt><dd>Moulded hard shell, microfibre bag</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ───────────────────────── reserve ───────────────────────── -->
+<section class="reserve" id="reserve">
+  <div class="reserve__bg" aria-hidden="true"><img src="assets/img/hero-outro.jpg" alt=""></div>
+  <div class="wrap reserve__inner">
+    <p class="sec-tag mono" data-reveal>006 — Availability</p>
+    <h2 class="reserve__h" data-words>The first run is four hundred pairs.</h2>
+    <p class="reserve__p" data-reveal>Numbered on the inside of the left stem. Shipping from the first week of October.</p>
+    <div class="reserve__cta" data-reveal data-delay="1">
+      <span class="reserve__price mono">€280</span>
+      <a class="btn btn--lg" href="#reserve" data-cursor>Reserve a pair</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div class="foot__brand">
+      <svg class="nav__ellipse" viewBox="0 0 34 16" aria-hidden="true"><ellipse cx="17" cy="8" rx="15.5" ry="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><ellipse cx="17" cy="8" rx="10" ry="3.2" fill="none" stroke="currentColor" stroke-width="1.1" opacity=".55"/></svg>
+      <span>OAKLEY</span>
+    </div>
+    <div class="foot__col">
+      <span class="mono">Product</span>
+      <a href="#anatomy" data-cursor>Anatomy</a>
+      <a href="#iridium" data-cursor>Iridium</a>
+      <a href="#specs" data-cursor>Specification</a>
+    </div>
+    <div class="foot__col">
+      <span class="mono">This page</span>
+      <a href="#hero" data-cursor>Back to top</a>
+      <a href="../index.html" data-cursor>Other work</a>
+    </div>
+    <div class="foot__end">
+      <a class="btn btn--sm" href="#reserve" data-cursor>Reserve</a>
+      <p class="foot__note">Concept landing page, built as a design exercise. Not affiliated with, endorsed by, or produced by Oakley, Inc. All product imagery is AI-generated and does not depict a real product for sale.</p>
+    </div>
+  </div>
+</footer>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

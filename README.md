@@ -1,5 +1,10 @@
 # AIR MAX 95 — The Anatomy of Air
 
+> **Also in this repo:** [`oakley/`](oakley/README.md) — *Eye Jacket, Bone / Fire
+> Iridium*, a second scroll-scrubbed landing page built from a different product
+> film, sharing this project's self-hosted fonts and frame-sequence approach.
+
+
 A single-page luxury landing page built around a scroll-scrubbed product film.
 No framework, no build step, no third-party requests at runtime — open
 `index.html` and it runs.

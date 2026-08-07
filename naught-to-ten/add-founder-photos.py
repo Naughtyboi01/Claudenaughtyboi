@@ -30,7 +30,7 @@ ROOT = Path(__file__).parent.resolve()
 OUT = ROOT / 'assets' / 'img' / 'founder'
 
 SPECS = {                      # slot        -> (w, h, css modifier, alt text)
-    'portrait': (1000, 1250, 'tall', 'Jozua, founder of Naught to Ten'),
+    'portrait': (1000, 1250, 'tall', 'Joshua Naughton, founder of Naught to Ten'),
     'grid-01':  (800, 800, 'sq', 'Naught to Ten, off the desk'),
     'grid-02':  (800, 800, 'sq', 'Naught to Ten, off the desk'),
     'grid-03':  (800, 800, 'sq', 'Naught to Ten, off the desk'),

@@ -82,15 +82,47 @@ rocky/
 - **Native scroll throughout.** No transform-hijacked scroll container — sticky
   positioning stays intact, and the trackpad, keyboard and scrollbar all behave.
   Smoothing is applied to animated values, not to the scroll itself.
-- **The logo is the real one.** `rocky/img/logo-wordmark.png` is the supplied
-  mark lifted off its cream disc onto transparency, so it can sit on any
-  background; `logo-circle.png` keeps the disc.
-- **Fonts are self-hosted**, so the page has zero external dependencies and
-  works offline or behind a strict CSP.
+- **The logo and the type are both vector.** See below.
 - **`prefers-reduced-motion`** disables the grain, drift and reveal
   transitions; the hero stays scrubbable because it is user-driven.
 - **No-JS fallback** in a `<noscript>` block unpins the sticky sections,
   reveals all masked text, and leaves the hero showing its poster.
+
+## Brand assets — all vector
+
+Nothing on the page renders brand type or the mark from a bitmap, so both stay
+sharp at any size and on any display.
+
+**The logo**, `rocky/img/logo-wordmark.svg` and `logo-circle.svg`. The logo
+arrived as a JPEG — black square, cream disc, dark lettering. `tools/trace-logo.py`
+lifts the lettering off the disc and traces it to Bezier outlines:
+
+```bash
+python3 tools/trace-logo.py [path/to/logo.jpeg]
+```
+
+It traces a 2× upsample of the mask, because potrace fits curves to whole
+pixels and tracing at native resolution leaves visible faceting on the thin
+italic strokes of *House of*. The result is 17 contours and about 12 KB —
+smaller than the 92 KB PNG it replaces, and resolution-independent. Traced ink
+coverage lands within 2% of the original raster, the remainder being sub-pixel
+edge rounding.
+
+The wordmark is filled with `currentColor` and carries the brand ink as its
+root style, so it takes the ink colour when loaded through `<img>` and follows
+CSS `color` if you ever inline it. The circle lockup keeps its cream disc and
+is also the SVG favicon, with the PNG left in place for `apple-touch-icon`.
+
+> One caveat: this is a faithful *trace of a raster*, not the original artwork.
+> If whoever drew the logo still has the vector file, use theirs — it will have
+> true curves rather than curves fitted to pixels. This is the best available
+> reconstruction from what was supplied.
+
+**The type.** Instrument Serif (display), Inter (UI) and JetBrains Mono
+(labels) are self-hosted as `woff2` in `rocky/fonts/` — outline fonts, so the
+text is vector too, and stays live text: selectable, searchable and readable by
+a screen reader. Nothing is converted to paths. Self-hosting also means the
+page makes zero external requests and works offline or behind a strict CSP.
 
 ## Copy — please read before this goes live
 
@@ -123,8 +155,8 @@ nothing else beside it, there are two single-file builds:
 
 | File | Size | For |
 |---|---|---|
-| `house-of-rocky-offline.html` | 10.6 MB | Desktop — 1000px hero frames, full-size stills |
-| `house-of-rocky-offline-mobile.html` | 5.8 MB | Phones and sharing — 620px frames, stills capped at 900px |
+| `house-of-rocky-offline.html` | 10.2 MB | Desktop — 1000px hero frames, full-size stills |
+| `house-of-rocky-offline-mobile.html` | 5.5 MB | Phones and sharing — 620px frames, stills capped at 900px |
 
 Both are the complete site: styles, fonts, all 109 hero frames, the stills and
 the film. Open either straight off `file://` — it loads in about a second

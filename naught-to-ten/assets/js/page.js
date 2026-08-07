@@ -24,19 +24,32 @@ if ('IntersectionObserver' in window) {
 }
 
 /* ── enquiry form ───────────────────────────────────────────────────────────
-   Client side only — nothing leaves the page. Wire it to a real endpoint
-   before launch; the privacy notice describes it as it stands today.
+   Posts to Netlify Forms. Netlify reads the form's markup at deploy time and
+   accepts a urlencoded POST to the page's own path, so there is no endpoint
+   to configure and no third-party request on page load — the browser only
+   talks to this domain, and only when someone actually submits.
+
+   Spam is caught by a honeypot field rather than a CAPTCHA. A CAPTCHA would
+   mean a third-party request, an international transfer, and terminal-
+   equipment access needing consent; a hidden input costs none of that.
    ────────────────────────────────────────────────────────────────────────── */
-var form = $('#contactForm'), note = $('#formNote');
-if (form) {
+window.NTT_bindForm = function (form) {
+  if (!form || form.dataset.bound) return;
+  form.dataset.bound = '1';
+  var note = form.querySelector('.form__note');
+  var btn = form.querySelector('button[type=submit]');
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = $('#fName'), mail = $('#fMail');
+    var name = form.querySelector('input[name="name"]');
+    var mail = form.querySelector('input[name="email"]');
     var bad = [];
-    if (!name.value.trim()) bad.push(name);
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim())) bad.push(mail);
+    if (name && !name.value.trim()) bad.push(name);
+    if (mail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim())) bad.push(mail);
 
-    $$('.field').forEach(function (f) { f.classList.remove('is-bad'); });
+    Array.prototype.forEach.call(form.querySelectorAll('.field'), function (f) {
+      f.classList.remove('is-bad');
+    });
     note.classList.remove('is-good', 'is-bad');
 
     if (bad.length) {
@@ -46,10 +59,29 @@ if (form) {
       bad[0].focus();
       return;
     }
-    form.classList.add('is-sent');
-    note.textContent = 'Received. You will hear back within two working days.';
-    note.classList.add('is-good');
+
+    note.textContent = 'Sending…';
+    if (btn) btn.disabled = true;
+
+    fetch(form.getAttribute('action') || window.location.pathname, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      form.classList.add('is-sent');
+      note.textContent = 'Received. You will hear back within two working days.';
+      note.classList.add('is-good');
+    }).catch(function () {
+      /* offline copy, or the post failed — never pretend it arrived */
+      if (btn) btn.disabled = false;
+      note.innerHTML = 'That did not send. Email <a href="mailto:naughttoten@outlook.ie">' +
+                       'naughttoten@outlook.ie</a> and it will reach us.';
+      note.classList.add('is-bad');
+    });
   });
-}
+};
+
+window.NTT_bindForm($('#contactForm'));
 
 })();

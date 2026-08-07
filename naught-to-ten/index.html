@@ -483,7 +483,12 @@
     <h2 class="start__h" data-lines>Start at naught.</h2>
     <p class="start__b">Tell us where the brand is now. We reply to everything within two working days, with a real opinion rather than a calendar link.</p>
 
-    <form class="form" id="form" novalidate>
+    <form class="form" id="form" name="enquiry-home" method="POST"
+      data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry-home">
+      <!-- honeypot: hidden from people, filled in by naive bots. Kept out of
+           the tab order and the accessibility tree entirely. -->
+      <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="field"><label for="fName">Name</label><input id="fName" name="name" type="text" autocomplete="name" required placeholder="Your name"></div>
       <div class="field"><label for="fCo">Company</label><input id="fCo" name="company" type="text" autocomplete="organization" placeholder="Optional"></div>
       <div class="field"><label for="fMail">Email</label><input id="fMail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div>

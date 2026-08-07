@@ -192,13 +192,14 @@ ROUTER = """
     var form = r.querySelector('form.form');
     if (!form) return;
     var note = form.querySelector('.form__note');
+    var btn = form.querySelector('button[type=submit]');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var name = form.querySelector('input[name="name"]');
       var mail = form.querySelector('input[name="email"]');
       var bad = [];
       if (name && !name.value.trim()) bad.push(name);
-      if (mail && !/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(mail.value.trim())) bad.push(mail);
+      if (mail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim())) bad.push(mail);
 
       Array.prototype.forEach.call(form.querySelectorAll('.field'), function (f) {
         f.classList.remove('is-bad');
@@ -212,9 +213,12 @@ ROUTER = """
         bad[0].focus();
         return;
       }
-      form.classList.add('is-sent');
-      note.textContent = 'Received. You will hear back within two working days.';
-      note.classList.add('is-good');
+      /* This copy is detached from the site, so there is nowhere to post to.
+         Say so plainly rather than showing a confirmation that means nothing. */
+      note.innerHTML = 'This is an offline copy — the form cannot send from here. ' +
+                       'Email <a href="mailto:naughttoten@outlook.ie">naughttoten@outlook.ie</a>.';
+      note.classList.add('is-bad');
+      if (btn) btn.blur();
     });
   });
 })();

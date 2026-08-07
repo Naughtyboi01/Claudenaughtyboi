@@ -144,6 +144,28 @@ body.page{background:var(--porcelain)}
 .prose li::marker{color:rgba(10,10,11,.3)}
 .prose a{border-bottom:1px solid var(--line-l);transition:border-color .3s}
 .prose a:hover{border-bottom-color:var(--ink)}
+/* processor table — scrolls inside itself rather than widening the page */
+.prose .ptable{
+  width:100%;border-collapse:collapse;margin:0 0 clamp(14px,1.8vw,22px);
+  font-size:clamp(13.5px,1.05vw,15.5px);
+}
+.prose .ptable th,.prose .ptable td{
+  text-align:left;padding:12px 16px 12px 0;border-bottom:1px solid var(--line-l);
+  vertical-align:top;
+}
+.prose .ptable th{
+  font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim-l);border-bottom-color:var(--ink);
+}
+.prose .ptable td{color:var(--dim-l)}
+.prose .ptable td:first-child{color:var(--ink);white-space:nowrap}
+@media (max-width:560px){
+  .prose .ptable,.prose .ptable tbody,.prose .ptable tr,.prose .ptable td{display:block;width:100%}
+  .prose .ptable thead{display:none}
+  .prose .ptable tr{padding:14px 0;border-bottom:1px solid var(--line-l)}
+  .prose .ptable td{border:0;padding:2px 0}
+}
+
 .prose__meta{
   font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--dim-l);padding-bottom:clamp(26px,3.4vw,44px);

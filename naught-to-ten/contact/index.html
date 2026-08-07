@@ -124,7 +124,12 @@
   <div class="contact__form" id="form">
     <h2 class="sec__k"><i>—</i>Send an enquiry</h2>
 
-    <form class="form" id="contactForm" novalidate>
+    <form class="form" id="contactForm" name="enquiry" method="POST"
+          data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry">
+      <!-- honeypot: hidden from people, filled in by naive bots. Kept out of
+           the tab order and the accessibility tree entirely. -->
+      <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="field"><label for="fName">Name</label><input id="fName" name="name" type="text" autocomplete="name" required placeholder="Your name"></div>
       <div class="field"><label for="fCo">Company</label><input id="fCo" name="company" type="text" autocomplete="organization" placeholder="Optional"></div>
       <div class="field"><label for="fMail">Email</label><input id="fMail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div>

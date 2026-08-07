@@ -563,10 +563,19 @@ window.addEventListener('resize', function () { measure(); schedule(); });
 window.addEventListener('orientationchange', function () { setTimeout(function () { measure(); schedule(); }, 250); });
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FORM — client side only, nothing leaves the page
+   FORM
+   Posts to Netlify Forms — a urlencoded POST to this page's own path, which
+   Netlify accepts because it read the form's markup at deploy time. No
+   endpoint to configure, and no third-party request on page load: the browser
+   only talks to this domain, and only once someone submits.
+
+   Spam is caught by a honeypot input rather than a CAPTCHA. A CAPTCHA would
+   pull in a third party, an international transfer and terminal-equipment
+   access needing consent; a hidden field costs none of that.
    ══════════════════════════════════════════════════════════════════════════ */
 var form = $('#form'), note = $('#formNote');
 if (form) {
+  var btn = form.querySelector('button[type=submit]');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = $('#fName'), mail = $('#fMail');
@@ -574,7 +583,7 @@ if (form) {
     if (!name.value.trim()) bad.push(name);
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim())) bad.push(mail);
 
-    $$('.field').forEach(function (f) { f.classList.remove('is-bad'); });
+    $$('.field', form).forEach(function (f) { f.classList.remove('is-bad'); });
     note.classList.remove('is-good', 'is-bad');
 
     if (bad.length) {
@@ -584,9 +593,26 @@ if (form) {
       bad[0].focus();
       return;
     }
-    form.classList.add('is-sent');
-    note.textContent = 'Received. You will hear back within two working days.';
-    note.classList.add('is-good');
+
+    note.textContent = 'Sending…';
+    if (btn) btn.disabled = true;
+
+    fetch(form.getAttribute('action') || window.location.pathname, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      form.classList.add('is-sent');
+      note.textContent = 'Received. You will hear back within two working days.';
+      note.classList.add('is-good');
+    }).catch(function () {
+      /* offline copy, or the post failed — never pretend it arrived */
+      if (btn) btn.disabled = false;
+      note.innerHTML = 'That did not send. Email <a href="mailto:naughttoten@outlook.ie">' +
+                       'naughttoten@outlook.ie</a> and it will reach us.';
+      note.classList.add('is-bad');
+    });
   });
 }
 

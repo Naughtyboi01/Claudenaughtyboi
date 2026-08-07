@@ -6,5 +6,7 @@ Allow: /
 # otherwise be indexed as near-duplicate pages.
 Disallow: /naught-to-ten-offline-desktop.html
 Disallow: /naught-to-ten-offline-mobile.html
+Disallow: /naught-to-ten-site-desktop.html
+Disallow: /naught-to-ten-site-mobile.html
 
 Sitemap: https://naughttoten.ie/sitemap.xml

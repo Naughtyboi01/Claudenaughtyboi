@@ -1409,7 +1409,12 @@ body::after{
     <h2 class="start__h" data-lines>Start at naught.</h2>
     <p class="start__b">Tell us where the brand is now. We reply to everything within two working days, with a real opinion rather than a calendar link.</p>
 
-    <form class="form" id="form" novalidate>
+    <form class="form" id="form" name="enquiry-home" method="POST"
+      data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry-home">
+      <!-- honeypot: hidden from people, filled in by naive bots. Kept out of
+           the tab order and the accessibility tree entirely. -->
+      <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="field"><label for="fName">Name</label><input id="fName" name="name" type="text" autocomplete="name" required placeholder="Your name"></div>
       <div class="field"><label for="fCo">Company</label><input id="fCo" name="company" type="text" autocomplete="organization" placeholder="Optional"></div>
       <div class="field"><label for="fMail">Email</label><input id="fMail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div>
@@ -2040,10 +2045,19 @@ window.addEventListener('resize', function () { measure(); schedule(); });
 window.addEventListener('orientationchange', function () { setTimeout(function () { measure(); schedule(); }, 250); });
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FORM — client side only, nothing leaves the page
+   FORM
+   Posts to Netlify Forms — a urlencoded POST to this page's own path, which
+   Netlify accepts because it read the form's markup at deploy time. No
+   endpoint to configure, and no third-party request on page load: the browser
+   only talks to this domain, and only once someone submits.
+
+   Spam is caught by a honeypot input rather than a CAPTCHA. A CAPTCHA would
+   pull in a third party, an international transfer and terminal-equipment
+   access needing consent; a hidden field costs none of that.
    ══════════════════════════════════════════════════════════════════════════ */
 var form = $('#form'), note = $('#formNote');
 if (form) {
+  var btn = form.querySelector('button[type=submit]');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = $('#fName'), mail = $('#fMail');
@@ -2051,7 +2065,7 @@ if (form) {
     if (!name.value.trim()) bad.push(name);
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim())) bad.push(mail);
 
-    $$('.field').forEach(function (f) { f.classList.remove('is-bad'); });
+    $$('.field', form).forEach(function (f) { f.classList.remove('is-bad'); });
     note.classList.remove('is-good', 'is-bad');
 
     if (bad.length) {
@@ -2061,9 +2075,26 @@ if (form) {
       bad[0].focus();
       return;
     }
-    form.classList.add('is-sent');
-    note.textContent = 'Received. You will hear back within two working days.';
-    note.classList.add('is-good');
+
+    note.textContent = 'Sending…';
+    if (btn) btn.disabled = true;
+
+    fetch(form.getAttribute('action') || window.location.pathname, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      form.classList.add('is-sent');
+      note.textContent = 'Received. You will hear back within two working days.';
+      note.classList.add('is-good');
+    }).catch(function () {
+      /* offline copy, or the post failed — never pretend it arrived */
+      if (btn) btn.disabled = false;
+      note.innerHTML = 'That did not send. Email <a href="mailto:naughttoten@outlook.ie">' +
+                       'naughttoten@outlook.ie</a> and it will reach us.';
+      note.classList.add('is-bad');
+    });
   });
 }
 

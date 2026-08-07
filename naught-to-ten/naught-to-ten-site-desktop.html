@@ -1090,6 +1090,28 @@ body.page{background:var(--porcelain)}
 .prose li::marker{color:rgba(10,10,11,.3)}
 .prose a{border-bottom:1px solid var(--line-l);transition:border-color .3s}
 .prose a:hover{border-bottom-color:var(--ink)}
+/* processor table — scrolls inside itself rather than widening the page */
+.prose .ptable{
+  width:100%;border-collapse:collapse;margin:0 0 clamp(14px,1.8vw,22px);
+  font-size:clamp(13.5px,1.05vw,15.5px);
+}
+.prose .ptable th,.prose .ptable td{
+  text-align:left;padding:12px 16px 12px 0;border-bottom:1px solid var(--line-l);
+  vertical-align:top;
+}
+.prose .ptable th{
+  font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim-l);border-bottom-color:var(--ink);
+}
+.prose .ptable td{color:var(--dim-l)}
+.prose .ptable td:first-child{color:var(--ink);white-space:nowrap}
+@media (max-width:560px){
+  .prose .ptable,.prose .ptable tbody,.prose .ptable tr,.prose .ptable td{display:block;width:100%}
+  .prose .ptable thead{display:none}
+  .prose .ptable tr{padding:14px 0;border-bottom:1px solid var(--line-l)}
+  .prose .ptable td{border:0;padding:2px 0}
+}
+
 .prose__meta{
   font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--dim-l);padding-bottom:clamp(26px,3.4vw,44px);
@@ -1470,7 +1492,12 @@ body.page{background:var(--porcelain)}
     <h2 class="start__h" data-lines>Start at naught.</h2>
     <p class="start__b">Tell us where the brand is now. We reply to everything within two working days, with a real opinion rather than a calendar link.</p>
 
-    <form class="form" id="form" novalidate>
+    <form class="form" id="form" name="enquiry-home" method="POST"
+      data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry-home">
+      <!-- honeypot: hidden from people, filled in by naive bots. Kept out of
+           the tab order and the accessibility tree entirely. -->
+      <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="field"><label for="fName">Name</label><input id="fName" name="name" type="text" autocomplete="name" required placeholder="Your name"></div>
       <div class="field"><label for="fCo">Company</label><input id="fCo" name="company" type="text" autocomplete="organization" placeholder="Optional"></div>
       <div class="field"><label for="fMail">Email</label><input id="fMail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div>
@@ -1506,7 +1533,12 @@ body.page{background:var(--porcelain)}
   <div class="contact__form" id="contact-form">
     <h2 class="sec__k"><i>—</i>Send an enquiry</h2>
 
-    <form class="form" id="contact-contactForm" novalidate>
+    <form class="form" id="contact-contactForm" name="enquiry" method="POST"
+          data-netlify="true" netlify-honeypot="bot-field" novalidate>
+      <input type="hidden" name="form-name" value="enquiry">
+      <!-- honeypot: hidden from people, filled in by naive bots. Kept out of
+           the tab order and the accessibility tree entirely. -->
+      <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <div class="field"><label for="contact-fName">Name</label><input id="contact-fName" name="name" type="text" autocomplete="name" required placeholder="Your name"></div>
       <div class="field"><label for="contact-fCo">Company</label><input id="contact-fCo" name="company" type="text" autocomplete="organization" placeholder="Optional"></div>
       <div class="field"><label for="contact-fMail">Email</label><input id="contact-fMail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div>
@@ -1640,7 +1672,7 @@ body.page{background:var(--porcelain)}
     <a href="#/">Home</a><span aria-hidden="true">/</span><span aria-current="page">Privacy</span>
   </nav>
   <h1 class="phero__h">Privacy.</h1>
-  <p class="phero__lead">The short version: this website collects nothing about you. No cookies, no analytics, no tracking pixels, no requests to anyone else's server.</p>
+  <p class="phero__lead">The short version: no cookies, no analytics, no tracking pixels, and nothing loaded from anyone else's server. The only personal data we hold is what you choose to send us.</p>
 </section>
 
 <div class="prose">
@@ -1660,23 +1692,55 @@ body.page{background:var(--porcelain)}
   <p>Our hosting provider may keep standard server logs — an IP address, a timestamp, a requested page — as almost every web server does. Those exist for security and reliability, are not linked to you by us, and are not used for analytics.</p>
 
   <h2>The enquiry form</h2>
-  <p>The form on the <a href="#/contact">contact page</a> currently runs entirely in your browser. It validates what you type and shows a confirmation, and <strong>the details are not transmitted anywhere or stored</strong>. Nothing you type into it reaches us until the form is connected to a mail service, at which point this section will be updated to say exactly where the data goes and how long it is kept.</p>
-  <p>If you would like to reach us in the meantime, email or phone directly.</p>
+  <p>If you use the form on the <a href="#/contact">contact page</a>, it sends us the fields you filled in: your name, email address, and — if you chose to give them — company, phone number, budget range, timing and whatever you wrote in the message box.</p>
+  <p><strong>Why:</strong> so that we can reply to you and, if it goes further, quote for and carry out the work. <strong>Legal basis:</strong> Article 6(1)(b) of the GDPR, steps taken at your request before entering a contract.</p>
+  <p><strong>Do you have to?</strong> No. The form is entirely optional, and you are as welcome to email or phone instead. Within the form, name and email are the only fields we need — without them we have no way to answer you.</p>
+  <p>The form is protected from spam by a hidden field that people never see and automated submitters usually fill in. We deliberately do not use a CAPTCHA, because that would load code from another company and send them your IP address.</p>
+
+  <h2>Who processes your data</h2>
+  <p>We do not sell personal data and we do not share it for anyone else's marketing. Three suppliers process it on our behalf, under contract and on our instructions only:</p>
+  <table class="ptable">
+    <thead><tr><th>Who</th><th>What they do</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>Netlify</td><td>Hosts this website and receives enquiry-form submissions</td><td>United States</td></tr>
+      <tr><td>Microsoft</td><td>Our Outlook mailbox, where enquiries and email land</td><td>European Union</td></tr>
+    </tbody>
+  </table>
+  <p>Beyond those, we disclose personal data only where the law requires it, or where a professional adviser such as an accountant needs it.</p>
+
+  <h2>Data sent outside the EU</h2>
+  <p>Netlify is based in the United States, so enquiry submissions and server logs are processed there. Transfers outside the European Economic Area are permitted only with a recognised safeguard in place, and ours rests on Netlify's certification under the EU–US Data Privacy Framework together with the European Commission's Standard Contractual Clauses in our data processing agreement with them.</p>
+  <p>If you would rather nothing of yours crossed the Atlantic, email or phone us directly instead of using the form — our mailbox is inside the EU.</p>
+
+  <h2>How long we keep things</h2>
+  <ul>
+    <li><strong>Form submissions</strong> are deleted from Netlify once they have reached our mailbox, and within three months at the latest.</li>
+    <li><strong>Enquiries that do not lead to work</strong> are deleted from our mailbox within twelve months.</li>
+    <li><strong>Records connected to paid work</strong> are kept for six years, which is what Irish tax and limitation rules require.</li>
+    <li><strong>Server logs</strong> are kept by Netlify to their own retention schedule, typically a matter of weeks.</li>
+  </ul>
 
   <h2>When you email or call us</h2>
-  <p>If you contact us about a project, we hold what you send — your name, contact details and whatever you tell us about the business — so that we can reply and, if it goes further, quote for and carry out the work. The lawful bases are our legitimate interest in responding to an enquiry, and performance of a contract once one exists.</p>
-  <p>Email sits in our Outlook mailbox, provided by Microsoft. Enquiries that do not lead to work are deleted within twelve months. Records connected to paid work are kept for six years, which is what Irish tax and limitation rules require.</p>
-  <p>We do not sell personal data, and we do not share it with anyone except where a supplier is needed to deliver the work — for example a hosting provider — or where the law requires it.</p>
+  <p>If you contact us directly we hold what you send — your name, contact details and whatever you tell us about the business — for the same purposes and for the same periods set out above. The lawful bases are our legitimate interest in responding to someone who has contacted us, and performance of a contract once one exists.</p>
 
   <h2>Your rights</h2>
-  <p>Under the GDPR and the Irish Data Protection Act 2018 you can ask us to give you a copy of the personal data we hold about you, correct it, delete it, restrict or object to how we use it, or provide it in a portable format. Email <a href="mailto:naughttoten@outlook.ie">naughttoten@outlook.ie</a> and we will respond within one month.</p>
-  <p>If you are unhappy with how we have handled your data you can complain to the Irish Data Protection Commission at <a href="https://www.dataprotection.ie/" rel="noopener" target="_blank">dataprotection.ie</a>.</p>
+  <p>Under the GDPR and the Irish Data Protection Act 2018 you can ask us to:</p>
+  <ul>
+    <li>give you a copy of the personal data we hold about you;</li>
+    <li>correct it if it is wrong, or complete it if it is missing something;</li>
+    <li>delete it;</li>
+    <li>restrict what we do with it, or object to us using it at all;</li>
+    <li>hand it over in a portable, machine-readable format.</li>
+  </ul>
+  <p>Email <a href="mailto:naughttoten@outlook.ie">naughttoten@outlook.ie</a> and we will respond within one month. There is no charge. We are a small studio and are not required to appoint a Data Protection Officer; Joshua Naughton handles these requests personally.</p>
+  <p>We do not make any decision about you by automated means, and we do not profile you.</p>
+  <p>If you are unhappy with how we have handled your data you can complain to the Irish supervisory authority, the Data Protection Commission, at <a href="https://www.dataprotection.ie/" rel="noopener" target="_blank">dataprotection.ie</a>.</p>
 
   <h2>Other websites</h2>
   <p>This site links out to Instagram. Once you follow a link you are on someone else's site, under their privacy policy, not ours.</p>
 
   <h2>Changes</h2>
-  <p>If this notice changes — most likely when the enquiry form is connected to a real mail service — the date at the top of this page changes with it.</p>
+  <p>If this notice changes — because we add a supplier, a tool, or anything that collects more than it does today — the date at the top of this page changes with it.</p>
 </div>
 
 <section class="nextup">
@@ -1850,6 +1914,7 @@ window.__FRAMES = ["data:image/jpeg;base64,/9j//gAPTGF2YzYxLjMuMTAwAP/bAEMACAoKC
     var form = r.querySelector('form.form');
     if (!form) return;
     var note = form.querySelector('.form__note');
+    var btn = form.querySelector('button[type=submit]');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var name = form.querySelector('input[name="name"]');
@@ -1870,9 +1935,12 @@ window.__FRAMES = ["data:image/jpeg;base64,/9j//gAPTGF2YzYxLjMuMTAwAP/bAEMACAoKC
         bad[0].focus();
         return;
       }
-      form.classList.add('is-sent');
-      note.textContent = 'Received. You will hear back within two working days.';
-      note.classList.add('is-good');
+      /* This copy is detached from the site, so there is nowhere to post to.
+         Say so plainly rather than showing a confirmation that means nothing. */
+      note.innerHTML = 'This is an offline copy — the form cannot send from here. ' +
+                       'Email <a href="mailto:naughttoten@outlook.ie">naughttoten@outlook.ie</a>.';
+      note.classList.add('is-bad');
+      if (btn) btn.blur();
     });
   });
 })();
@@ -2444,10 +2512,19 @@ window.addEventListener('resize', function () { measure(); schedule(); });
 window.addEventListener('orientationchange', function () { setTimeout(function () { measure(); schedule(); }, 250); });
 
 /* ══════════════════════════════════════════════════════════════════════════
-   FORM — client side only, nothing leaves the page
+   FORM
+   Posts to Netlify Forms — a urlencoded POST to this page's own path, which
+   Netlify accepts because it read the form's markup at deploy time. No
+   endpoint to configure, and no third-party request on page load: the browser
+   only talks to this domain, and only once someone submits.
+
+   Spam is caught by a honeypot input rather than a CAPTCHA. A CAPTCHA would
+   pull in a third party, an international transfer and terminal-equipment
+   access needing consent; a hidden field costs none of that.
    ══════════════════════════════════════════════════════════════════════════ */
 var form = $('#form'), note = $('#formNote');
 if (form) {
+  var btn = form.querySelector('button[type=submit]');
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = $('#fName'), mail = $('#fMail');
@@ -2455,7 +2532,7 @@ if (form) {
     if (!name.value.trim()) bad.push(name);
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim())) bad.push(mail);
 
-    $$('.field').forEach(function (f) { f.classList.remove('is-bad'); });
+    $$('.field', form).forEach(function (f) { f.classList.remove('is-bad'); });
     note.classList.remove('is-good', 'is-bad');
 
     if (bad.length) {
@@ -2465,9 +2542,26 @@ if (form) {
       bad[0].focus();
       return;
     }
-    form.classList.add('is-sent');
-    note.textContent = 'Received. You will hear back within two working days.';
-    note.classList.add('is-good');
+
+    note.textContent = 'Sending…';
+    if (btn) btn.disabled = true;
+
+    fetch(form.getAttribute('action') || window.location.pathname, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      form.classList.add('is-sent');
+      note.textContent = 'Received. You will hear back within two working days.';
+      note.classList.add('is-good');
+    }).catch(function () {
+      /* offline copy, or the post failed — never pretend it arrived */
+      if (btn) btn.disabled = false;
+      note.innerHTML = 'That did not send. Email <a href="mailto:naughttoten@outlook.ie">' +
+                       'naughttoten@outlook.ie</a> and it will reach us.';
+      note.classList.add('is-bad');
+    });
   });
 }
 

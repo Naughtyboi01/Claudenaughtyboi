@@ -1,9 +1,22 @@
+Concept product landing pages, each built from a single short product film.
+No framework, no build step, no third-party requests at runtime — open the
+page's `index.html` and it runs.
+
+| | Page | Source film | Docs |
+|---|---|---|---|
+| **`/`** | Air Max 95 — *The Anatomy of Air* | 8s, bone/sand Air Max 95 | below |
+| **`oakley/`** | Eye Jacket — *Bone / Fire Iridium* | 8s, Eye Jacket sunglasses | [`oakley/README.md`](oakley/README.md) |
+
+Both are **concepts**: the imagery is AI-generated, neither is affiliated with
+or endorsed by the brand named on it, and nothing on them is for sale. Each
+page carries that notice in its footer and it should stay there.
+
+Shared conventions — the frame-sequence technique, the performance rules, and
+how to verify a change — are in [`CLAUDE.md`](CLAUDE.md).
+
+---
+
 # AIR MAX 95 — The Anatomy of Air
-
-> **Also in this repo:** [`oakley/`](oakley/README.md) — *Eye Jacket, Bone / Fire
-> Iridium*, a second scroll-scrubbed landing page built from a different product
-> film, sharing this project's self-hosted fonts and frame-sequence approach.
-
 
 A single-page luxury landing page built around a scroll-scrubbed product film.
 No framework, no build step, no third-party requests at runtime — open

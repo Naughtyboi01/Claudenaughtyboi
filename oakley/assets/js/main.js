@@ -83,13 +83,23 @@
     el.innerHTML = html;
   }());
 
-  /* ── 2. split headings into per-word spans ─────────────── */
+  /* ── 2. split headings into per-word spans ───────────────
+     Built with DOM calls rather than an innerHTML string. This reads
+     text out of the document and puts it back, and concatenating that
+     into markup is the exact shape of a DOM-XSS sink — it would also
+     quietly mangle any heading containing & or <. textContent is never
+     parsed as markup, so neither can happen. */
   $$('[data-words]').forEach(function (el) {
     var words = el.textContent.trim().split(/\s+/);
-    el.innerHTML = words.map(function (w) {
-      return '<span class="wd">' + w + '</span>';
-    }).join(' ');
-    el._words = $$('.wd', el);
+    el.textContent = '';
+    el._words = words.map(function (w, i) {
+      if (i) el.appendChild(document.createTextNode(' '));
+      var span = document.createElement('span');
+      span.className = 'wd';
+      span.textContent = w;
+      el.appendChild(span);
+      return span;
+    });
   });
 
   /* stagger delays for [data-reveal] */

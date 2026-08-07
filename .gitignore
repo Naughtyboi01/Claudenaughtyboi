@@ -1,0 +1,19 @@
+# Dependencies. The sites themselves have none — this is only ever
+# tooling (Playwright, for the screenshot sweeps and the demo recorder).
+node_modules/
+
+# Capture + build scratch (frame sequences, screenshot sweeps, recordings)
+seq/
+raw/
+vidframes/
+shots*/
+playshots/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db

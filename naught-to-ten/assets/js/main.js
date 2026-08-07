@@ -14,6 +14,12 @@ var FRAME_COUNT = 145;
 var BOOT_TIMEOUT = 9000;
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* The single-file offline build sets window.__FRAMES to an array of data URIs
+   before this script runs. Detecting it here is the one hook that lets both
+   builds share this file instead of forking a copy to keep in sync. */
+var EMBEDDED = (window.__FRAMES && window.__FRAMES.length) ? window.__FRAMES : null;
+if (EMBEDDED) FRAME_COUNT = EMBEDDED.length;
+
 /* ── helpers ────────────────────────────────────────────────────────────── */
 var $  = function (s, r) { return (r || document).querySelector(s); };
 var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -129,6 +135,9 @@ function finishBoot() {
 function loadFrames() {
   var set = pickSet();
   var pad = function (n) { return ('000' + n).slice(-4); };
+  var srcOf = function (i) {
+    return EMBEDDED ? EMBEDDED[i] : 'assets/frames/' + set + '/' + pad(i + 1) + '.jpg';
+  };
   var next = 0;
   var CONCURRENCY = 8;
 
@@ -149,7 +158,7 @@ function loadFrames() {
     var img = new Image();
     img.decoding = 'async';
     img.onload = img.onerror = function () { bump(); pumpOne(); };
-    img.src = 'assets/frames/' + set + '/' + pad(i + 1) + '.jpg';
+    img.src = srcOf(i);
     frames[i] = img;
   }
   for (var k = 0; k < CONCURRENCY; k++) pumpOne();

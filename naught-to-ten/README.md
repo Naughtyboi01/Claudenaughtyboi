@@ -102,11 +102,56 @@ assets/
 python3 -m http.server 8000   # any static server; file:// works too
 ```
 
+## Offline
+
+The page makes no network requests at runtime, so this folder already works
+with no connection — including straight off `file://`.
+
+For a version you can email, carry on a stick, or open with nothing else
+alongside it, there are **two single-file builds** — styles, fonts, all 145
+hero frames, the crops and the film, all inlined:
+
+| File | Frames | Size | Boot from disk |
+|---|---|---|---|
+| `naught-to-ten-offline-desktop.html` | 1600px | 10.8 MB | ~1.2 s |
+| `naught-to-ten-offline-mobile.html` | 960px | 6.4 MB | ~0.6 s |
+
+They differ only in which frame set is baked in. The served site picks between
+the two sets at runtime; a single file cannot, so the choice is made at build
+time instead — hand someone the mobile file if they are on a phone or a slow
+disk, the desktop file otherwise. Both are otherwise identical and both are
+fully responsive.
+
+Rebuild after any edit:
+
+```bash
+python3 build-offline.py --both      # both files
+python3 build-offline.py             # desktop only
+python3 build-offline.py --frames sm # mobile only
+```
+
+Three things worth knowing about that build:
+
+- Frames go in as a `window.__FRAMES` array of data URIs; `main.js` detects it
+  and skips its path-based loading, so both builds share one codebase.
+- The film is inlined as base64 and handed over as a **Blob URL**, not a
+  `data:` URI — Safari wants byte-range requests for media and will not
+  reliably play a `data:` URI video. It also keeps its poster, so the section
+  still reads as designed if a browser cannot decode H.264.
+- Asset references are rewritten per *attribute*, not per tag. The `<video>`
+  carries both `src` and `poster`; a tag-anchored match catches only the first
+  and leaves the other pointing at a file that is no longer there. The build
+  fails loudly if any `assets/` reference survives.
+
 ## Verification
 
 Checked in headless Chromium at 1440×900, 820×1180 and 390×844 — roughly forty
 scroll positions per breakpoint — plus the reduced-motion and no-JS paths, and
 the form and service-row interactions.
+
+Both offline files were opened from `file://` and confirmed to make **zero**
+network requests, raise no console errors, and scrub the full sequence to
+145/145 with the counter landing on 10.
 
 One caveat: the headless Chromium used here has no H.264 decoder, so the film
 section's `<video>` could not be played in test and falls back to its poster.

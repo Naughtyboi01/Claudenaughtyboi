@@ -1,3 +1,9 @@
+> **Two studies live in this repo.**
+> This file documents the Air Max 95 page at the root. The second,
+> **[Naught to Ten](naught-to-ten/)** — a landing page for a web design studio,
+> built around a 145-frame scroll-scrubbed film — has its own
+> [README](naught-to-ten/README.md).
+
 # AIR MAX 95 — The Anatomy of Air
 
 A single-page luxury landing page built around a scroll-scrubbed product film.

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Naught to Ten — Web design studio</title>
+<meta name="description" content="Naught to Ten is a web design studio. We take brands from nothing to fully realised: strategy, identity, interface, motion and engineering, in one continuous move.">
+<meta name="theme-color" content="#0A0A0B">
+<link rel="preconnect" href="/">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A0B'/%3E%3Ctext x='16' y='22' font-family='Helvetica,Arial' font-size='15' font-weight='600' fill='%23F2F1EE' text-anchor='middle'%3E10%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ───────────────────────────── preloader ───────────────────────────── -->
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot__inner">
+    <div class="boot__mark">Naught<span>&nbsp;to&nbsp;</span>Ten</div>
+    <div class="boot__bar"><i id="bootBar"></i></div>
+    <div class="boot__pct"><span id="bootPct">0</span><em>/10</em></div>
+  </div>
+</div>
+
+<!-- ───────────────────────────── chrome ──────────────────────────────── -->
+<header class="nav" id="nav">
+  <a class="nav__mark" href="#top" aria-label="Naught to Ten, back to top">
+    <span class="nav__markText">Naught to Ten</span>
+    <span class="nav__markNum" aria-hidden="true">0—10</span>
+  </a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#scale"><i>01</i>Services</a>
+    <a href="#process"><i>02</i>Process</a>
+    <a href="#work"><i>03</i>Work</a>
+    <a href="#studio"><i>04</i>Studio</a>
+  </nav>
+  <a class="nav__cta" href="#start"><span>Start a project</span></a>
+</header>
+
+<main id="top">
+
+<!-- ───────────────────────────── 00 · hero ───────────────────────────── -->
+<section class="hero" id="hero" aria-label="Naught to Ten">
+  <div class="hero__track" id="heroTrack">
+    <div class="hero__stage">
+
+      <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+      <img class="hero__poster" id="heroPoster" src="assets/img/hero-poster.jpg" alt="" aria-hidden="true">
+      <div class="hero__vignette" aria-hidden="true"></div>
+      <div class="hero__wash hero__wash--l" id="heroWashL" aria-hidden="true"></div>
+      <div class="hero__wash hero__wash--r" id="heroWashR" aria-hidden="true"></div>
+
+      <!-- scale rail: naught to ten, ticking with the scrub -->
+      <div class="rail" aria-hidden="true">
+        <div class="rail__line"><i id="railFill"></i></div>
+        <ol class="rail__ticks" id="railTicks"></ol>
+      </div>
+
+      <!-- top-left readout -->
+      <div class="hud hud--tl" aria-hidden="true">
+        <span class="hud__k">Sequence</span>
+        <span class="hud__v" id="hudSeq">001 / 145</span>
+      </div>
+      <div class="hud hud--tr" aria-hidden="true">
+        <span class="hud__k">Phase</span>
+        <span class="hud__v" id="hudPhase">Naught</span>
+      </div>
+
+      <!-- the counter -->
+      <div class="count" aria-hidden="true">
+        <span class="count__n" id="countN">0</span><span class="count__d">.<i id="countD">0</i></span>
+      </div>
+
+      <!-- beat 1 · wordmark -->
+      <div class="beat beat--1" id="beat1">
+        <p class="eyebrow"><span>Independent web design studio</span><span>Est. Dublin</span></p>
+        <h1 class="lede">
+          <span class="lede__l" data-split>Naught</span>
+          <span class="lede__l lede__l--serif" data-split>to</span>
+          <span class="lede__l" data-split>Ten</span>
+        </h1>
+        <p class="hero__sub">We build the presence your brand should have had all along.</p>
+      </div>
+
+      <!-- beat 2 · statement -->
+      <div class="beat beat--2" id="beat2">
+        <p class="beat__k">01 — The premise</p>
+        <p class="beat__t">Every brand<br>starts at <em>naught</em>.</p>
+        <p class="beat__b">A blank field. No traffic, no trust, no reason to stay. What happens next is a design problem, and we solve it in public.</p>
+      </div>
+
+      <!-- beat 3 · technical -->
+      <div class="beat beat--3" id="beat3">
+        <p class="beat__k">02 — The method</p>
+        <ul class="beat__spec">
+          <li><b>Strategy</b><span>Positioning before pixels</span></li>
+          <li><b>Identity</b><span>A system, not a logo</span></li>
+          <li><b>Interface</b><span>Designed to the half-pixel</span></li>
+          <li><b>Engineering</b><span>Shipped, measured, kept</span></li>
+        </ul>
+      </div>
+
+      <!-- beat 4 · end card -->
+      <div class="beat beat--4" id="beat4">
+        <p class="beat__k">03 — The result</p>
+        <p class="beat__t beat__t--big">Ten.</p>
+        <p class="beat__b beat__b--wide">Fully realised. Every surface considered, every interaction accounted for, nothing left at a default.</p>
+      </div>
+
+      <div class="cue" id="cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 01 · manifesto ──────────────────────── -->
+<section class="manifesto" id="manifesto" aria-label="Manifesto">
+  <p class="sec__k"><i>—</i>Manifesto</p>
+  <p class="manifesto__t" data-ignite>
+    Most websites are assembled. We would rather <em>compose</em> one: a single idea, carried without compromise from the first grid line to the last frame of motion, until the thing feels inevitable.
+  </p>
+  <div class="manifesto__foot">
+    <div class="stat"><b data-count="10">0</b><span>Services, 0&nbsp;—&nbsp;10</span></div>
+    <div class="stat"><b data-count="46">0</b><span>Brands launched</span></div>
+    <div class="stat"><b data-count="98" data-suffix="+">0</b><span>Median Lighthouse</span></div>
+    <div class="stat"><b data-count="12" data-suffix=" wks">0</b><span>Typical engagement</span></div>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 02 · the scale ──────────────────────── -->
+<section class="scale" id="scale" aria-label="Services">
+  <div class="scale__track" id="scaleTrack">
+    <div class="scale__stage">
+      <div class="scale__head">
+        <div>
+          <p class="sec__k sec__k--light"><i>—</i>Services</p>
+          <h2 class="scale__h">The scale</h2>
+        </div>
+        <p class="scale__lead">Ten disciplines, run in sequence.<br>Take the whole climb or join it anywhere.</p>
+      </div>
+
+      <div class="scale__body">
+        <ol class="scale__list" id="scaleList">
+          <li class="row" data-i="0" data-img="assets/img/detail-circuit.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">01</span>
+              <span class="row__t">Discovery &amp; Strategy</span>
+              <span class="row__d">Where the brand actually stands, and the shortest honest route to where it should be.</span>
+            </button>
+          </li>
+          <li class="row" data-i="1" data-img="assets/img/detail-circuit.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">02</span>
+              <span class="row__t">Brand Identity</span>
+              <span class="row__d">Wordmark, palette, type, tone — built as a system that survives contact with the real world.</span>
+            </button>
+          </li>
+          <li class="row" data-i="2" data-img="assets/img/detail-profile.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">03</span>
+              <span class="row__t">Art Direction</span>
+              <span class="row__d">The campaign look: photography, render, crop and pace. What the brand feels like before it is read.</span>
+            </button>
+          </li>
+          <li class="row" data-i="3" data-img="assets/img/detail-profile.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">04</span>
+              <span class="row__t">UX Architecture</span>
+              <span class="row__d">Structure, flows, and the decisions about what to leave out. The quiet half of the work.</span>
+            </button>
+          </li>
+          <li class="row" data-i="4" data-img="assets/img/detail-chrome.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">05</span>
+              <span class="row__t">Interface Design</span>
+              <span class="row__d">Every state drawn — hover, focus, empty, error, loading — on a grid that holds at every width.</span>
+            </button>
+          </li>
+          <li class="row" data-i="5" data-img="assets/img/detail-chrome.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">06</span>
+              <span class="row__t">Motion &amp; Interaction</span>
+              <span class="row__d">Scroll choreography, transitions, micro-response. Motion that explains rather than decorates.</span>
+            </button>
+          </li>
+          <li class="row" data-i="6" data-img="assets/img/detail-figure.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">07</span>
+              <span class="row__t">Front-End Engineering</span>
+              <span class="row__d">Semantic, accessible, fast by construction. The build matches the file, to the pixel.</span>
+            </button>
+          </li>
+          <li class="row" data-i="7" data-img="assets/img/detail-figure.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">08</span>
+              <span class="row__t">Content &amp; Copy</span>
+              <span class="row__d">Words written to the layout, not poured into it. Headlines that survive a small screen.</span>
+            </button>
+          </li>
+          <li class="row" data-i="8" data-img="assets/img/detail-face.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">09</span>
+              <span class="row__t">Performance &amp; SEO</span>
+              <span class="row__d">Budgets set at the start and defended at the end. Structured data, real Core Web Vitals.</span>
+            </button>
+          </li>
+          <li class="row" data-i="9" data-img="assets/img/detail-face.jpg">
+            <button type="button" class="row__btn">
+              <span class="row__n">10</span>
+              <span class="row__t">Launch &amp; Evolution</span>
+              <span class="row__d">Handover, instrumentation, and a retainer that keeps the tenth point where it belongs.</span>
+            </button>
+          </li>
+        </ol>
+
+        <figure class="scale__view" aria-hidden="true">
+          <div class="scale__frame" id="scaleFrame"></div>
+          <figcaption class="scale__cap">
+            <p class="scale__capH">
+              <span class="scale__capN" id="scaleCapN">01</span>
+              <span class="scale__capT" id="scaleCapT">Discovery &amp; Strategy</span>
+            </p>
+            <p class="scale__capD" id="scaleCapD">Where the brand actually stands, and the shortest honest route to where it should be.</p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 03 · film ───────────────────────────── -->
+<section class="film" id="film" aria-label="Studio film">
+  <video class="film__v" id="filmV" src="assets/media/naught-to-ten-loop.mp4"
+         poster="assets/img/loop-poster.jpg" muted loop playsinline preload="none"></video>
+  <div class="film__scrim" aria-hidden="true"></div>
+  <div class="film__copy">
+    <p class="sec__k sec__k--light"><i>—</i>Point of view</p>
+    <p class="film__t">A website is the <em>only</em> part of a brand that answers back.</p>
+    <p class="film__b">Print sits still. A campaign runs and stops. The site is the one surface a customer touches, argues with and returns to — so it earns the same care as everything else, and then some.</p>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 04 · process ────────────────────────── -->
+<section class="process" id="process" aria-label="Process">
+  <div class="process__head">
+    <p class="sec__k"><i>—</i>Process</p>
+    <h2 class="h2" data-lines>Four movements,<br>twelve weeks.</h2>
+  </div>
+  <ol class="process__list">
+    <li class="step" data-rev>
+      <span class="step__n">00</span>
+      <div class="step__c">
+        <h3>Naught</h3>
+        <p>Two weeks. We read everything you have, talk to the people who use it, and come back with a position you can argue in one sentence.</p>
+        <ul><li>Audit</li><li>Interviews</li><li>Positioning</li><li>Scope</li></ul>
+      </div>
+    </li>
+    <li class="step" data-rev>
+      <span class="step__n">03</span>
+      <div class="step__c">
+        <h3>Form</h3>
+        <p>Four weeks. Identity and art direction land together, tested on the hardest page rather than a mood board. You see real screens early.</p>
+        <ul><li>Identity system</li><li>Art direction</li><li>Key screens</li><li>Type &amp; grid</li></ul>
+      </div>
+    </li>
+    <li class="step" data-rev>
+      <span class="step__n">07</span>
+      <div class="step__c">
+        <h3>Build</h3>
+        <p>Four weeks. Design and front-end run in the same room. Motion is prototyped in the browser, never faked in a video.</p>
+        <ul><li>Full design</li><li>Front-end</li><li>Motion</li><li>CMS</li></ul>
+      </div>
+    </li>
+    <li class="step" data-rev>
+      <span class="step__n">10</span>
+      <div class="step__c">
+        <h3>Ten</h3>
+        <p>Two weeks. Performance budgets enforced, analytics wired, team trained. Then we stay on for the quarter that actually decides it.</p>
+        <ul><li>QA &amp; a11y</li><li>Performance</li><li>Launch</li><li>Retainer</li></ul>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<!-- ───────────────────────────── 05 · work rail ──────────────────────── -->
+<section class="work" id="work" aria-label="Selected work">
+  <div class="work__track" id="workTrack">
+    <div class="work__stage">
+      <div class="work__rail" id="workRail">
+        <div class="work__intro">
+          <p class="sec__k sec__k--light"><i>—</i>Selected</p>
+          <h2 class="work__h">Recent<br>climbs</h2>
+          <p class="work__lead">Six engagements from the last eighteen months. Scroll on.</p>
+        </div>
+        <article class="card"><div class="card__img" style="background-image:url('assets/img/detail-circuit.jpg')"></div><div class="card__m"><span>01</span><h3>Aureate</h3><p>Private wealth · Identity, site, motion</p><i>2025</i></div></article>
+        <article class="card"><div class="card__img" style="background-image:url('assets/img/detail-profile.jpg')"></div><div class="card__m"><span>02</span><h3>Halcyon Atelier</h3><p>Fashion house · Art direction, e-commerce</p><i>2025</i></div></article>
+        <article class="card"><div class="card__img" style="background-image:url('assets/img/detail-chrome.jpg')"></div><div class="card__m"><span>03</span><h3>Meridian Rye</h3><p>Distillery · Brand, packaging, site</p><i>2025</i></div></article>
+        <article class="card"><div class="card__img" style="background-image:url('assets/img/detail-figure.jpg')"></div><div class="card__m"><span>04</span><h3>Nocturne</h3><p>Hospitality group · Strategy, five properties</p><i>2024</i></div></article>
+        <article class="card"><div class="card__img" style="background-image:url('assets/img/detail-face.jpg')"></div><div class="card__m"><span>05</span><h3>Vantage Labs</h3><p>Deep tech · Positioning, design system</p><i>2024</i></div></article>
+        <article class="card"><div class="card__img" style="background-image:url('assets/img/plate-wide.jpg')"></div><div class="card__m"><span>06</span><h3>Fold</h3><p>Architecture practice · Identity, portfolio</p><i>2024</i></div></article>
+        <div class="work__end">
+          <p>Full case studies<br>on request.</p>
+          <a class="btn btn--light" href="#start"><span>Ask for the deck</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 06 · studio ─────────────────────────── -->
+<section class="studio" id="studio" aria-label="Studio">
+  <div class="studio__l">
+    <p class="sec__k"><i>—</i>Studio</p>
+    <h2 class="h2" data-lines>Small by design.<br>Senior by default.</h2>
+    <p class="studio__b">Naught to Ten is a five-person studio in Dublin. There is no account layer and no junior pass — the people who pitch the work are the people who draw and build it. We take four engagements a quarter, which is the honest limit of what five people can do properly.</p>
+    <a class="btn" href="#start"><span>Check availability</span></a>
+  </div>
+  <dl class="studio__specs">
+    <div><dt>Founded</dt><dd>2019</dd></div>
+    <div><dt>Team</dt><dd>Five</dd></div>
+    <div><dt>Base</dt><dd>Dublin, remote-comfortable</dd></div>
+    <div><dt>Engagements</dt><dd>Four per quarter</dd></div>
+    <div><dt>Typical span</dt><dd>12 weeks</dd></div>
+    <div><dt>From</dt><dd>€38,000</dd></div>
+    <div><dt>Stack</dt><dd>Whatever survives the brief</dd></div>
+    <div><dt>Handover</dt><dd>Always</dd></div>
+  </dl>
+</section>
+
+<!-- ───────────────────────────── 07 · start ─────────────────────────── -->
+<section class="start" id="start" aria-label="Start a project">
+  <div class="start__inner">
+    <p class="sec__k sec__k--light"><i>—</i>Enquiries</p>
+    <h2 class="start__h" data-lines>Start at naught.</h2>
+    <p class="start__b">Tell us where the brand is now. We reply to everything within two working days, with a real opinion rather than a calendar link.</p>
+
+    <form class="form" id="form" novalidate>
+      <div class="field"><label for="fName">Name</label><input id="fName" name="name" type="text" autocomplete="name" required placeholder="Your name"></div>
+      <div class="field"><label for="fCo">Company</label><input id="fCo" name="company" type="text" autocomplete="organization" placeholder="Optional"></div>
+      <div class="field"><label for="fMail">Email</label><input id="fMail" name="email" type="email" autocomplete="email" required placeholder="you@company.com"></div>
+      <div class="field"><label for="fBudget">Budget</label>
+        <select id="fBudget" name="budget">
+          <option>€38k – €60k</option>
+          <option>€60k – €100k</option>
+          <option>€100k +</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="field field--wide"><label for="fBrief">Where are you now?</label><textarea id="fBrief" name="brief" rows="4" placeholder="A paragraph is plenty."></textarea></div>
+      <div class="form__foot">
+        <p class="form__note" id="formNote" role="status" aria-live="polite">No newsletter, no CRM sequence.</p>
+        <button class="btn btn--light" type="submit"><span>Send it</span></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="foot__mark">Naught<span>&nbsp;to&nbsp;</span>Ten</div>
+  <div class="foot__cols">
+    <div><h4>Studio</h4><a href="mailto:hello@naughttoten.com">hello@naughttoten.com</a><a href="tel:+35315550110">+353 1 555 0110</a><span>14 Fumbally Lane<br>Dublin 8, D08 · Ireland</span></div>
+    <div><h4>Elsewhere</h4><a href="#work">Instagram</a><a href="#work">Are.na</a><a href="#work">LinkedIn</a><a href="#work">Read.cv</a></div>
+    <div><h4>Index</h4><a href="#scale">Services</a><a href="#process">Process</a><a href="#work">Work</a><a href="#start">Enquiries</a></div>
+  </div>
+  <div class="foot__end">
+    <p>© 2026 Naught to Ten Ltd. A fictional studio, built as a design study. Film supplied by the project owner.</p>
+    <a class="foot__top" href="#top">Back to naught ↑</a>
+  </div>
+</footer>
+
+</main>
+
+<noscript>
+  <style>
+    .boot{display:none}
+    .hero__track,.scale__track,.work__track{height:auto!important;position:static!important}
+    .hero__stage,.scale__stage,.work__stage{position:static!important;height:auto!important;min-height:0!important}
+    .hero__canvas,.rail,.hud,.count,.cue,.hero__vignette,.hero__wash{display:none}
+    .hero__poster{
+      opacity:1!important;position:static!important;
+      width:100%;height:auto;max-height:62vh;object-fit:cover;
+    }
+    .beat{position:static!important;opacity:1!important;transform:none!important;padding:12vh 6vw}
+    .work__rail{flex-wrap:wrap;transform:none!important}
+    [data-rev],[data-lines],[data-ignite]{opacity:1!important;transform:none!important}
+    .scale__view{display:none}
+    .row{opacity:1!important}
+  </style>
+</noscript>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

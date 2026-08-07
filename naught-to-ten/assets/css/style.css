@@ -605,7 +605,117 @@ body::after{
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   06 · STUDIO
+   06 · FOUNDER
+   A tonal step lighter than the studio block below it, so two pale sections
+   in a row still read as two sections.
+   ══════════════════════════════════════════════════════════════════════════ */
+.founder{
+  background:var(--paper);
+  padding:clamp(90px,15vh,190px) var(--gut) clamp(70px,10vh,130px);
+  border-bottom:1px solid var(--line-l);
+}
+.founder>.sec__k{margin-bottom:clamp(30px,4.6vw,64px)}
+
+.founder__top{
+  display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(30px,5vw,90px);align-items:start;
+}
+
+.founder__portrait{position:relative}
+.founder__portrait figcaption{
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--line-l);
+}
+/* Scoped to the caption — a bare `.founder__portrait span` also matches the
+   placeholder mark and tag inside the frame, and outranks their own rules. */
+.founder__portrait figcaption b{font-size:clamp(17px,1.6vw,23px);font-weight:500;letter-spacing:-.03em}
+.founder__portrait figcaption span{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim-l);
+}
+
+.founder__quote{
+  font-size:clamp(25px,3.5vw,54px);line-height:1.04;letter-spacing:-.042em;font-weight:500;
+  margin-bottom:clamp(26px,3.4vw,46px);
+}
+.founder__body{
+  display:grid;gap:clamp(13px,1.4vw,20px);max-width:60ch;
+  font-size:clamp(14.5px,1.12vw,17px);line-height:1.62;letter-spacing:-.01em;color:var(--dim-l);
+}
+.founder__facts{
+  margin-top:clamp(28px,3.6vw,48px);
+  display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(20px,3vw,48px);
+  border-top:1px solid var(--line-l);
+}
+.founder__facts>div{
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding:clamp(12px,1.4vw,17px) 0;border-bottom:1px solid var(--line-l);
+}
+.founder__facts dt{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim-l);
+}
+.founder__facts dd{font-size:clamp(13.5px,1.1vw,16px);letter-spacing:-.02em;text-align:right}
+.founder__facts a{border-bottom:1px solid var(--line-l);transition:border-color .3s}
+.founder__facts a:hover{border-bottom-color:var(--ink)}
+
+/* ── contact sheet ──────────────────────────────────────────────────────── */
+.sheet{margin-top:clamp(48px,7vh,100px)}
+.sheet__k{
+  display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding-bottom:14px;margin-bottom:clamp(14px,1.6vw,22px);
+  border-bottom:1px solid var(--line-l);
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim-l);
+}
+.sheet__k a{transition:color .3s}
+.sheet__k a:hover{color:var(--ink)}
+.sheet__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.4vw,22px)}
+
+/* ── photo slots ────────────────────────────────────────────────────────── */
+/* Styled to read as an empty contact-sheet frame rather than a broken image,
+   so the section is presentable before any photograph exists. Dropping a real
+   <img> inside covers the frame entirely. */
+.shot{
+  position:relative;overflow:hidden;
+  background:linear-gradient(155deg,#E6E4E0 0%,#F4F3F1 55%,#E8E6E2 100%);
+}
+.shot--tall{aspect-ratio:4/5}
+.shot--sq{aspect-ratio:1/1}
+.shot::after{
+  content:'';position:absolute;inset:clamp(7px,.7vw,12px);
+  border:1px solid rgba(10,10,11,.14);pointer-events:none;
+}
+.shot__mark{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font-size:clamp(38px,5vw,86px);font-weight:500;letter-spacing:-.05em;
+  color:rgba(10,10,11,.08);white-space:nowrap;
+}
+/* the square frames are a third of the width — scale the mark to fit one line */
+.shot--sq .shot__mark{font-size:clamp(26px,3.4vw,64px)}
+.shot__tag{
+  position:absolute;left:clamp(15px,1.5vw,24px);bottom:clamp(13px,1.3vw,20px);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(10,10,11,.42);
+}
+.shot img{
+  position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;
+}
+.shot:has(img)::after{border-color:rgba(255,255,255,.22)}
+.shot:has(img) .shot__mark,.shot:has(img) .shot__tag{display:none}
+
+@media (max-width:900px){
+  .founder__top{grid-template-columns:1fr;gap:34px}
+  .founder__portrait{max-width:420px}
+  .founder__facts{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .sheet__grid{grid-template-columns:1fr 1fr}
+  .sheet__grid li:last-child{display:none}
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   07 · STUDIO
    ══════════════════════════════════════════════════════════════════════════ */
 .studio{
   background:var(--porcelain);

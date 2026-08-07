@@ -1,6 +1,6 @@
 # NAUGHT TO TEN — web design studio
 
-A single-page luxury landing page for a (fictional) web design studio, built
+A single-page luxury landing page for a Galway web design studio, built
 around a scroll-scrubbed film. No framework, no build step, no third-party
 requests at runtime — open `index.html` and it runs.
 
@@ -54,8 +54,9 @@ Supporting details:
 | 03 | Film | Full-bleed loop, plays only while in view |
 | 04 | Process | Four movements, staggered reveal |
 | 05 | Work | Vertical scroll translated into a horizontal rail |
-| 06 | Studio | Editorial split with a hover-tracked spec table |
-| 07 | Start | Client-side form with inline validation and confirmation |
+| 06 | Founder | Portrait, first-person bio, fact table and a three-up contact sheet |
+| 07 | Studio | Editorial split with a hover-tracked spec table |
+| 08 | Start | Client-side form with inline validation and confirmation |
 
 ## Structure
 
@@ -158,8 +159,42 @@ section's `<video>` could not be played in test and falls back to its poster.
 The file itself is a Main/4.0 H.264 with a silent AAC track, bt709 tags and
 faststart applied, which is the combination that plays everywhere.
 
+
+## Founder photographs
+
+The founder section ships with **styled empty frames**, not broken images —
+one 4:5 portrait and three square contact-sheet slots, each drawn as a matted
+frame with the `0—10` mark. The section is presentable with no photographs in
+it at all.
+
+To drop real photographs in:
+
+```bash
+python3 add-founder-photos.py --portrait me.jpg --grid a.jpg b.jpg c.jpg
+python3 build-offline.py --both        # refresh the single-file bundles
+```
+
+The script crops with ffmpeg (portrait to 1000×1250, squares to 800×800, both
+centred), writes them to `assets/img/founder/`, and rewrites the matching
+frames in `index.html` as `<img>` tags. Slots you don't supply stay as frames,
+and re-running overwrites in place. Every argument is optional, so you can add
+the portrait now and the contact sheet later.
+
+## Content that is still placeholder
+
+The site carries real contact details, so anything invented reads as a real
+claim. Before this goes live, replace:
+
+- **The six case studies** in the Work rail — Aureate, Halcyon Atelier,
+  Meridian Rye, Nocturne, Vantage Labs and Fold are all fictional, and they
+  currently reuse crops from the hero film as their imagery.
+- **The manifesto statistics** — brands launched, median Lighthouse, typical
+  engagement.
+- **The studio spec table** — founded year, engagements per quarter, starting
+  price.
+
 ## Credits
 
-An independent design study. Naught to Ten is a fictional studio; the contact
-details, client names and figures on the page are invented. Film supplied by
-the project owner.
+Naught to Ten is a real studio in Mervue, Galway — the address, phone and email
+on the page are its own. The client names and figures are not; see *Content
+that is still placeholder* above. Film supplied by the project owner.

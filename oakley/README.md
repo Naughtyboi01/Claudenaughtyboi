@@ -108,6 +108,14 @@ pass. Bugs this caught and that are now fixed:
 - Reduced motion still ran the rAF loop, which reset the anatomy hotspots to
   "off" on every frame.
 - The beat rail sat at the right edge, on top of act 2's right-hand spec rail.
+- `.is-lit` on `<body>` was scoped too broadly, so it pre-revealed *every*
+  masked heading the moment the preloader cleared — the anatomy and iridium
+  mask reveals never actually played. Caught while recording the demo video.
+
+The loop video now ships as VP9 WebM alongside the H.264 MP4, so it plays in
+Chromium builds without proprietary codecs as well as in Safari. Confirmed
+playing in both the served and offline builds (`readyState 4`, advancing
+`currentTime`, 960×540 decoded).
 
 **Measured** (this machine, software rasterisation — real GPU hardware is much
 faster): the scroll loop runs at ~39 fps and settles exactly on target. Time to
@@ -117,15 +125,53 @@ frame set — a real 900 kbps browser reports `effectiveType: '3g'` and takes th
 
 ## Known limitations
 
-**The video section is unverified.** The headless Chromium used for testing has
-no H.264 decoder, so `assets/media/iridium-loop.mp4` shows its poster in tests.
-In a real browser it plays. The bytes are a valid faststart MP4 with a silent
-AAC track, Main/4.0, bt709.
-
 **The lens engraving in the source footage is garbled.** It is AI-generated text
 that reads as something like "CIMITEY IRS". It is legible for roughly one beat
 of the macro sequence and there is nothing to be done about it short of
 retouching every affected frame.
+
+## The 30-second demo
+
+`demo/eye-jacket-demo.mp4` — 1600×900, 30.00s, 30fps, 5.4 MB. A scripted
+runthrough with holds on each hero act, the four anatomy hotspots, and the
+closing panel. `demo/eye-jacket-demo.webm` is the same 900 frames in VP9, and
+`demo/eye-jacket-demo.html` wraps the MP4 as a self-contained player page for
+when a desktop player is being fussy.
+
+`record-demo.js` regenerates it. Two things it has to work around:
+
+**Virtual time is not usable.** Chromium's `Emulation.setVirtualTimePolicy`
+advances `performance.now()` and rAF but *not* `document.timeline` — measured
+directly: after advancing 2000ms of virtual time, `performance.now()` had moved
+2000ms and `document.timeline.currentTime` had not moved at all. Every CSS
+transition on the page (reveals, hotspot cards, mask reveals, the preloader
+dissolve) therefore snaps or freezes. Deterministic frame-stepping is out.
+
+**So it records in slow motion instead.** `Animation.setPlaybackRate(0.3)` slows
+the document's animation timeline, the scroll timeline is slowed by the same
+factor, and the loop video's own `playbackRate` is set to match. The renderer
+then only has to deliver ~9 wall-fps to yield a full 30 content-fps — it
+manages ~13 at this size, where recording at native speed would have produced a
+13fps video. Captured frames are resampled against *content* time onto an exact
+1/30s grid, so the output is correctly paced however unevenly the screencast
+delivered.
+
+The camera path is a monotone cubic (Fritsch–Carlson) through keyframes taken
+from measured page geometry: C1-continuous so velocity never jerks at a
+keyframe, monotonicity-preserving so it can never overshoot into a backwards
+scroll, and naturally flat where a y value repeats, which is what makes the
+holds.
+
+**Measured:** 1663 frames captured over 29.3s of content (56.7 content-fps),
+resampled to 900 output frames with 52 repeats (5.8%). Every repeat run longer
+than 3 frames falls inside an intentional hold, where a repeat is invisible;
+the longest is the 0.67s settle on the footer at the end. Both files decode end
+to end with zero errors, and MP4 vs WebM scores SSIM 0.983 — the same frames in
+two codecs.
+
+The intro is rewound before recording (transitions off, classes stripped,
+settle, restore, re-arm) so the preloader dissolve and the letter-by-letter
+wordmark are inside the video rather than something that happened during setup.
 
 ## The offline demo
 
@@ -174,6 +220,12 @@ ffmpeg -ss 2.2 -t 4.0 -i source.mp4 -f lavfi -i anullsrc=r=48000:cl=stereo \
   -map "[v]" -map 1:a -shortest -c:v libx264 -profile:v main -level 4.0 -pix_fmt yuv420p \
   -crf 30 -preset slow -color_primaries bt709 -color_trc bt709 -colorspace bt709 \
   -c:a aac -b:a 48k -movflags +faststart assets/media/iridium-loop.mp4
+
+# and the VP9 twin, for Chromium builds without proprietary codecs
+ffmpeg -ss 2.2 -t 4.0 -i source.mp4 -filter_complex \
+  "[0:v]scale=960:540:flags=lanczos,split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1[v]" \
+  -map "[v]" -an -c:v libvpx-vp9 -crf 34 -b:v 0 -row-mt 1 -deadline good \
+  -cpu-used 2 -pix_fmt yuv420p assets/media/iridium-loop.webm
 ```
 
 Serve locally with `python3 -m http.server 8000` and open `/oakley/`.
@@ -184,8 +236,9 @@ Serve locally with `python3 -m http.server 8000` and open `/oakley/`.
 |---|---|
 | Frames, large set | 3.1 MB (120 × 1280×720) |
 | Frames, small set | 1.6 MB (120 × 720×405) |
-| Loop video | 298 KB |
 | Stills | 300 KB |
 | Fonts | 140 KB |
 | HTML + CSS + JS | ~60 KB |
-| **Offline bundle** | **5.1 MB** (2.9 MB with `--frames sm`) |
+| Loop video | 298 KB MP4 + 346 KB WebM |
+| **Offline bundle** | **5.6 MB** (3.4 MB with `--frames sm`) |
+| Demo video | 5.4 MB MP4 · 2.0 MB WebM · 7.3 MB player page |

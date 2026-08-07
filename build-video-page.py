@@ -18,13 +18,18 @@ recovered from the bundle.
 
 import argparse
 import base64
+import os
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).parent.resolve()
-FFMPEG = '/usr/local/lib/python3.11/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
+# Overridable: the packaged path rots when the environment is rebuilt.
+FFMPEG = os.environ.get(
+    'FFMPEG',
+    '/usr/local/lib/python3.11/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2',
+)
 
 
 def b64(path: Path) -> str:

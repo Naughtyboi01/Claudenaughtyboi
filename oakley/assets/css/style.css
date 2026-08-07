@@ -91,7 +91,12 @@ ul{list-style:none;padding:0}
   transform:translate3d(0,110%,0);
   transition:transform 1.15s var(--e-out);
 }
-.ln.in > i,.is-lit .ln > i{transform:none}
+/* .in is the scroll-driven reveal. The .is-lit fallback is scoped to
+   the hero only — unscoped it pre-revealed every masked heading on the
+   page the moment the preloader cleared, so the anatomy and iridium
+   reveals never played. */
+.ln.in > i,
+.is-lit .hero .ln > i{transform:none}
 
 /* ── generic scroll reveal ───────────────────────────────────── */
 [data-reveal]{

@@ -35,8 +35,11 @@ MIME = {
     '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.svg': 'image/svg+xml',
 }
 
-VIDEO = 'assets/media/iridium-loop.mp4'
 VIDEO_ID = 'iridiumVideo'
+VIDEOS = [                       # order matters: it is the browser's pick order
+    ('assets/media/iridium-loop.webm', 'video/webm'),
+    ('assets/media/iridium-loop.mp4',  'video/mp4'),
+]
 
 
 def data_uri(path: Path) -> str:
@@ -99,21 +102,37 @@ def main():
     total = sum(f.stat().st_size for f in frames)
     print(f'  · inlined {len(frames)} frames from {args.frames}/ ({total/1e6:.1f} MB raw)')
 
-    # ── looping video, as a Blob URL ─────────────────────────────────────
-    video = ROOT / VIDEO
-    video_b64 = base64.b64encode(video.read_bytes()).decode()
-    html = html.replace(f'<source src="{VIDEO}" type="video/mp4">', '')
-    print(f'  · inlined {video.name} ({video.stat().st_size/1e6:.1f} MB raw)')
+    # ── looping video, as Blob URLs ──────────────────────────────────────
+    # Both codecs travel: WebM/VP9 for Chromium builds without proprietary
+    # codecs, MP4/H.264 for Safari. The <source> elements stay in place and
+    # only lose their src, so the browser still does the picking.
+    media = {}
+    for rel, mime in VIDEOS:
+        f = ROOT / rel
+        media[mime] = base64.b64encode(f.read_bytes()).decode()
+        html = html.replace(f'<source src="{rel}" type="{mime}">',
+                            f'<source type="{mime}">')
+        print(f'  · inlined {f.name} ({f.stat().st_size/1e6:.1f} MB raw)')
 
     payload = f"""<script>
 window.__FRAMES = {json.dumps(uris)};
 (function () {{
   // base64 -> Blob URL: Safari wants byte-range requests for video and will
   // not reliably play a data: URI source.
-  var b64 = "{video_b64}", bin = atob(b64), buf = new Uint8Array(bin.length);
-  for (var i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  var MEDIA = {json.dumps(media)};
+  function blobUrl(b64, type) {{
+    var bin = atob(b64), buf = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([buf], {{ type: type }}));
+  }}
   var v = document.getElementById('{VIDEO_ID}');
-  if (v) v.src = URL.createObjectURL(new Blob([buf], {{ type: 'video/mp4' }}));
+  if (!v) return;
+  var srcs = v.getElementsByTagName('source');
+  for (var i = 0; i < srcs.length; i++) {{
+    var t = srcs[i].getAttribute('type');
+    if (MEDIA[t]) srcs[i].src = blobUrl(MEDIA[t], t);
+  }}
+  v.load();
 }})();
 </script>
 """

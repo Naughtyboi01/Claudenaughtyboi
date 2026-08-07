@@ -34,8 +34,14 @@
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── frame sequence config ─────────────────────────────── */
-  var FRAMES = 120;
+  /* ── frame sequence config ─────────────────────────────────
+     The offline bundle sets window.__FRAMES to an array of data:
+     URIs before this file runs. That single hook is what lets the
+     single-file build exist without a forked copy of the engine to
+     keep in sync. */
+  var EMBEDDED = (window.__FRAMES && window.__FRAMES.length) ? window.__FRAMES : null;
+  var FRAMES = EMBEDDED ? EMBEDDED.length : 120;
+
   var conn = navigator.connection;
   var lowData = !!(conn && (conn.saveData || /(^|-)([23])g$/.test(conn.effectiveType || '')));
   var useSmall = lowData || window.innerWidth < 900 ||
@@ -45,6 +51,10 @@
   var images = new Array(FRAMES);
   var ready  = new Array(FRAMES);
   var loaded = 0;
+
+  function frameSrc(i) {
+    return EMBEDDED ? EMBEDDED[i] : setDir + pad(i + 1) + '.jpg';
+  }
 
   var canvas   = $('#heroCanvas');
   var ctx      = canvas ? canvas.getContext('2d', { alpha: false }) : null;
@@ -132,7 +142,7 @@
           };
           img.onload = function () { settle(true); };
           img.onerror = function () { settle(false); };
-          img.src = setDir + pad(i + 1) + '.jpg';
+          img.src = frameSrc(i);
           images[i] = img;
         }(next++));
       }
@@ -497,7 +507,7 @@
     sizeCanvas();
     var still = new Image();
     still.onload = function () { images[0] = still; ready[0] = true; draw(0, 1, 0); };
-    still.src = setDir + '0001.jpg';
+    still.src = frameSrc(0);
     reveal();
     $$('#beats .beat')[0] && $$('#beats .beat')[0].classList.add('is-on');
     renderAnatomy(1);

@@ -127,6 +127,36 @@ that reads as something like "CIMITEY IRS". It is legible for roughly one beat
 of the macro sequence and there is nothing to be done about it short of
 retouching every affected frame.
 
+## The offline demo
+
+`eye-jacket-offline.html` is the whole site as one 5.1 MB file — stylesheet,
+fonts, all 120 hero frames, the stills and the looping video inlined. It runs
+from a USB stick, an email attachment or a double-click on `file://` with no
+server and no network. Verified: boots in 0.6s from `file://`, makes zero
+network requests, no console errors.
+
+```sh
+python3 build-offline.py                      # → eye-jacket-offline.html (5.1 MB)
+python3 build-offline.py --frames sm          # → 2.9 MB, 720px frames
+python3 build-offline.py -o demo.html         # pick the filename
+```
+
+Three things the bundler has to get right:
+
+- **Frames go in as a `window.__FRAMES` array of data: URIs.** `main.js` checks
+  for that array and skips its normal path-based loading, so the single-file
+  build exists without a forked copy of the engine to keep in sync.
+- **The video becomes a Blob URL, not a data: URI.** Safari wants byte-range
+  requests for media and will not reliably play a `data:` source.
+- **Image references are matched per *attribute*, not per tag, and only for
+  image extensions.** A tag-anchored pattern only catches the first attribute,
+  so a tag carrying both `src` and `poster` keeps an un-inlined poster; a
+  pattern that is not extension-scoped swallows `<script src>` and silently
+  produces a stub. Both of those were real bugs in the sibling page's builder.
+
+The footer's link to the sibling page is dropped on the way out, since it has
+nowhere to point in a single file.
+
 ## Rebuilding the assets
 
 Frames, stills and the loop video all come from the one source clip:
@@ -158,3 +188,4 @@ Serve locally with `python3 -m http.server 8000` and open `/oakley/`.
 | Stills | 300 KB |
 | Fonts | 140 KB |
 | HTML + CSS + JS | ~60 KB |
+| **Offline bundle** | **5.1 MB** (2.9 MB with `--frames sm`) |

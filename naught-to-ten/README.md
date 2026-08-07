@@ -182,8 +182,45 @@ The page makes no network requests at runtime, so this folder already works
 with no connection — including straight off `file://`.
 
 For a version you can email, carry on a stick, or open with nothing else
-alongside it, there are **two single-file builds** — styles, fonts, all 145
-hero frames, the crops and the film, all inlined:
+alongside it there are **two kinds of single-file build** — styles, fonts, all
+145 hero frames, the photographs and the film, all inlined.
+
+**The whole site in one file.** Every page, with the links between them
+working:
+
+```bash
+python3 build-offline-site.py --both
+```
+
+| File | Frames | Size |
+|---|---|---|
+| `naught-to-ten-site-desktop.html` | 1600px | 11.7 MB |
+| `naught-to-ten-site-mobile.html` | 960px | 7.3 MB |
+
+Four things make that hold together:
+
+- **One shared nav and footer.** Each page contributed an identical copy;
+  keeping five would mean five elements carrying `id="nav"`.
+- **A hash router.** Each page's `<main>` becomes a route container and one
+  shows at a time — `#/contact`, `#/work`. Anything that is *not* a known
+  route resolves to the one-pager, so plain anchors like `#scale` still work
+  and so does the back button.
+- **Sub-page ids are prefixed.** The contact form and the one-pager's enquiry
+  form both used `fName`, `fMail`, `formNote` and `form`. Duplicated in one
+  document the first would win and the second would be unreachable.
+- **main.js reads `window.__NTT_ROUTE`** and does nothing while a sub-page is
+  showing, since every measurement would read zero against a hidden page. The
+  router calls `window.__NTT_REMEASURE()` on the way back. Both are undefined
+  on the normal site, so they cost nothing there.
+
+The route reset uses `scrollTo({behavior:'instant'})` rather than
+`scrollTo(0,0)` — the stylesheet sets `scroll-behavior: smooth`, so a plain
+reset animates from wherever the last page was and the new one arrives
+part-scrolled.
+
+**The one-pager alone**, for when that is all you want to hand over. Its
+sub-page links point at the live domain, since those pages are separate
+documents that cannot be inlined:
 
 | File | Frames | Size | Boot from disk |
 |---|---|---|---|

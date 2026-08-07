@@ -414,6 +414,12 @@ var raf = null;
 function tick() {
   var y = window.scrollY || window.pageYOffset;
   var now = performance.now();
+  /* The single-file site bundle keeps every page in one document and shows
+     one at a time. While a sub-page is showing, the one-pager is display:none
+     — every measurement here would read zero and the nav would fight the
+     static one. Undefined on the normal site, so this costs nothing there. */
+  if (window.__NTT_ROUTE && window.__NTT_ROUTE !== 'home') { raf = null; return; }
+
   /* Set whenever an eased value is still short of its target. Scroll events
      stop the moment the wheel does, so without this the ease would freeze
      part-way — the canvas would hold a stale frame and the rail would stop
@@ -547,6 +553,10 @@ function tick() {
 }
 
 function schedule() { if (raf === null) raf = requestAnimationFrame(tick); }
+
+/* Geometry has to be retaken after the one-pager is shown again in the
+   bundle, since everything measured to zero while it was hidden. */
+window.__NTT_REMEASURE = function () { measure(); schedule(); };
 
 window.addEventListener('scroll', schedule, { passive: true });
 window.addEventListener('resize', function () { measure(); schedule(); });

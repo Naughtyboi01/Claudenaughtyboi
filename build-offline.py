@@ -57,7 +57,7 @@ def main():
                     help='frame set to embed (lg = 1280px, sm = 720px)')
     args = ap.parse_args()
 
-    html = (ROOT / 'index.html').read_text()
+    html = (ROOT / 'airmax95.html').read_text()
 
     # ── stylesheets ──────────────────────────────────────────────────────
     for href in re.findall(r'<link rel="stylesheet" href="([^"]+)"\s*/?>', html):

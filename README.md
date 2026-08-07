@@ -1,71 +1,113 @@
-# AIR MAX 95 — The Anatomy of Air
+# House of Rocky
 
-A single-page luxury landing page built around a scroll-scrubbed product film.
-No framework, no build step, no third-party requests at runtime — open
-`index.html` and it runs.
+A one-page luxury site for a small bakery, built around a scroll-scrubbed
+brand film. No framework, no build step, no third-party requests at runtime —
+open `index.html` and it runs.
+
+---
 
 ## The hero
 
-The centrepiece is a **frame-sequence scrubber**: the source video is decoded
-ahead of time into 96 stills, preloaded, and painted to a `<canvas>` at an index
-driven by scroll position inside a 700vh sticky track.
+The centrepiece is a **frame-sequence scrubber**. The 6-second brand film is
+decoded ahead of time into 109 square stills, preloaded, and painted to a
+`<canvas>` at an index driven by scroll position inside a 760vh sticky track.
 
-This is deliberately *not* a `<video>` with `currentTime` assignment. Scrubbing a
-video element stutters badly on mobile Safari, which seeks to the nearest
+This is deliberately *not* a `<video>` with `currentTime` assignment. Scrubbing
+a video element stutters badly on mobile Safari, which seeks to the nearest
 keyframe rather than the requested time. Painting decoded stills is frame-exact
 everywhere, at the cost of the upfront download.
 
+The film has four beats, and the hero is choreographed to them:
+
+| Scroll | Footage | On screen |
+|---|---|---|
+| 0.00 – 0.25 | macro dough | wordmark lockup, then *“Butter, browned”* |
+| 0.26 – 0.41 | pecans | *“Toasted whole, broken by hand”* |
+| 0.42 – 0.55 | chocolate chunks | *“Cut from the block, never a chip”* — a wash deepens here |
+| 0.55 – 1.00 | the finished cookie | captions clear out; the closing card fades up |
+
+**The pull-back.** The film is square and the footage carries the House of Rocky
+wordmark burned into its bottom-right corner. Cover-cropping a square into a
+wide viewport would slice that off, so the canvas eases from `cover` to
+`contain` between 0.55 and 0.80 — the shot pulls back into a framed plate as
+the cookie resolves, and the wordmark lands intact. On a portrait screen the
+same move ends as a full-width plate with the caption in clear space beneath.
+
+**The plate margins** are filled with a 32×32 copy of the current frame scaled
+back up with smoothing — a cheap blur that always matches the footage, so there
+is no colour to keep in sync and no hard letterbox.
+
 Supporting details:
 
-- **Two frame sets.** `assets/frames/lg` (1280px, ~4.5 MB) for desktop,
-  `assets/frames/sm` (720px, ~2 MB) served to narrow viewports, `saveData`
-  clients, and 2G connections.
+- **Two frame sets.** `rocky/frames/lg` (1000px, 5.8 MB) for desktop,
+  `rocky/frames/sm` (620px, 2.6 MB) for narrow viewports, `saveData` clients
+  and 2G connections.
 - **Eased index.** The drawn frame lerps toward the scroll-derived target, so a
-  fast flick reads as motion blur rather than a jump cut.
-- **Graceful degradation.** `nearestReady()` paints the closest decoded frame, so
-  scrubbing never blanks out mid-preload; a 9s timeout dismisses the loader
+  fast flick reads as motion rather than a cut.
+- **Graceful degradation.** `nearestReady()` paints the closest decoded frame,
+  so scrubbing never blanks mid-preload; a 9s timeout dismisses the loader
   regardless of network.
-- **Four choreographed beats** — wordmark, statement, technical callout, end card
-  — cross-fade against the footage on their own scroll windows, with a live HUD
-  reading sequence position and phase.
+- **A poster behind the canvas**, so the hero shows real footage before the
+  first frame decodes — and with JavaScript off, where the canvas never paints.
 
 ## Sections
 
 | # | Section | Mechanic |
 |---|---------|----------|
-| 01 | Origin | Word-by-word ignition tied to scroll position |
-| 02 | Anatomy | Pinned figure, four hotspots that advance as you scroll (also clickable) |
-| 03 | Materials | Staggered editorial grid with parallax crops |
-| 04 | Air | Looping video, plays only while in view |
-| 05 | Archive | Vertical scroll translated into a horizontal rail |
-| 06 | Specification | Hover-tracked spec table |
-| 07 | Reserve | Client-side form with inline confirmation |
+| 01 | Hero | Scroll-scrubbed canvas, four choreographed beats |
+| 02 | Statement | Word-by-word ignition tied to scroll position |
+| 03 | The reason | The Rocky story — editorial two-column, dark |
+| 04 | Anatomy | Pinned cookie, four hotspots that advance with scroll (also clickable) |
+| 05 | The counter | Three products, parallax crops |
+| 06 | Craft | Vertical scroll translated into a horizontal rail |
+| 07 | The film | Looping macro footage, plays only while in view |
+| 08 | Reserve | Client-side form with inline confirmation |
 
 ## Structure
 
 ```
 index.html
-assets/
+rocky/
   css/fonts.css      self-hosted @font-face
   css/style.css
   js/main.js         one rAF loop drives everything
   fonts/             Instrument Serif, Inter var, JetBrains Mono var (latin)
-  frames/lg, sm/     hero sequences, 96 frames each
-  img/               stills for the static sections
-  media/             looping mp4 for the Air section
+  frames/lg, sm/     hero sequences, 109 frames each
+  img/               logo, stills, posters
+  media/             looping mp4 for the film section
 ```
 
 ## Notes
 
 - **Native scroll throughout.** No transform-hijacked scroll container — sticky
-  positioning stays intact, and the trackpad/keyboard/scrollbar all behave.
+  positioning stays intact, and the trackpad, keyboard and scrollbar all behave.
   Smoothing is applied to animated values, not to the scroll itself.
-- **Fonts are self-hosted**, so the page has zero external dependencies and works
-  offline or behind a strict CSP.
-- **`prefers-reduced-motion`** disables the drift, grain, and reveal transitions;
-  the hero remains scrubbable because it is user-driven.
-- **No-JS fallback** in a `<noscript>` block unpins the sticky sections and
-  reveals all masked text.
+- **The logo is the real one.** `rocky/img/logo-wordmark.png` is the supplied
+  mark lifted off its cream disc onto transparency, so it can sit on any
+  background; `logo-circle.png` keeps the disc.
+- **Fonts are self-hosted**, so the page has zero external dependencies and
+  works offline or behind a strict CSP.
+- **`prefers-reduced-motion`** disables the grain, drift and reveal
+  transitions; the hero stays scrubbable because it is user-driven.
+- **No-JS fallback** in a `<noscript>` block unpins the sticky sections,
+  reveals all masked text, and leaves the hero showing its poster.
+
+## Copy — please read before this goes live
+
+The origin story in section 03 is written from what was supplied: the business
+was started by **Jane Naughton** in memory of her late brother **Rafeek**, known
+to everyone as **Rocky**.
+
+Everything else in that section is **written colour, not reported fact** — the
+late-night kitchen, the neighbours at the door, "the loudest laugh in the room",
+the plates he overfilled. It reads as memoir, so it should be replaced with real
+memories before publishing rather than left as written. The same goes for the
+product specifics invented to give the page substance: the 36-hour cold rest,
+Irish butter, the €4.00–4.50 prices, the Thursday–Sunday bake days, the
+`hello@houseofrocky.ie` address and the empty social links.
+
+The reserve form is front-end only. It validates and confirms in the page and
+sends nothing anywhere — wire it to a real order system before launch.
 
 ## Running it
 
@@ -73,45 +115,12 @@ assets/
 python3 -m http.server 8000   # any static server; file:// works too
 ```
 
-## Offline
+## Also in this repo
 
-The page makes no network requests at runtime, so the folder already works with
-no connection — including straight off `file://`.
-
-For a version you can email, carry on a stick, or open with nothing else
-alongside it, `airmax95-offline.html` is the **whole site as one file**: styles,
-fonts, all 96 hero frames, the stills and the video, inlined. 8.6 MB, opens in
-about a second from disk since nothing is fetched.
-
-Rebuild it after any edit:
-
-```bash
-python3 build-offline.py                # -> airmax95-offline.html (1280px frames)
-python3 build-offline.py --frames sm    # ~4 MB, 720px frames
-```
-
-Two things worth knowing about that build:
-
-- Frames go in as a `window.__FRAMES` array of data URIs; `main.js` detects it
-  and skips its path-based loading, so both builds share one codebase.
-- The video is inlined as base64 and handed over as a **Blob URL**, not a data:
-  URI — Safari wants byte-range requests for media and will not reliably play a
-  data: URI video. The video also carries a poster, so the Air section still
-  reads as designed if a browser can't decode H.264.
-
-## Demo
-
-`demo/air-max-95-demo.mp4` — an 83-second walkthrough of the offline file,
-recorded at 1440×900 straight off `file://`. The scroll is driven by an eased
-timeline whose stops come from the page's measured geometry, so each one lands
-where it should: the hero scrub, the Air callout timed to the close-up, all four
-anatomy chapters, the archive rail, and the reserve panel.
-
-One caveat: the Air section's background shows its poster rather than the
-playing loop, because the headless Chromium used to record has no H.264 decoder.
-In a real browser that footage plays.
+`airmax95.html` and `assets/` are an earlier, unrelated design study, kept
+alongside this one. `build-offline.py` packs that study into a single
+self-contained file; `demo/` holds its walkthrough video.
 
 ## Credits
 
-An independent design study. Not affiliated with or endorsed by Nike, Inc.
-Product footage supplied by the project owner.
+Brand film, logo and the facts of the story supplied by the project owner.

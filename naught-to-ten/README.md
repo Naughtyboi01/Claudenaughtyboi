@@ -69,6 +69,8 @@ assets/
   fonts/             Instrument Serif, Inter var, JetBrains Mono var (latin)
   frames/lg, sm/     hero sequences, 145 frames each
   img/               editorial crops pulled from the film
+  img/founder/       portrait and contact sheet
+  logo/              outlined SVG wordmarks, monogram and icon
   media/             the loop for the film section
 ```
 
@@ -114,8 +116,8 @@ hero frames, the crops and the film, all inlined:
 
 | File | Frames | Size | Boot from disk |
 |---|---|---|---|
-| `naught-to-ten-offline-desktop.html` | 1600px | 10.8 MB | ~1.2 s |
-| `naught-to-ten-offline-mobile.html` | 960px | 6.4 MB | ~0.6 s |
+| `naught-to-ten-offline-desktop.html` | 1600px | 11.3 MB | ~0.7 s |
+| `naught-to-ten-offline-mobile.html` | 960px | 6.9 MB | ~0.4 s |
 
 They differ only in which frame set is baked in. The served site picks between
 the two sets at runtime; a single file cannot, so the choice is made at build
@@ -162,12 +164,11 @@ faststart applied, which is the combination that plays everywhere.
 
 ## Founder photographs
 
-The founder section ships with **styled empty frames**, not broken images —
-one 4:5 portrait and three square contact-sheet slots, each drawn as a matted
-frame with the `0—10` mark. The section is presentable with no photographs in
-it at all.
+The four slots are filled. The frames themselves are styled to stand alone —
+a matted, hairline-bordered `0—10` plate — so an empty slot reads as a
+contact sheet rather than a broken image.
 
-To drop real photographs in:
+To replace them, or to fill slots later:
 
 ```bash
 python3 add-founder-photos.py --portrait me.jpg --grid a.jpg b.jpg c.jpg
@@ -177,8 +178,38 @@ python3 build-offline.py --both        # refresh the single-file bundles
 The script crops with ffmpeg (portrait to 1000×1250, squares to 800×800, both
 centred), writes them to `assets/img/founder/`, and rewrites the matching
 frames in `index.html` as `<img>` tags. Slots you don't supply stay as frames,
-and re-running overwrites in place. Every argument is optional, so you can add
-the portrait now and the contact sheet later.
+and re-running overwrites in place.
+
+It never enlarges past the source. Enlarging adds no detail, only bytes and
+softness, so a source that cannot fill a slot is cropped to the right shape
+and written at whatever size it honestly supports — the current portrait comes
+from an 828px screenshot and lands at 660×826 rather than a stretched
+1000×1250. Feeding it the original camera files would fill the slots properly.
+
+## Logo
+
+`make-logo.py` rebuilds the wordmark from the site's own fonts and writes it
+out as **outlined SVG paths**, so the artwork scales cleanly and opens
+anywhere without the fonts installed.
+
+```bash
+python3 make-logo.py          # -> assets/logo/*.svg
+python3 make-logo.py --png    # also 2400px transparent PNGs
+```
+
+| File | What it is |
+|---|---|
+| `wordmark-{dark,light}.svg` | The horizontal lockup — the primary mark |
+| `wordmark-stacked-{dark,light}.svg` | Three-line version, as in the hero |
+| `monogram-{dark,light}.svg` | The `0—10` scale mark |
+| `icon.svg` | Square app icon, `10` in porcelain on an ink tile |
+
+`dark` is ink for pale backgrounds, `light` is porcelain for dark ones. Inter
+ships here as a variable font, so it is pinned to `wght=500` before the
+outlines are taken — read at its 400 default the logo would come out visibly
+lighter than the site. The stacked lockup is set looser than the hero (line
+height .92 against .82), because on the page each line sits in its own masked
+block and free-standing the italic *to* would run into the cap of *Ten*.
 
 ## Content that is still placeholder
 

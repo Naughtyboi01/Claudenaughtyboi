@@ -37,8 +37,36 @@ SPECS = {                      # slot        -> (w, h, css modifier, alt text)
 }
 
 
+def probe(src: Path) -> tuple[int, int]:
+    """Source pixel dimensions, read off ffmpeg's stream line."""
+    err = subprocess.run(['ffmpeg', '-hide_banner', '-i', str(src)],
+                         capture_output=True, text=True).stderr
+    for line in err.splitlines():
+        if 'Video:' in line:
+            m = re.search(r'\b(\d{2,5})x(\d{2,5})\b', line)
+            if m:
+                return int(m.group(1)), int(m.group(2))
+    raise SystemExit(f'! could not read dimensions of {src}')
+
+
+def target_size(src: Path, slot: str) -> tuple[int, int]:
+    """The slot's size, reduced if the source cannot fill it.
+
+    Enlarging a small source adds no detail, only bytes and softness — phone
+    screenshots in particular are already well under these targets. Crop to
+    the slot's aspect ratio either way; only the output scale gives.
+    """
+    tw, th = SPECS[slot][0], SPECS[slot][1]
+    sw, sh = probe(src)
+    crop_w = min(sw, sh * tw / th)          # widest correctly-shaped crop available
+    scale = min(1.0, crop_w / tw)
+    even = lambda v: max(2, int(round(v)) // 2 * 2)
+    return even(tw * scale), even(th * scale)
+
+
 def crop(src: Path, slot: str) -> Path:
-    w, h, _, _ = SPECS[slot]
+    w, h = target_size(src, slot)
+    full_w, full_h = SPECS[slot][0], SPECS[slot][1]
     OUT.mkdir(parents=True, exist_ok=True)
     dst = OUT / f'{slot}.jpg'
     cmd = [
@@ -48,8 +76,9 @@ def crop(src: Path, slot: str) -> Path:
         '-frames:v', '1', '-q:v', '4', str(dst),
     ]
     subprocess.run(cmd, check=True)
+    note = '' if (w, h) == (full_w, full_h) else f'  (source too small for {full_w}x{full_h})'
     print(f'  · {src.name} -> assets/img/founder/{dst.name} '
-          f'({w}x{h}, {dst.stat().st_size/1e3:.0f} KB)')
+          f'({w}x{h}, {dst.stat().st_size/1e3:.0f} KB){note}')
     return dst
 
 

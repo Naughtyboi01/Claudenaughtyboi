@@ -103,16 +103,19 @@ standard online services terms.
 
 ## Before you announce it
 
-Content that is still placeholder and reads as fact:
+The fictional client work is gone. `/work/` is now a single real case study —
+this website — and the sentence in `/terms/` asserting those client names were
+genuine has been removed.
 
-- **Six invented case studies** on `/work/` and the home rail — Aureate,
-  Halcyon Atelier, Meridian Rye, Nocturne, Vantage Labs, Fold — illustrated
-  with crops from the hero film.
-- **Invented figures**: 46 brands launched, 98+ median Lighthouse, founded
-  2019, four engagements a quarter, from €38,000.
-- **`/terms/` states** that the project names under work "belong to the clients
-  concerned and appear as a record of work carried out". That sentence is
-  false while the projects are invented.
+Two invented figures are still on the home page and read as fact:
 
-None of it is in the structured data, so nothing false is being asserted to
-search engines — but a visitor will read all of it as true.
+- **46 brands launched**
+- **98+ median Lighthouse**
+
+Both sit in the manifesto stat row. Replace or remove them before launch.
+Neither appears in the structured data, so nothing false is being told to
+search engines — but a visitor will read them as true.
+
+Also still assumed rather than decided by you: **founded 2019** in the studio
+spec table, the **50/50 payment split** and **14-day invoice terms** in
+`/terms/`, and the **two revision rounds** quoted in both `/terms/` and the FAQ.

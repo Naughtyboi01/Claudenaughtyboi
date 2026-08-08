@@ -890,3 +890,13 @@ body::after{
   .manifesto__t .w{opacity:1}
   .card__img,.row__btn,.btn,.scale__frame .pl{transition-duration:.01ms}
 }
+
+/* work rail cards became links once they pointed at the case study */
+.card > a{display:block;color:inherit}
+.card > a:focus-visible{outline-offset:6px}
+
+.scale__more{
+  display:inline-block;margin-top:10px;color:var(--current);
+  border-bottom:1px solid rgba(91,184,255,.4);transition:border-color .3s;
+}
+.scale__more:hover{border-bottom-color:var(--current)}

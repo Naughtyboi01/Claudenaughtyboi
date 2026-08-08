@@ -46,6 +46,8 @@ VIDEO_EL = 'filmV'
 
 # slug -> (folder, nav label, document title)
 PAGES = [
+    ('services', 'services', 'Services', 'Web Design Services in Galway — Naught to Ten'),
+    ('faq',      'faq',      'FAQ',      'Web Design FAQ — Naught to Ten'),
     ('contact', 'contact', 'Contact', 'Contact — Naught to Ten'),
     ('work',    'work',    'Work',    'Selected Work — Naught to Ten'),
     ('privacy', 'privacy', 'Privacy', 'Privacy — Naught to Ten'),
@@ -236,6 +238,9 @@ def build(frame_set: str, out_name: str) -> None:
 
     nav = relink(nav)
     footer = relink(footer)
+    # the one-pager's own body links out too — the services teaser and the
+    # work rail both point at sub-pages
+    home_main = relink(home_main)
 
     # ── route views ──────────────────────────────────────────────────────
     views = [f'<div data-route="home">{home_main}</div>']

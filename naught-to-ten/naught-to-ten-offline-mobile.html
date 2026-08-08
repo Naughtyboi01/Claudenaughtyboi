@@ -1071,8 +1071,11 @@ body.is-navopen .nav__cta{position:relative;z-index:2}
         "addressRegion": "County Galway",
         "addressCountry": "IE"
       },
+      "foundingDate": "2026",
       "areaServed": [
         { "@type": "City", "name": "Galway" },
+        { "@type": "City", "name": "Ballinasloe" },
+        { "@type": "AdministrativeArea", "name": "County Galway" },
         { "@type": "Country", "name": "Ireland" }
       ],
       "founder": {
@@ -1081,6 +1084,7 @@ body.is-navopen .nav__cta{position:relative;z-index:2}
         "name": "Joshua Naughton",
         "jobTitle": "Founder & CEO",
         "worksFor": { "@id": "https://naughttoten.ie/#studio" },
+        "birthPlace": { "@type": "Place", "name": "Ballinasloe, County Galway, Ireland" },
         "sameAs": ["https://www.instagram.com/jozua.wav/"]
       },
       "sameAs": ["https://www.instagram.com/jozua.wav/"],
@@ -1241,9 +1245,9 @@ body.is-navopen .nav__cta{position:relative;z-index:2}
   </p>
   <div class="manifesto__foot">
     <div class="stat"><b data-count="10">0</b><span>Services, 0&nbsp;—&nbsp;10</span></div>
-    <div class="stat"><b data-count="46">0</b><span>Brands launched</span></div>
-    <div class="stat"><b data-count="98" data-suffix="+">0</b><span>Median Lighthouse</span></div>
-    <div class="stat"><b data-count="4" data-suffix=" wks">0</b><span>Typical engagement</span></div>
+    <div class="stat"><b data-count="0">0</b><span>Cookies, trackers, third&nbsp;parties</span></div>
+    <div class="stat"><b data-count="1.1" data-decimals="1" data-suffix="&nbsp;MB">0</b><span>Home page, before it appears</span></div>
+    <div class="stat"><b data-count="2">0</b><span>Working days to a reply</span></div>
   </div>
 </section>
 
@@ -1441,13 +1445,13 @@ body.is-navopen .nav__cta{position:relative;z-index:2}
       <p class="founder__quote" data-lines>I started this because a good<br>business should never be let<br>down by its own website.</p>
 
       <div class="founder__body">
-        <p>I'm a Galway native — born here, based here, and still working a few minutes from where I grew up. Mervue is home. Most of the people I build for are close enough to meet over a coffee rather than a calendar invite, and I think that shows in the work.</p>
+        <p>I'm from Ballinasloe, out at the east end of the county, and the studio is in Mervue now — so I've seen Galway from both ends of it. Most of the people I build for are close enough to meet over a coffee rather than a calendar invite, and I think that shows in the work.</p>
         <p>What I actually love is the moment an owner sees their own idea reflected back at them properly for the first time. Nearly everyone I work with is excellent at what they do and badly served by how they look online. Closing that gap is the entire job, and it never stops being satisfying.</p>
         <p>Naught to Ten came out of that. One person accountable from the first conversation to the last deployment — no handoffs, no account layer, nobody to hide behind. If it ships with my name on it, I drew it and I built it.</p>
       </div>
 
       <dl class="founder__facts">
-        <div><dt>From</dt><dd>Galway, Ireland</dd></div>
+        <div><dt>From</dt><dd>Ballinasloe, Co.&nbsp;Galway</dd></div>
         <div><dt>Based</dt><dd>Mervue, Galway</dd></div>
         <div><dt>Works with</dt><dd>Owner-led businesses</dd></div>
         <div><dt>Direct line</dt><dd><a href="tel:+353894470626">+353 89 447 0626</a></dd></div>
@@ -1475,7 +1479,7 @@ body.is-navopen .nav__cta{position:relative;z-index:2}
     <a class="btn" href="#start"><span>Check availability</span></a>
   </div>
   <dl class="studio__specs">
-    <div><dt>Founded</dt><dd>2019</dd></div>
+    <div><dt>Founded</dt><dd>2026</dd></div>
     <div><dt>Team</dt><dd>Founder-led</dd></div>
     <div><dt>Base</dt><dd>Galway, remote-comfortable</dd></div>
     <div><dt>Engagements</dt><dd>Two or three at a time</dd></div>
@@ -1951,17 +1955,26 @@ var igniteLit = -1;
    STAT COUNTERS
    ══════════════════════════════════════════════════════════════════════════ */
 var stats = $$('[data-count]').map(function (el) {
-  return { el: el, to: +el.getAttribute('data-count'), suffix: el.getAttribute('data-suffix') || '', run: false, from: 0, t0: 0 };
+  return {
+    el: el,
+    to: +el.getAttribute('data-count'),
+    suffix: el.getAttribute('data-suffix') || '',
+    /* some figures are not whole — 1.1 MB would round to 1 without this */
+    dp: +(el.getAttribute('data-decimals') || 0),
+    run: false, t0: 0
+  };
 });
 
 function runStat(s) {
   if (s.run) return;
   s.run = true;
-  if (reduced) { s.el.textContent = s.to + s.suffix; return; }
+  var show = function (v) { s.el.textContent = v.toFixed(s.dp) + s.suffix; };
+  /* nothing to count up to, so do not pretend to */
+  if (reduced || s.to === 0) { show(s.to); return; }
   s.t0 = performance.now();
   (function step(now) {
     var t = clamp((now - s.t0) / 1400, 0, 1);
-    s.el.textContent = Math.round(easeOut(t) * s.to) + s.suffix;
+    show(easeOut(t) * s.to);
     if (t < 1) requestAnimationFrame(step);
   })(performance.now());
 }

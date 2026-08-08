@@ -305,17 +305,26 @@ var igniteLit = -1;
    STAT COUNTERS
    ══════════════════════════════════════════════════════════════════════════ */
 var stats = $$('[data-count]').map(function (el) {
-  return { el: el, to: +el.getAttribute('data-count'), suffix: el.getAttribute('data-suffix') || '', run: false, from: 0, t0: 0 };
+  return {
+    el: el,
+    to: +el.getAttribute('data-count'),
+    suffix: el.getAttribute('data-suffix') || '',
+    /* some figures are not whole — 1.1 MB would round to 1 without this */
+    dp: +(el.getAttribute('data-decimals') || 0),
+    run: false, t0: 0
+  };
 });
 
 function runStat(s) {
   if (s.run) return;
   s.run = true;
-  if (reduced) { s.el.textContent = s.to + s.suffix; return; }
+  var show = function (v) { s.el.textContent = v.toFixed(s.dp) + s.suffix; };
+  /* nothing to count up to, so do not pretend to */
+  if (reduced || s.to === 0) { show(s.to); return; }
   s.t0 = performance.now();
   (function step(now) {
     var t = clamp((now - s.t0) / 1400, 0, 1);
-    s.el.textContent = Math.round(easeOut(t) * s.to) + s.suffix;
+    show(easeOut(t) * s.to);
     if (t < 1) requestAnimationFrame(step);
   })(performance.now());
 }

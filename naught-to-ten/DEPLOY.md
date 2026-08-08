@@ -111,15 +111,21 @@ The fictional client work is gone. `/work/` is now a single real case study —
 this website — and the sentence in `/terms/` asserting those client names were
 genuine has been removed.
 
-Two invented figures are still on the home page and read as fact:
+The two invented figures — *46 brands launched* and *98+ median Lighthouse* —
+are gone from the manifesto stat row. What replaced them is measurable:
 
-- **46 brands launched**
-- **98+ median Lighthouse**
+| Figure | Where it comes from |
+|---|---|
+| **10** services | The ten on `/services/` |
+| **0** cookies, trackers, third parties | Measured: zero third-party requests, zero cookies, zero storage entries |
+| **1.1 MB** before it appears | Measured on a throttled 1.6 Mbps connection, to first paint of the hero |
+| **2** working days to a reply | A promise, not a measurement — so keep it |
 
-Both sit in the manifesto stat row. Replace or remove them before launch.
-Neither appears in the structured data, so nothing false is being told to
-search engines — but a visitor will read them as true.
+The middle two are true of the site as built. **If you ever add a font from
+Google, an analytics script, a chat widget or an embedded map, both become
+false immediately** — and so does the privacy notice. That is the cost of the
+claim, and it is worth paying.
 
-Also still assumed rather than decided by you: **founded 2019** in the studio
-spec table, the **50/50 payment split** and **14-day invoice terms** in
-`/terms/`, and the **two revision rounds** quoted in both `/terms/` and the FAQ.
+Still assumed rather than decided by you: the **50/50 payment split** and
+**14-day invoice terms** in `/terms/`, and the **two revision rounds** quoted
+in both `/terms/` and the FAQ.

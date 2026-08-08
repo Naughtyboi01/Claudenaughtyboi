@@ -53,9 +53,13 @@ There are two, kept separate so the fields do not clash:
 | `enquiry` | `/contact/` | name, company, email, phone, budget, timing, message |
 | `enquiry-home` | `/` | name, company, email, budget, message |
 
-Netlify detects both from the HTML on first deploy. Under **Forms**, add an
-email notification for each so submissions land in `naughttoten@outlook.ie`
-rather than sitting in a dashboard you never open.
+Netlify detects both from the HTML on first deploy.
+
+**Where submissions go is a dashboard setting, not something in the code.**
+Under **Forms → Form notifications**, add an *Email notification* for each of
+the two forms and set the address to `naughttoten@hotmail.com`. Until you do
+that, submissions are captured but sit in the Netlify dashboard where you will
+never look at them.
 
 **Then submit a real test through each one** and confirm it arrives. Until you
 have seen that happen, assume it does not work.

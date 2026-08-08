@@ -609,8 +609,8 @@ if (form) {
     }).catch(function () {
       /* offline copy, or the post failed — never pretend it arrived */
       if (btn) btn.disabled = false;
-      note.innerHTML = 'That did not send. Email <a href="mailto:naughttoten@outlook.ie">' +
-                       'naughttoten@outlook.ie</a> and it will reach us.';
+      note.innerHTML = 'That did not send. Email <a href="mailto:naughttoten@hotmail.com">' +
+                       'naughttoten@hotmail.com</a> and it will reach us.';
       note.classList.add('is-bad');
     });
   });

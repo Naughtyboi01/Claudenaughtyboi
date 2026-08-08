@@ -42,7 +42,11 @@ Two traps worth knowing, both already hit once:
 These are on the sheet as commitments. Confirm them before sending it to anyone:
 
 - **An hour a month** of small content edits included
-- **Twelve-month minimum** on the monthly fee
 - **Two working days** to reply
-- No VAT line, on the basis of being under the €42,500 services threshold.
-  Once registered, every figure on the sheet needs revisiting.
+- **No VAT to add**, on the basis of being under the €42,500 services
+  threshold. Registering changes this: VAT would have to go *on top* of every
+  figure here, or come out of the margin. Revisit the whole sheet at that point.
+- **No contract, cancel any time.** This is the sharpest line on the page —
+  the pay-monthly competitors all run twelve-month terms and keep the site at
+  the end. It only stays true if the monthly is never used to recover build
+  cost, so the upfront fee has to stand on its own.

@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+"""
+Drop real photographs into the founder section.
+
+The section ships with styled empty frames so it looks finished before any
+photo exists. This script crops the images you give it, writes them into
+assets/img/founder/, and swaps the matching frames in index.html for <img>
+tags. Slots you don't supply are left as frames.
+
+    python3 add-founder-photos.py --portrait me.jpg
+    python3 add-founder-photos.py --portrait me.jpg --grid a.jpg b.jpg c.jpg
+
+Portrait is cropped to 4:5 at 1000x1250, contact-sheet frames to 1:1 at
+800x800, both centred. Re-running is safe — it overwrites in place.
+
+Afterwards, rebuild the single-file bundles:
+
+    python3 build-offline.py --both
+"""
+
+import argparse
+import html as htmlmod
+import re
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).parent.resolve()
+OUT = ROOT / 'assets' / 'img' / 'founder'
+
+SPECS = {                      # slot        -> (w, h, css modifier, alt text)
+    'portrait': (1000, 1250, 'tall', 'Joshua Naughton, founder of Naught to Ten'),
+    'grid-01':  (800, 800, 'sq', 'Naught to Ten, off the desk'),
+    'grid-02':  (800, 800, 'sq', 'Naught to Ten, off the desk'),
+    'grid-03':  (800, 800, 'sq', 'Naught to Ten, off the desk'),
+}
+
+
+def probe(src: Path) -> tuple[int, int]:
+    """Source pixel dimensions, read off ffmpeg's stream line."""
+    err = subprocess.run(['ffmpeg', '-hide_banner', '-i', str(src)],
+                         capture_output=True, text=True).stderr
+    for line in err.splitlines():
+        if 'Video:' in line:
+            m = re.search(r'\b(\d{2,5})x(\d{2,5})\b', line)
+            if m:
+                return int(m.group(1)), int(m.group(2))
+    raise SystemExit(f'! could not read dimensions of {src}')
+
+
+def target_size(src: Path, slot: str) -> tuple[int, int]:
+    """The slot's size, reduced if the source cannot fill it.
+
+    Enlarging a small source adds no detail, only bytes and softness — phone
+    screenshots in particular are already well under these targets. Crop to
+    the slot's aspect ratio either way; only the output scale gives.
+    """
+    tw, th = SPECS[slot][0], SPECS[slot][1]
+    sw, sh = probe(src)
+    crop_w = min(sw, sh * tw / th)          # widest correctly-shaped crop available
+    scale = min(1.0, crop_w / tw)
+    even = lambda v: max(2, int(round(v)) // 2 * 2)
+    return even(tw * scale), even(th * scale)
+
+
+def crop(src: Path, slot: str) -> tuple[Path, int, int]:
+    w, h = target_size(src, slot)
+    full_w, full_h = SPECS[slot][0], SPECS[slot][1]
+    OUT.mkdir(parents=True, exist_ok=True)
+    dst = OUT / f'{slot}.webp'
+    cmd = [
+        'ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', str(src),
+        '-vf', f'scale={w}:{h}:force_original_aspect_ratio=increase:flags=lanczos,'
+               f'crop={w}:{h}',
+        '-frames:v', '1', '-c:v', 'libwebp', '-quality', '82', str(dst),
+    ]
+    subprocess.run(cmd, check=True)
+    note = '' if (w, h) == (full_w, full_h) else f'  (source too small for {full_w}x{full_h})'
+    print(f'  · {src.name} -> assets/img/founder/{dst.name} '
+          f'({w}x{h}, {dst.stat().st_size/1e3:.0f} KB){note}')
+    return dst, w, h
+
+
+def fill_slot(page: str, slot: str, w: int, h: int) -> str:
+    """Replace the empty frame for `slot` with an <img>, keeping the frame."""
+    _, _, mod, alt = SPECS[slot]
+    pattern = re.compile(
+        rf'(<div class="shot shot--{mod}" data-slot="{slot}">).*?(</div>)',
+        re.S)
+    if not pattern.search(page):
+        raise SystemExit(f'! no slot "{slot}" found in index.html')
+    # width/height are the actual crop output, not the slot's nominal size —
+    # a small source is scaled down rather than enlarged (see target_size),
+    # and a mismatched attribute would misreport the image's real aspect
+    # ratio to the browser instead of preventing the layout shift it is for.
+    img = (f'<img src="assets/img/founder/{slot}.webp" '
+           f'alt="{htmlmod.escape(alt, quote=True)}" loading="lazy" decoding="async" '
+           f'width="{w}" height="{h}">')
+    return pattern.sub(lambda m: m.group(1) + img + m.group(2), page, count=1)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--portrait', type=Path, help='the founder portrait (cropped to 4:5)')
+    ap.add_argument('--grid', type=Path, nargs='*', default=[],
+                    help='up to three contact-sheet photos (cropped square)')
+    args = ap.parse_args()
+
+    if not args.portrait and not args.grid:
+        ap.error('give --portrait and/or --grid')
+    if shutil.which('ffmpeg') is None:
+        sys.exit('! ffmpeg not found on PATH — needed to crop the images')
+    if len(args.grid) > 3:
+        sys.exit('! the contact sheet has three slots; give at most three --grid photos')
+
+    jobs = []
+    if args.portrait:
+        jobs.append(('portrait', args.portrait))
+    for i, src in enumerate(args.grid, start=1):
+        jobs.append((f'grid-{i:02d}', src))
+
+    for slot, src in jobs:
+        if not src.is_file():
+            sys.exit(f'! not a file: {src}')
+
+    page_path = ROOT / 'index.html'
+    page = page_path.read_text()
+    for slot, src in jobs:
+        _, w, h = crop(src, slot)
+        page = fill_slot(page, slot, w, h)
+    page_path.write_text(page)
+
+    print(f'\n  → index.html updated ({len(jobs)} slot(s) filled)')
+    print('  → now run: python3 build-offline.py --both')
+
+
+if __name__ == '__main__':
+    main()

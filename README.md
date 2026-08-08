@@ -115,3 +115,12 @@ In a real browser that footage plays.
 
 An independent design study. Not affiliated with or endorsed by Nike, Inc.
 Product footage supplied by the project owner.
+
+---
+
+## Also in this repo
+
+`galway-roast/` — a second landing page, same technique, different brand: **The
+Galway Roast**, an Irish coffee roaster. Scroll-scrubbed hero over a 121-frame
+sequence, typography matched to the lettering printed on the pouch, and the pack
+logo rebuilt as an SVG lockup. See `galway-roast/README.md`.

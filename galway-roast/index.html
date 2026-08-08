@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Galway Roast — Freshly Hand-Roasted Ground Coffee</title>
+<meta name="description" content="Freshly hand-roasted ground coffee from Galway, Ireland. A small-batch blend of Brazilian Santos, Guatemalan and Honduras beans. 100% Arabica. Great Taste 2024.">
+<meta name="theme-color" content="#140203">
+<meta property="og:title" content="The Galway Roast">
+<meta property="og:description" content="Freshly hand-roasted ground coffee. Three origins, one coastline.">
+<meta property="og:image" content="assets/img/pack-full.webp">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/shantell-sans-var.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-var.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><rect width='128' height='128' rx='26' fill='%23140203'/><g transform='translate(0,6)'><ellipse cx='63' cy='50' rx='48' ry='35' transform='rotate(-26 63 50)' fill='none' stroke='%23cf8c9b' stroke-width='8'/><path d='M27 68C46 55 72 36 96 26' fill='none' stroke='%23cf8c9b' stroke-width='8' stroke-linecap='round'/><path d='M22 94C44 86 88 86 112 95C88 102 42 102 22 94Z' fill='%23cf8c9b'/></g></svg>">
+</head>
+<body>
+
+<!-- ── film grain + vignette, sits over everything ───────────────────────── -->
+<div class="grain" aria-hidden="true"></div>
+<div class="edge-vignette" aria-hidden="true"></div>
+<div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"></span></div>
+
+<!-- ── preloader ─────────────────────────────────────────────────────────── -->
+<div class="loader" id="loader">
+  <div class="loader__inner">
+    <div class="loader__mark">
+      <svg class="logo__mark loader__glyph" viewBox="0 0 128 122" aria-hidden="true">
+      <ellipse class="stroke" cx="63" cy="50" rx="48" ry="35" transform="rotate(-26 63 50)"/>
+      <path class="stroke" d="M27 68C46 55 72 36 96 26"/>
+      <path class="saucer" d="M22 94C44 86 88 86 112 95C88 102 42 102 22 94Z"/>
+    </svg>
+    </div>
+    <p class="loader__word">the galway roast</p>
+    <div class="loader__bar"><span id="loaderFill"></span></div>
+    <p class="loader__pct"><span id="loaderPct">0</span><i>%</i></p>
+  </div>
+</div>
+
+<!-- ── nav ───────────────────────────────────────────────────────────────── -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="the galway roast — top of page">
+    <svg class="logo__mark nav__mark" viewBox="0 0 128 122" aria-hidden="true">
+      <ellipse class="stroke" cx="63" cy="50" rx="48" ry="35" transform="rotate(-26 63 50)"/>
+      <path class="stroke" d="M27 68C46 55 72 36 96 26"/>
+      <path class="saucer" d="M22 94C44 86 88 86 112 95C88 102 42 102 22 94Z"/>
+    </svg>
+    <span class="nav__name">the <em>galway</em> roast</span>
+  </a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#blend">The Blend</a>
+    <a href="#profile">Profile</a>
+    <a href="#ritual">Ritual</a>
+    <a href="#roastery">Roastery</a>
+  </nav>
+  <a class="btn btn--ghost nav__cta" href="#shop"><span>Shop</span></a>
+  <div class="nav__progress"><span id="navProgress"></span></div>
+</header>
+
+<!-- ── section rail ──────────────────────────────────────────────────────── -->
+<aside class="rail" aria-hidden="true">
+  <ol id="rail">
+    <li data-target="top"><i></i><b>Hero</b></li>
+    <li data-target="manifesto"><i></i><b>Manifesto</b></li>
+    <li data-target="blend"><i></i><b>Blend</b></li>
+    <li data-target="profile"><i></i><b>Profile</b></li>
+    <li data-target="ritual"><i></i><b>Ritual</b></li>
+    <li data-target="roastery"><i></i><b>Roastery</b></li>
+    <li data-target="film"><i></i><b>Film</b></li>
+    <li data-target="shop"><i></i><b>Shop</b></li>
+  </ol>
+</aside>
+
+<main id="top">
+
+<!-- ══ HERO — scroll-scrubbed frame sequence ═══════════════════════════════ -->
+<section class="hero" id="hero">
+  <div class="hero__track" id="heroTrack">
+    <div class="hero__stage">
+
+      <div class="hero__canvasWrap" id="canvasWrap">
+        <canvas id="frames" aria-label="The Galway Roast pouch, revealed as you scroll"></canvas>
+        <div class="hero__glow" aria-hidden="true"></div>
+        <div class="hero__wash" id="heroWash" aria-hidden="true"></div>
+      </div>
+
+      <!-- beat 1 — the logo, as printed on the pouch -->
+      <div class="beat beat--1" data-beat="1">
+        <p class="eyebrow">Est. Galway · Ireland</p>
+        <h1 class="hero__logo logo">
+          <span class="logo__row">
+            <span class="logo__the">the</span>
+            <svg class="logo__mark" viewBox="0 0 128 122" aria-hidden="true">
+              <ellipse class="stroke" cx="63" cy="50" rx="48" ry="35" transform="rotate(-26 63 50)"/>
+              <path class="stroke" d="M27 68C46 55 72 36 96 26"/>
+              <path class="saucer" d="M22 94C44 86 88 86 112 95C88 102 42 102 22 94Z"/>
+            </svg>
+          </span>
+          <span class="logo__galway">galway</span>
+          <span class="logo__roast">roast</span>
+        </h1>
+        <p class="hero__sub">Freshly hand-roasted ground coffee</p>
+      </div>
+
+      <!-- beat 2 — the line -->
+      <div class="beat beat--2" data-beat="2">
+        <p class="beat__kicker">01 — The origin</p>
+        <p class="beat__line">Roasted by hand,<br>a few miles from<br><em>the Atlantic.</em></p>
+      </div>
+
+      <!-- beat 3 — credentials -->
+      <div class="beat beat--3" data-beat="3">
+        <ul class="chips">
+          <li class="chip" style="--i:0"><b>100%</b><span>Arabica</span></li>
+          <li class="chip" style="--i:1"><b>3</b><span>Origins</span></li>
+          <li class="chip" style="--i:2"><b>2024</b><span>Great Taste</span></li>
+        </ul>
+      </div>
+
+      <!-- beat 4 — the reveal -->
+      <div class="beat beat--4" data-beat="4">
+        <p class="beat__kicker">The blend</p>
+        <h2 class="beat__display">Freshly<br>Hand-Roasted</h2>
+        <p class="beat__body">Brazilian Santos, Guatemalan and Honduras beans. Well balanced,
+          full of flavour, with a creamy smooth finish.</p>
+        <div class="beat__actions">
+          <a class="btn btn--solid magnetic" href="#shop"><span>Shop the roast</span></a>
+          <a class="btn btn--line magnetic" href="#blend"><span>Explore the blend</span></a>
+        </div>
+      </div>
+
+      <!-- hud -->
+      <div class="hero__hud" aria-hidden="true">
+        <div class="hud__l">
+          <span class="hud__label">Scroll</span>
+          <span class="hud__line"><i id="hudFill"></i></span>
+        </div>
+        <div class="hud__r">
+          <span class="hud__frame" id="hudFrame">000</span>
+          <span class="hud__sep">/</span>
+          <span class="hud__total" id="hudTotal">000</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ MANIFESTO ═══════════════════════════════════════════════════════════ -->
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <p class="eyebrow reveal">02 — The idea</p>
+    <h2 class="statement split" data-reveal>
+      <span class="l"><span>Three origins.</span></span>
+      <span class="l"><span>One coastline.</span></span>
+      <span class="l l--em"><span>Every batch turned by hand.</span></span>
+    </h2>
+    <div class="manifesto__grid">
+      <p class="lede reveal" data-delay="1">We roast in small batches on the west coast of Ireland — close
+        enough to the Atlantic that the weather gets a vote. Brazilian Santos for body. Guatemalan
+        for lift. Honduras for the long, creamy finish.</p>
+      <p class="lede reveal" data-delay="2">Nothing is rushed and nothing is hidden. One blend, ground
+        and sealed within days of roasting, so what reaches your kitchen is the coffee we tasted at
+        the drum.</p>
+    </div>
+    <ul class="stats">
+      <li class="reveal" data-delay="1"><b>100%</b><span>Arabica</span></li>
+      <li class="reveal" data-delay="2"><b>03</b><span>Single origins</span></li>
+      <li class="reveal" data-delay="3"><b>Medium</b><span>Roast strength</span></li>
+      <li class="reveal" data-delay="4"><b>2024</b><span>Great Taste</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ THE BLEND — pinned panels ═══════════════════════════════════════════ -->
+<section class="blend" id="blend">
+  <div class="blend__track" id="blendTrack">
+    <div class="blend__stage">
+      <div class="blend__bg" aria-hidden="true"></div>
+
+      <header class="blend__head">
+        <p class="eyebrow">03 — The blend</p>
+        <h2 class="blend__title">Three beans,<br>one cup</h2>
+      </header>
+
+      <div class="blend__panels" id="blendPanels">
+        <article class="panel is-on" data-panel="0">
+          <span class="panel__num">01</span>
+          <h3 class="panel__name">Brazilian<br><em>Santos</em></h3>
+          <p class="panel__role">Body &amp; chocolate</p>
+          <p class="panel__copy">Low-acid, nutty, heavy in the cup. Santos is the floor the whole blend
+            stands on — the weight you feel before you taste anything else.</p>
+          <dl class="panel__meta">
+            <div><dt>Country</dt><dd>Brazil</dd></div>
+            <div><dt>Note</dt><dd>Dark chocolate</dd></div>
+            <div><dt>Role</dt><dd>Foundation</dd></div>
+          </dl>
+        </article>
+
+        <article class="panel" data-panel="1">
+          <span class="panel__num">02</span>
+          <h3 class="panel__name">Guatemalan<br><em>Highland</em></h3>
+          <p class="panel__role">Structure &amp; lift</p>
+          <p class="panel__copy">Grown at altitude, where the cherries ripen slowly. Cocoa and a gentle
+            spice, with the clean bright edge that keeps a medium roast from going flat.</p>
+          <dl class="panel__meta">
+            <div><dt>Country</dt><dd>Guatemala</dd></div>
+            <div><dt>Note</dt><dd>Cocoa, spice</dd></div>
+            <div><dt>Role</dt><dd>Brightness</dd></div>
+          </dl>
+        </article>
+
+        <article class="panel" data-panel="2">
+          <span class="panel__num">03</span>
+          <h3 class="panel__name">Honduras<br><em>Reserve</em></h3>
+          <p class="panel__role">Caramel &amp; finish</p>
+          <p class="panel__copy">Soft, sweet and rounded. The last third of the blend and the last
+            thing you taste — the creamy, caramel close that stays after the cup is down.</p>
+          <dl class="panel__meta">
+            <div><dt>Country</dt><dd>Honduras</dd></div>
+            <div><dt>Note</dt><dd>Caramel</dd></div>
+            <div><dt>Role</dt><dd>Finish</dd></div>
+          </dl>
+        </article>
+      </div>
+
+      <figure class="blend__art">
+        <img src="assets/img/logo-angle.webp" alt="Detail of The Galway Roast pouch" loading="lazy" decoding="async">
+        <div class="blend__artGlow" aria-hidden="true"></div>
+      </figure>
+
+      <ol class="blend__ticks" id="blendTicks" aria-hidden="true">
+        <li class="is-on"><i></i></li><li><i></i></li><li><i></i></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROFILE ═════════════════════════════════════════════════════════════ -->
+<section class="profile" id="profile">
+  <div class="wrap">
+    <div class="profile__head">
+      <p class="eyebrow reveal">04 — The profile</p>
+      <h2 class="h2 split" data-reveal>
+        <span class="l"><span>What it tastes</span></span>
+        <span class="l l--em"><span>like, exactly</span></span>
+      </h2>
+    </div>
+
+    <div class="profile__body">
+      <div class="spec">
+        <div class="spec__row reveal" data-delay="1">
+          <span class="spec__k">Strength</span>
+          <div class="spec__v">
+            <div class="meter" data-fill="3" aria-label="Medium, 3 out of 5">
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <span class="spec__note">Medium</span>
+          </div>
+        </div>
+        <div class="spec__row reveal" data-delay="2">
+          <span class="spec__k">Tasting notes</span>
+          <div class="spec__v"><span class="tag">Chocolate</span><span class="tag">Caramel</span></div>
+        </div>
+        <div class="spec__row reveal" data-delay="3">
+          <span class="spec__k">Grind</span>
+          <div class="spec__v"><span class="spec__note">Ground — ready to brew</span></div>
+        </div>
+        <div class="spec__row reveal" data-delay="4">
+          <span class="spec__k">Perfect for</span>
+          <div class="spec__v">
+            <span class="method">
+              <svg viewBox="0 0 24 32" aria-hidden="true"><rect x="5" y="7" width="12" height="21" rx="2"/><path d="M5 12h12M11 2v5M8 2h6M17 12h3v6h-3"/></svg>
+              Cafetière
+            </span>
+            <span class="method">
+              <svg viewBox="0 0 24 32" aria-hidden="true"><path d="M4 6h16l-6 9v9M4 6l6 9v9M10 24h4"/></svg>
+              Filter / pour-over
+            </span>
+          </div>
+        </div>
+        <div class="spec__row reveal" data-delay="5">
+          <span class="spec__k">Origins</span>
+          <div class="spec__v"><span class="spec__note">Brazil · Guatemala · Honduras</span></div>
+        </div>
+        <div class="spec__row reveal" data-delay="6">
+          <span class="spec__k">Award</span>
+          <div class="spec__v"><span class="spec__note">Great Taste, 2024</span></div>
+        </div>
+      </div>
+
+      <figure class="profile__art reveal" data-delay="2">
+        <img src="assets/img/label.webp" alt="Close detail of the pouch label: strength, tasting notes and brewing methods" loading="lazy" decoding="async">
+        <figcaption>Printed on every pouch.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RITUAL ══════════════════════════════════════════════════════════════ -->
+<section class="ritual" id="ritual">
+  <div class="wrap">
+    <div class="ritual__head">
+      <p class="eyebrow reveal">05 — The ritual</p>
+      <h2 class="h2 split" data-reveal>
+        <span class="l"><span>Four minutes,</span></span>
+        <span class="l l--em"><span>done properly</span></span>
+      </h2>
+      <p class="lede reveal" data-delay="2">Ground for cafetière and filter. Thirty grams to half a litre —
+        adjust once, then keep it.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step reveal" data-delay="1">
+        <span class="step__n">01</span>
+        <h3>Measure</h3>
+        <p>30g of ground coffee to 500ml of water. A heaped six tablespoons if the scales are elsewhere.</p>
+      </li>
+      <li class="step reveal" data-delay="2">
+        <span class="step__n">02</span>
+        <h3>Pour</h3>
+        <p>Just off the boil — around 94°C. Wet the grounds, wait thirty seconds for the bloom, then fill.</p>
+      </li>
+      <li class="step reveal" data-delay="3">
+        <span class="step__n">03</span>
+        <h3>Steep</h3>
+        <p>Four minutes for a cafetière. Lid on, plunger up, and leave it alone.</p>
+      </li>
+      <li class="step reveal" data-delay="4">
+        <span class="step__n">04</span>
+        <h3>Plunge</h3>
+        <p>Slowly, with the flat of your hand. Decant straight away so it stops brewing.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══ ROASTERY ════════════════════════════════════════════════════════════ -->
+<section class="roastery" id="roastery">
+  <div class="roastery__bg" aria-hidden="true">
+    <img src="assets/img/silk.webp" alt="" loading="lazy" decoding="async" data-parallax="0.12">
+  </div>
+  <div class="wrap">
+    <div class="roastery__inner">
+      <p class="eyebrow reveal">06 — The roastery</p>
+      <h2 class="display split" data-reveal>
+        <span class="l"><span>Small batch,</span></span>
+        <span class="l l--em"><span>west of Ireland</span></span>
+      </h2>
+      <p class="lede reveal" data-delay="2">Drum roasted in quantities small enough to watch. Each batch is
+        tasted before it is bagged, and bagged in a resealable pouch within days of the roast — because
+        ground coffee has a short, bright life and we would rather you spent it.</p>
+      <ul class="roastery__list">
+        <li class="reveal" data-delay="1"><span>Hand-roasted</span><em>in small batches</em></li>
+        <li class="reveal" data-delay="2"><span>Ground &amp; sealed</span><em>days after roasting</em></li>
+        <li class="reveal" data-delay="3"><span>Resealable pouch</span><em>keeps the aromatics in</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__row" id="marquee">
+      <span>Hand-Roasted</span><i>✦</i><span>100% Arabica</span><i>✦</i><span>Galway, Ireland</span><i>✦</i>
+      <span>Chocolate &amp; Caramel</span><i>✦</i><span>Great Taste 2024</span><i>✦</i>
+      <span>Hand-Roasted</span><i>✦</i><span>100% Arabica</span><i>✦</i><span>Galway, Ireland</span><i>✦</i>
+      <span>Chocolate &amp; Caramel</span><i>✦</i><span>Great Taste 2024</span><i>✦</i>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FILM ════════════════════════════════════════════════════════════════ -->
+<section class="film" id="film">
+  <div class="wrap">
+    <div class="film__head">
+      <p class="eyebrow reveal">07 — The film</p>
+      <h2 class="h2 split" data-reveal>
+        <span class="l"><span>The campaign,</span></span>
+        <span class="l l--em"><span>in full</span></span>
+      </h2>
+    </div>
+    <figure class="film__frame reveal" data-delay="1">
+      <video id="filmVideo" playsinline muted loop preload="metadata"
+             poster="assets/img/film-poster.jpg"
+             aria-label="The Galway Roast campaign film">
+        <source src="assets/media/the-galway-roast.mp4" type="video/mp4">
+      </video>
+      <button class="film__toggle" id="filmToggle" type="button" aria-pressed="false">
+        <span class="film__icon" aria-hidden="true"></span>
+        <span class="film__toggleLabel">Play</span>
+      </button>
+      <figcaption><span>The Galway Roast</span><span>2024 · 00:05</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ══ SHOP ════════════════════════════════════════════════════════════════ -->
+<section class="shop" id="shop">
+  <div class="wrap shop__wrap">
+    <figure class="shop__art">
+      <div class="shop__halo" aria-hidden="true"></div>
+      <img src="assets/img/pack-full.webp" alt="The Galway Roast — freshly hand-roasted ground coffee pouch"
+           loading="lazy" decoding="async" data-parallax="-0.06" id="packShot">
+      <span class="shop__badge">Great Taste<i>2024</i></span>
+    </figure>
+
+    <div class="shop__panel">
+      <p class="eyebrow reveal">08 — Take it home</p>
+      <h2 class="shop__title split" data-reveal>
+        <span class="l"><span>The Galway Roast</span></span>
+        <span class="l l--em"><span>Ground Coffee</span></span>
+      </h2>
+      <p class="lede reveal" data-delay="1">Medium roast. Chocolate and caramel. Ground for cafetière
+        and filter, sealed in a resealable pouch.</p>
+
+      <div class="picker reveal" data-delay="2">
+        <span class="picker__k">Size</span>
+        <div class="picker__opts" id="sizePicker" role="radiogroup" aria-label="Pouch size">
+          <button type="button" role="radio" aria-checked="false" data-price="9.50" data-size="227g">227<i>g</i></button>
+          <button type="button" role="radio" aria-checked="true"  data-price="17.00" data-size="500g" class="is-on">500<i>g</i></button>
+          <button type="button" role="radio" aria-checked="false" data-price="30.00" data-size="1kg">1<i>kg</i></button>
+        </div>
+      </div>
+
+      <div class="price reveal" data-delay="3">
+        <span class="price__cur">€</span><span class="price__val" id="priceVal">17.00</span>
+        <span class="price__unit" id="priceUnit">/ 500g pouch</span>
+      </div>
+
+      <div class="shop__actions reveal" data-delay="4">
+        <button class="btn btn--solid btn--wide magnetic" type="button" id="addToBag"><span>Add to bag</span></button>
+        <a class="btn btn--line magnetic" href="#ritual"><span>Brew guide</span></a>
+      </div>
+
+      <ul class="shop__notes reveal" data-delay="5">
+        <li>Roasted to order, shipped from Galway</li>
+        <li>Free Irish delivery over €35</li>
+        <li>Subscribe &amp; save 10%</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════════════════════ -->
+<footer class="foot" id="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__logo logo reveal">
+        <span class="logo__row">
+          <span class="logo__the">the</span>
+          <svg class="logo__mark " viewBox="0 0 128 122" aria-hidden="true">
+      <ellipse class="stroke" cx="63" cy="50" rx="48" ry="35" transform="rotate(-26 63 50)"/>
+      <path class="stroke" d="M27 68C46 55 72 36 96 26"/>
+      <path class="saucer" d="M22 94C44 86 88 86 112 95C88 102 42 102 22 94Z"/>
+    </svg>
+        </span>
+        <span class="logo__galway">galway</span>
+        <span class="logo__roast">roast</span>
+      </div>
+      <form class="signup reveal" data-delay="1" id="signup" novalidate>
+        <label for="email">Roast notes, once a month</label>
+        <div class="signup__field">
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+          <button type="submit" aria-label="Subscribe">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p class="signup__msg" id="signupMsg" role="status"></p>
+      </form>
+    </div>
+
+    <div class="foot__cols">
+      <div><h3>Coffee</h3><a href="#shop">Ground Coffee</a><a href="#blend">The Blend</a><a href="#profile">Profile</a></div>
+      <div><h3>Learn</h3><a href="#ritual">Brew guide</a><a href="#roastery">Roastery</a><a href="#film">The film</a></div>
+      <div><h3>Company</h3><a href="#top">About</a><a href="#top">Stockists</a><a href="#top">Contact</a></div>
+      <div><h3>Follow</h3><a href="#top">Instagram</a><a href="#top">Facebook</a><a href="#top">TikTok</a></div>
+    </div>
+
+    <div class="foot__base">
+      <p>© <span id="year">2026</span> The Galway Roast · Galway, Ireland</p>
+      <p class="foot__note">Concept landing page. Product photography is from the supplied brand film;
+        sizes, prices and delivery terms are placeholders for demonstration.</p>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

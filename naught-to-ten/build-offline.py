@@ -42,7 +42,7 @@ SITE = 'https://naughttoten.ie'
 # Sub-pages the one-pager links to. They are separate documents and cannot be
 # inlined, so in the bundle their links point at the live site instead of a
 # relative path that resolves to nothing on a memory stick.
-SUBPAGES = ('work/', 'contact/', 'privacy/', 'terms/')
+SUBPAGES = ('services/', 'faq/', 'work/', 'contact/', 'privacy/', 'terms/')
 
 _cache: dict[Path, str] = {}
 
@@ -134,6 +134,11 @@ window.__FRAMES = {json.dumps(uris)};
 </script>
 """
 
+    # nav.js is independent of the frame payload
+    nav_js = (ROOT / 'assets' / 'js' / 'nav.js').read_text()
+    html = html.replace('<script src="assets/js/nav.js"></script>',
+                        f'<script>\n{nav_js}\n</script>')
+
     # main.js goes after the payload so window.__FRAMES is already set
     js = (ROOT / 'assets' / 'js' / 'main.js').read_text()
     html = html.replace('<script src="assets/js/main.js"></script>',
@@ -141,6 +146,8 @@ window.__FRAMES = {json.dumps(uris)};
 
     leftover = re.findall(r'(?:src|href|poster|data-img)="(assets/[^"]+)"', html)
     leftover += re.findall(r'url\([\'"]?(assets/[^)\'"]+)', html)
+    # a relative page link left behind resolves to nothing from a memory stick
+    leftover += re.findall(r'href="(?!#|https?:|mailto:|tel:|data:)([^"]+)"', html)
     if leftover:
         raise SystemExit(f'  ! unresolved reference(s): {sorted(set(leftover))}')
 

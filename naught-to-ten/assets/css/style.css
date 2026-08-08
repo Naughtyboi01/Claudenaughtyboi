@@ -176,9 +176,83 @@ body::after{
 .nav__cta:hover{background:currentColor}
 .nav.is-dark .nav__cta:hover span{color:var(--ink)}
 .nav:not(.is-dark) .nav__cta:hover span{color:var(--porcelain)}
+/* ── mobile navigation ──────────────────────────────────────────────────
+   The link row stops fitting around 900px. With JavaScript it becomes a
+   full-screen panel behind a button; without, it degrades to a small wrapped
+   row rather than vanishing, because a phone with no way to reach the other
+   pages is worse than a cramped one.
+   ─────────────────────────────────────────────────────────────────────── */
+.nav__toggle{
+  display:none;position:relative;z-index:2;
+  width:44px;height:44px;margin-right:-10px;
+  align-items:center;justify-content:center;flex:0 0 auto;
+}
+.nav__toggle i{
+  display:block;position:relative;width:22px;height:1.5px;
+  background:currentColor;transition:background .2s .18s;
+}
+.nav__toggle i::before,.nav__toggle i::after{
+  content:'';position:absolute;left:0;width:22px;height:1.5px;background:currentColor;
+  transition:transform .34s var(--ease),top .2s .18s;
+}
+.nav__toggle i::before{top:-6.5px}
+.nav__toggle i::after{top:6.5px}
+[aria-expanded="true"] i{background:transparent;transition:background .2s}
+[aria-expanded="true"] i::before{top:0;transform:rotate(45deg);transition:top .2s,transform .34s .16s var(--ease)}
+[aria-expanded="true"] i::after{top:0;transform:rotate(-45deg);transition:top .2s,transform .34s .16s var(--ease)}
+
+body.is-navopen{overflow:hidden}
+
+/* Both `transform` and `backdrop-filter` make an element the containing block
+   for its position:fixed descendants. The nav carries both, so the panel sized
+   itself to the 110px bar instead of the viewport, and flex centring then
+   pushed the first two links above the top edge where nothing could reach
+   them. Dropping both while the panel is open costs nothing — the nav is
+   already at translateY(0), and the blur has an ink panel behind it now. */
+body.is-navopen .nav{
+  transform:none;
+  background:transparent;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  border-bottom-color:transparent;
+  color:var(--porcelain);
+}
+/* the panel is a positioned child of the nav, so without this it paints over
+   its own siblings and the bar loses the wordmark and the call to action */
+body.is-navopen .nav__mark,
+body.is-navopen .nav__cta{position:relative;z-index:2}
+
 @media (max-width:900px){
-  .nav__links{display:none}
   .nav{padding:14px var(--gut)}
+  .js .nav__toggle{display:inline-flex}
+
+  .js .nav__links{
+    position:fixed;inset:0;z-index:1;
+    display:flex;flex-direction:column;justify-content:center;gap:0;
+    padding:calc(70px + env(safe-area-inset-top)) var(--gut) 40px;
+    background:var(--ink);color:var(--porcelain);
+    transform:translateY(-101%);
+    transition:transform .6s var(--ease);
+    overflow-y:auto;overscroll-behavior:contain;
+  }
+  .js .nav__links.is-open{transform:translateY(0)}
+  .js .nav__links a{
+    display:flex;align-items:baseline;gap:16px;opacity:1;
+    padding:clamp(10px,2.2vh,20px) 0;border-bottom:1px solid var(--line-d);
+    font-size:clamp(26px,8vw,44px);letter-spacing:-.04em;font-weight:500;
+  }
+  .js .nav__links a:first-child{border-top:1px solid var(--line-d)}
+  .js .nav__links a i{font-size:11px;letter-spacing:.16em;opacity:.45}
+  .js .nav__links a::after{display:none}
+
+  /* no JS: the row survives, just smaller */
+  html:not(.js) .nav__links{
+    position:absolute;left:var(--gut);right:var(--gut);top:100%;
+    display:flex;flex-wrap:wrap;gap:4px 16px;padding-bottom:10px;
+  }
+  html:not(.js) .nav__links a{font-size:12px}
+}
+@media (max-width:900px) and (prefers-reduced-motion:reduce){
+  .js .nav__links{transition:none}
 }
 @media (max-width:520px){.nav__cta{height:34px;padding:0 14px;font-size:12px}}
 

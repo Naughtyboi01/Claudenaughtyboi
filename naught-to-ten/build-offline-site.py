@@ -309,9 +309,11 @@ window.__FRAMES = {json.dumps(uris)};
 </script>
 """
     router = ROUTER.replace('__TITLES__', json.dumps(titles))
+    nav_js = (ROOT / 'assets' / 'js' / 'nav.js').read_text()
     main_js = (ROOT / 'assets' / 'js' / 'main.js').read_text()
 
     doc += payload
+    doc += f'<script>\n{nav_js}\n</script>\n'
     doc += f'<script>\n{router}\n</script>\n'
     doc += f'<script>\n{main_js}\n</script>\n'
     doc += '</body>\n</html>\n'

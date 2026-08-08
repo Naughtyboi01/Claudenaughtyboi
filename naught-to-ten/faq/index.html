@@ -90,13 +90,15 @@
     <span class="nav__markText">Naught to Ten</span>
     <span class="nav__markNum" aria-hidden="true">0—10</span>
   </a>
-  <nav class="nav__links" aria-label="Primary">
+  <nav class="nav__links" id="navLinks" aria-label="Primary">
     <a href="../services/"><i>01</i>Services</a>
     <a href="../#process"><i>02</i>Process</a>
     <a href="../work/"><i>03</i>Work</a>
     <a href="../faq/"><i>04</i>FAQ</a>
     <a href="../#founder"><i>05</i>Founder</a>
   </nav>
+  <button class="nav__toggle" type="button" aria-expanded="false"
+          aria-controls="navLinks" aria-label="Open menu"><i aria-hidden="true"></i></button>
   <a class="nav__cta" href="../contact/"><span>Start a project</span></a>
 </header>
 
@@ -244,6 +246,7 @@
   </div>
 </footer>
 
+<script src="../assets/js/nav.js"></script>
 <script src="../assets/js/page.js"></script>
 </body>
 </html>

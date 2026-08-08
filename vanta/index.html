@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VANTA. — Avant-garde AI creative</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#000000;
+  --cream:#ffffff;
+  --ink:#000000;
+  --white:#ffffff;
+  --muted:rgba(255,255,255,.82);
+  --hair:rgba(255,255,255,.16);
+  --pad-x:24px;
+  --pad-t:22px;
+  --col:46%;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+
+*{ box-sizing:border-box; letter-spacing:-.02em; }
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  background:var(--bg);
+  overscroll-behavior:none;
+}
+
+body{
+  font-family:"Inter","Inter var",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  color:var(--white);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* ---------- background video ---------- */
+
+.hero-bg{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  z-index:0;
+  border:none;
+  background:var(--bg);
+  transform:translate3d(var(--shift,0px),0,0);
+  will-change:transform;
+}
+
+.hero-scrim{
+  position:fixed; inset:0;
+  z-index:0;
+  background:transparent;
+  pointer-events:none;
+}
+
+/* ---------- logo ---------- */
+
+.brand-layer{
+  position:fixed;
+  top:var(--pad-t);
+  left:var(--pad-x);
+  z-index:2;
+  mix-blend-mode:lighten;
+  pointer-events:none;
+}
+
+.brand-frame{
+  width:294px;
+  height:126px;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.brand{
+  display:block;
+  width:294px;
+  height:126px;
+  object-fit:cover;
+  border:none;
+  outline:none;
+}
+
+/* ---------- stage ---------- */
+
+.hero{
+  position:fixed; inset:0;
+  width:100%; min-height:100svh;
+  overflow:hidden;
+  z-index:1;
+}
+
+.meta, .actions, .approach, .title-block, .divider, .cta, .services{ position:absolute; }
+
+.meta{
+  top:calc(var(--pad-t) + 6px);
+  left:var(--col);
+  margin:0;
+  font-size:13px;
+  font-weight:400;
+  line-height:1.55;
+  color:var(--muted);
+}
+.meta span{ display:block; }
+
+.actions{
+  top:calc(var(--pad-t) + 2px);
+  right:var(--pad-x);
+  display:flex;
+  gap:10px;
+}
+
+.approach{
+  top:27%;
+  left:var(--pad-x);
+  margin:0;
+  font-size:14px;
+  font-weight:400;
+  color:var(--muted);
+}
+
+/* ---------- title block + wipe mask ---------- */
+
+.title-block{
+  top:27%;
+  left:var(--col);
+  right:var(--pad-x);
+  --wipe:0;
+  -webkit-mask-image:linear-gradient(to right, transparent calc(var(--wipe)*85% - 60%), #000 calc(var(--wipe)*85%));
+          mask-image:linear-gradient(to right, transparent calc(var(--wipe)*85% - 60%), #000 calc(var(--wipe)*85%));
+  -webkit-mask-repeat:no-repeat;
+          mask-repeat:no-repeat;
+}
+
+.bullet{
+  display:flex; align-items:center; gap:9px;
+  margin:0 0 18px;
+  font-size:14px; font-weight:400;
+  color:var(--white);
+}
+.bullet::before{
+  content:"";
+  width:7px; height:7px;
+  border-radius:50%;
+  background:var(--white);
+  flex:0 0 auto;
+}
+
+.headline{
+  margin:0;
+  font-size:clamp(40px,5.5vw,72px);
+  font-weight:400;
+  line-height:.98;
+  color:var(--white);
+}
+.headline span{ display:block; white-space:nowrap; }
+
+/* ---------- divider / cta / services ---------- */
+
+.divider{
+  top:70%;
+  left:var(--col);
+  right:var(--pad-x);
+  height:1px;
+  background:var(--hair);
+}
+
+.cta{ top:75.5%; left:var(--col); }
+.cta__line{ margin:0 0 16px; font-size:14px; font-weight:400; color:var(--muted); }
+
+.services{
+  top:70.4%;
+  left:var(--pad-x);
+  width:290px;
+  list-style:none; margin:0; padding:0;
+  border-bottom:1px solid var(--hair);
+}
+.services li{
+  border-top:1px solid var(--hair);
+  padding:9px 2px;
+  font-size:15px; font-weight:400;
+  color:rgba(255,255,255,.9);
+}
+
+/* ---------- buttons ---------- */
+
+.btn{
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+  line-height:1;
+  border:1px solid transparent;
+  border-radius:0;
+  cursor:default;
+  white-space:nowrap;
+  transition:transform 160ms var(--ease),
+             background-color 160ms var(--ease),
+             border-color 160ms var(--ease);
+}
+.btn:focus-visible{ outline:2px solid var(--cream); outline-offset:3px; }
+.btn:active{ transform:scale(.98); }
+
+.btn--pill{ padding:11px 18px; }
+.btn--fill{ background:var(--cream); color:var(--ink); }
+.btn--ghost{ background:rgba(255,255,255,.10); color:var(--white); border-color:transparent; }
+.btn--cta{ padding:15px 26px; background:var(--cream); color:var(--ink); font-size:15px; }
+
+@media (hover:hover) and (pointer:fine){
+  .btn--fill:hover, .btn--cta:hover{ background:#fff; }
+  .btn--ghost:hover{ background:rgba(255,255,255,.16); }
+}
+
+/* ---------- scroll runway ---------- */
+
+.scroll-spacer{ height:350vh; pointer-events:none; }
+
+/* ---------- mobile composition ---------- */
+
+@media (max-width:900px){
+  :root{
+    --pad-x:20px;
+    --pad-t:14px;
+    --header-h:72px;
+  }
+
+  .scroll-spacer{ height:0; }
+  .title-block{ -webkit-mask-image:none; mask-image:none; }
+  .hero-bg{ transform:none; object-position:center center; }
+
+  .brand-layer{
+    top:calc(var(--pad-t) + env(safe-area-inset-top));
+    left:calc(var(--pad-x) + env(safe-area-inset-left));
+  }
+  .brand-frame, .brand{ width:168px; height:72px; }
+
+  .actions{
+    position:fixed;
+    top:calc(var(--pad-t) + env(safe-area-inset-top));
+    right:calc(var(--pad-x) + env(safe-area-inset-right));
+    z-index:2;
+    display:flex;
+    gap:8px;
+  }
+  .btn--pill{ padding:10px 14px; font-size:13px; }
+
+  .hero{
+    position:relative; inset:auto; z-index:1;
+    min-height:100svh;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    padding-top:calc(env(safe-area-inset-top) + var(--header-h) + 28px);
+    padding-left:calc(var(--pad-x) + env(safe-area-inset-left));
+    padding-right:calc(var(--pad-x) + env(safe-area-inset-right));
+    padding-bottom:calc(28px + env(safe-area-inset-bottom));
+  }
+  .meta, .approach, .title-block, .divider, .cta, .services{ position:static; inset:auto; }
+
+  .approach   { order:1; font-size:13px; }
+  .title-block{ order:2; }
+  .meta       { order:3; font-size:12px; color:rgba(255,255,255,.72); margin-top:22px; }
+  .divider    { order:4; margin:6px 0; }
+  .cta        { order:5; }
+  .services   { order:6; width:100%; }
+
+  .bullet{ font-size:13px; margin:0 0 14px; }
+  .headline{ font-size:clamp(34px,9.2vw,52px); line-height:1.02; }
+  .headline span{ white-space:normal; max-width:12ch; }
+
+  .cta__line{ font-size:13px; max-width:22ch; }
+  .btn--cta{ width:100%; padding:16px 22px; font-size:15px; text-align:center; }
+
+  .services li{ padding:12px 2px; }
+}
+
+@media (max-width:900px) and (max-height:700px){
+  :root{ --header-h:64px; }
+  .hero{
+    padding-top:calc(env(safe-area-inset-top) + var(--header-h) + 20px);
+    padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  }
+  .headline{ font-size:clamp(30px,8.4vw,44px); }
+  .bullet{ margin:0 0 10px; }
+  .meta{ margin-top:16px; }
+  .services li{ padding:10px 2px; }
+}
+
+@media (max-width:400px){
+  :root{ --header-h:64px; }
+  .brand-frame, .brand{ width:149px; height:64px; }
+  .actions{ flex-direction:column; gap:6px; }
+  .btn--pill{ padding:9px 12px; font-size:12px; text-align:center; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .btn{ transition:none; }
+  .btn:active{ transform:none; }
+}
+</style>
+</head>
+<body>
+
+<video class="hero-bg" muted playsinline preload="auto" src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260724_061251_5b1af666-7df5-4284-abea-a19a14d1cc10.mp4"></video>
+<div class="hero-scrim" aria-hidden="true"></div>
+
+<div class="brand-layer" role="img" aria-label="VANTA">
+  <div class="brand-frame">
+    <video class="brand" autoplay muted loop playsinline preload="auto" src="https://d8j0ntlcm91z4.cloudfront.net/user_3GJaYKPxdnQG0Q9O26lu6DPmcHu/hf_20260723_195927_ed99d7a6-2edd-42cb-ae51-494cc41a854d.mp4"></video>
+  </div>
+</div>
+
+<main class="hero">
+  <p class="meta">
+    <span>Based in Berlin</span>
+    <span>Worldwide (12:50 PM)</span>
+  </p>
+
+  <div class="actions">
+    <button type="button" class="btn btn--pill btn--fill">Book a call</button>
+    <button type="button" class="btn btn--pill btn--ghost">Menu</button>
+  </div>
+
+  <p class="approach">Our creative approach</p>
+
+  <div class="title-block">
+    <p class="bullet">Open to new collaborations</p>
+    <h2 class="headline">
+      <span>Avant-garde work</span>
+      <span>that performs</span>
+    </h2>
+  </div>
+
+  <div class="divider" aria-hidden="true"></div>
+
+  <div class="cta">
+    <p class="cta__line">Let's build something that performs</p>
+    <button type="button" class="btn btn--cta">Start a project</button>
+  </div>
+
+  <ul class="services">
+    <li>AI Creative</li>
+    <li>Performance</li>
+    <li>Brand Films</li>
+    <li>Motion &amp; 3D</li>
+  </ul>
+</main>
+
+<div class="scroll-spacer" aria-hidden="true"></div>
+
+<script>
+(function () {
+  // Logo autoplay safety net — the attribute alone is unreliable.
+  var brandVideo = document.querySelector('video.brand');
+  if (brandVideo) brandVideo.play().catch(function () {});
+
+  var bgVideo = document.querySelector('.hero-bg');
+  if (!bgVideo) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // rest on frame 0
+
+  var K = 0.1, DEADBAND = 0.02;
+  var targetTime = 0, curTime = 0, seeking = false, lastSeek = 0;
+
+  var MASK_START = 0.3;
+  var SHIFT_PX = 225, CENTER_BY = 0.6;
+  var titleBlock = document.querySelector('.title-block');
+  var isMobile = window.matchMedia('(max-width: 900px)').matches;
+
+  bgVideo.addEventListener('loadedmetadata', function () {
+    try { bgVideo.pause(); bgVideo.currentTime = 0.001; } catch (_) {}   // pin the poster frame
+  });
+  bgVideo.addEventListener('seeked', function () { seeking = false; });  // the ONLY way the gate clears
+
+  function updateTarget() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max > 0 && bgVideo.duration) {
+      targetTime = Math.min(1, Math.max(0, window.scrollY / max)) * bgVideo.duration;
+    }
+  }
+
+  function tick(now) {
+    curTime += (targetTime - curTime) * K;
+    if (Math.abs(targetTime - curTime) < 0.0001) curTime = targetTime;   // snap
+
+    if (!seeking && Math.abs(curTime - bgVideo.currentTime) > DEADBAND && now - lastSeek > 30) {
+      seeking = true; lastSeek = now;
+      try { bgVideo.currentTime = curTime; } catch (_) { seeking = false; }
+    }
+
+    var dur = bgVideo.duration || 0;
+    if (!isMobile && dur) {
+      var p = curTime / dur;
+      var mp = (p - MASK_START) / (1 - MASK_START);
+      if (titleBlock) titleBlock.style.setProperty('--wipe', mp < 0 ? 0 : mp > 1 ? 1 : mp);
+      var cp = p / CENTER_BY; cp = cp < 0 ? 0 : cp > 1 ? 1 : cp;
+      bgVideo.style.setProperty('--shift', (-SHIFT_PX * (1 - cp)).toFixed(1) + 'px');
+    }
+
+    requestAnimationFrame(tick);   // always-on — no settle-stop, no watchdog
+  }
+
+  window.addEventListener('scroll', updateTarget, { passive: true });
+  window.addEventListener('resize', updateTarget, { passive: true });
+  updateTarget();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

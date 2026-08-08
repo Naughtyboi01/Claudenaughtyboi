@@ -136,6 +136,32 @@ python3 -m http.server 8000     # any static server; file:// works too
 `file://` works because nothing is fetched at runtime — the backdrop track is a
 script rather than JSON precisely so it survives there.
 
+## Offline
+
+The folder already works with no connection, including straight off `file://`,
+because nothing is fetched at runtime. For a version you can email or carry on
+a stick, **`orley-offline.html` is the whole site as one file** — styles,
+fonts, all 151 hero frames, the stills and the backdrop track inlined. 5.4 MB,
+and it paints in about half a second from disk since there is nothing to go and
+get.
+
+```bash
+python3 build-offline.py                # -> orley-offline.html   5.4 MB, 1500px frames
+python3 build-offline.py --frames sm    # -> orley-offline-sm.html 2.6 MB, 820px frames
+```
+
+Rebuild it after any edit to the site. Two things worth knowing about that
+build:
+
+- Frames go in as a `window.__ORLEY_FRAMES` array of data URIs. `main.js`
+  checks for it and skips its path-based loading, so both builds share one copy
+  of the code instead of a fork that has to be kept in step.
+- The image inlining is scoped to image suffixes. A broader pattern also eats
+  `<script src>` and quietly produces a bundle with no JavaScript in it, and
+  every occurrence is replaced rather than the first per tag — attribute order
+  is not worth relying on. The build fails loudly if any `src`, `href` or
+  `poster` still points at `assets/`.
+
 ## Rebuilding the assets
 
 ```bash

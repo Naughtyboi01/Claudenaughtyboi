@@ -55,7 +55,14 @@
   /* backdrop.js is generated alongside the frames and carries one entry per
      frame, so it is also the frame count — no second source to keep in sync. */
   var BACKDROP = window.__ORLEY_BACKDROP || null;
-  var FRAMES = BACKDROP ? BACKDROP.length : 151;
+
+  /* The single-file build sets __ORLEY_FRAMES to an array of data URIs. This
+     one hook is what lets the offline bundle exist without a forked copy of
+     this file to keep in step. */
+  var EMBEDDED = window.__ORLEY_FRAMES || null;
+
+  var FRAMES = EMBEDDED ? EMBEDDED.length
+             : BACKDROP ? BACKDROP.length : 151;
   var PRIORITY = 26;          // enough to cover the aperture opening
   var BOOT_TIMEOUT = 9000;
 
@@ -73,6 +80,7 @@
   var readyCount = 0;
 
   function src(i) {
+    if (EMBEDDED) return EMBEDDED[i];
     var n = String(i);
     while (n.length < 4) n = '0' + n;
     return 'assets/seq/' + setName + '/' + n + '.webp';
@@ -638,6 +646,7 @@
     clearTimeout(rt);
     rt = setTimeout(function () {
       drawSpectrum();
+      if (EMBEDDED) return;      // one set only; nothing to upgrade to
       var next = pickSet();
       if (next !== setName && next === 'lg') {
         // Only ever upgrade: never re-download a smaller set mid-session.

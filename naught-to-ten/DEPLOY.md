@@ -14,11 +14,15 @@ effect on signup — no separate paperwork.
 
 ## 1. Register the domain
 
-`naughttoten.ie` through any Irish registrar (Blacknight, Register365, Hosting
-Ireland). `.ie` requires a demonstrable connection to Ireland — a Galway
-business address covers it.
+Done — **`ntt.ie`** is registered. `.ie` requires a demonstrable connection to
+Ireland, which the Mervue business address covers.
 
-If you end up on a different domain, change it everywhere in one pass:
+**Point it at Netlify before announcing it anywhere**, and get a working
+mailbox on the domain before the site goes live — see the callout at the
+bottom of this file. `joshua@ntt.ie` is on every page right now; if nothing
+receives mail for that address yet, every one of those is a dead end.
+
+If you ever end up on a different domain again, change it everywhere in one pass:
 
 ```bash
 python3 set-domain.py whatever.ie --dry   # report
@@ -38,7 +42,7 @@ Every push to the branch redeploys automatically.
 
 ## 3. Point the domain at it
 
-**Domain management → Add a domain**, enter `naughttoten.ie`, and follow the DNS
+**Domain management → Add a domain**, enter `ntt.ie`, and follow the DNS
 records Netlify gives you. Set `www` to redirect to the bare domain (or the
 reverse — just pick one and make sure `canonical` in the HTML matches). HTTPS is
 issued automatically once DNS resolves; wait for the padlock before announcing
@@ -57,9 +61,10 @@ Netlify detects both from the HTML on first deploy.
 
 **Where submissions go is a dashboard setting, not something in the code.**
 Under **Forms → Form notifications**, add an *Email notification* for each of
-the two forms and set the address to `naughttoten@hotmail.com`. Until you do
-that, submissions are captured but sit in the Netlify dashboard where you will
-never look at them.
+the two forms and set the address to `joshua@ntt.ie`. Until you do that,
+submissions are captured but sit in the Netlify dashboard where you will
+never look at them — and until `joshua@ntt.ie` is a real, working mailbox,
+setting this doesn't help either. See the callout below.
 
 **Then submit a real test through each one** and confirm it arrives. Until you
 have seen that happen, assume it does not work.
@@ -104,6 +109,33 @@ standard online services terms.
   means updating the privacy notice again.
 
 ---
+
+## The mailbox has to exist before the address does
+
+Buying `ntt.ie` gives you a domain, not a mailbox. `joshua@ntt.ie` is now on
+every page — the nav, the footer, every `mailto:` link, the enquiry form's
+failure message, the structured data — but **none of that makes email for
+that address arrive anywhere** until you point the domain's MX records at an
+actual mail provider and create the mailbox there. Until you do:
+
+- anyone who clicks "email us" gets a bounce, not a studio;
+- the Netlify form-notification address above receives nothing;
+- and worse than either, nothing tells a visitor it failed — the `mailto:`
+  link opens their mail client and looks completely normal.
+
+Send yourself a real test email to `joshua@ntt.ie` before this goes live, from
+an account you don't control, and confirm it lands somewhere you check.
+
+**This also changes a claim in `/privacy/`.** The processor table currently
+names **Microsoft**, based in the **European Union**, as the party handling
+"our mailbox, where enquiries and email land" — carried over from the old
+Outlook/Hotmail address. Whatever you point `ntt.ie`'s mail at (Microsoft 365,
+Google Workspace, Zoho, the registrar's own forwarding, anything) becomes the
+actual processor and the actual jurisdiction, and the privacy notice has to
+name the real one. If it's still Microsoft, nothing to change. If it's Google
+Workspace or anything US-based, the notice needs a second Standard Contractual
+Clauses paragraph like the one already written for Netlify. This file cannot
+guess which — it needs your answer.
 
 ## Before you announce it
 

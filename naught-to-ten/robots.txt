@@ -1,4 +1,4 @@
-# https://naughttoten.ie/robots.txt
+# https://ntt.ie/robots.txt
 User-agent: *
 Allow: /
 
@@ -9,4 +9,4 @@ Disallow: /naught-to-ten-offline-mobile.html
 Disallow: /naught-to-ten-site-desktop.html
 Disallow: /naught-to-ten-site-mobile.html
 
-Sitemap: https://naughttoten.ie/sitemap.xml
+Sitemap: https://ntt.ie/sitemap.xml

@@ -24,7 +24,7 @@ DEFAULT = 'naughttoten.ie'
 
 TARGETS = ['index.html', '404.html', 'robots.txt', 'sitemap.xml', 'site.webmanifest',
            'build-offline.py', 'README.md']
-TARGET_DIRS = ['contact', 'work', 'privacy', 'terms']
+TARGET_DIRS = ['contact', 'work', 'privacy', 'terms', 'services', 'faq']
 
 
 def current() -> str:

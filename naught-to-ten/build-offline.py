@@ -38,7 +38,7 @@ MIME = {
 
 VIDEO = 'assets/media/naught-to-ten-loop.mp4'
 VIDEO_EL = 'filmV'
-SITE = 'https://naughttoten.ie'
+SITE = 'https://ntt.ie'
 # Sub-pages the one-pager links to. They are separate documents and cannot be
 # inlined, so in the bundle their links point at the live site instead of a
 # relative path that resolves to nothing on a memory stick.

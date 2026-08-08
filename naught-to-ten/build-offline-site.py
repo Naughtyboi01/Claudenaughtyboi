@@ -218,7 +218,7 @@ ROUTER = """
       /* This copy is detached from the site, so there is nowhere to post to.
          Say so plainly rather than showing a confirmation that means nothing. */
       note.innerHTML = 'This is an offline copy — the form cannot send from here. ' +
-                       'Email <a href="mailto:naughttoten@hotmail.com">naughttoten@hotmail.com</a>.';
+                       'Email <a href="mailto:joshua@ntt.ie">joshua@ntt.ie</a>.';
       note.classList.add('is-bad');
       if (btn) btn.blur();
     });

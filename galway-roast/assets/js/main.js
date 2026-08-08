@@ -15,7 +15,6 @@
 (() => {
   'use strict';
 
-  const FRAME_COUNT = 121;
   const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const $  = (s, r = document) => r.querySelector(s);
@@ -27,7 +26,14 @@
   const range  = (v, a, b) => clamp((v - a) / (b - a || 1e-6));
   const smooth = (v, a, b) => { const t = range(v, a, b); return t * t * (3 - 2 * t); };
 
-  /* ─── frame set: bigger art only where it will actually be seen ─────────── */
+  /* ─── frame set: bigger art only where it will actually be seen ───────────
+     build-offline.py bundles the sequence into window.__FRAMES as data: URIs;
+     when that is present there is nothing to choose between and no network to
+     be careful with, so the picking logic is skipped entirely. */
+
+  const EMBEDDED = Array.isArray(window.__FRAMES) && window.__FRAMES.length
+    ? window.__FRAMES
+    : null;
 
   const conn = navigator.connection || {};
   const slow = conn.saveData === true || /2g/.test(conn.effectiveType || '');
@@ -35,7 +41,11 @@
   const useLarge = !slow && (window.innerWidth * dense >= 900);
   const SET = useLarge ? 'lg' : 'sm';
 
-  const framePath = i => `assets/frames/${SET}/f${String(i + 1).padStart(3, '0')}.webp`;
+  const framePath = i => EMBEDDED
+    ? EMBEDDED[i]
+    : `assets/frames/${SET}/f${String(i + 1).padStart(3, '0')}.webp`;
+
+  const FRAME_COUNT = EMBEDDED ? EMBEDDED.length : 121;
 
   /* ─── DOM ───────────────────────────────────────────────────────────────── */
 

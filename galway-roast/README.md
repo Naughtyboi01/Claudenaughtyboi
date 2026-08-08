@@ -86,6 +86,27 @@ the canvas dissolve into the page.
 python3 -m http.server 8000     # or just open index.html
 ```
 
+## One-file offline build
+
+```sh
+python3 build-offline.py        # → the-galway-roast-offline.html (~5 MB)
+```
+
+Inlines the stylesheets, both fonts, all 121 hero frames, the stills and the
+film into a single HTML file that runs from `file://`, a USB stick or an email
+attachment with no server and no network. Frames go in as data: URIs on
+`window.__FRAMES`, which `main.js` picks up in place of its normal path-based
+loading.
+
+The film is handed to the page as a **Blob URL** rather than a data: URI —
+Safari wants byte-range requests for media and will not reliably play a data:
+URI source. It is also re-encoded to 800px/CRF 30 by default, since base64 adds
+a third on top and the file is meant to be passed around; `--full-video` embeds
+the original instead.
+
+The only things still reaching the network are the shop links in the range
+section, which point at galwayroast.ie on purpose.
+
 ## Rebuilding the frames
 
 Frames were extracted with ffmpeg from the source film:

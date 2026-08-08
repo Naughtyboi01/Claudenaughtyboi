@@ -420,10 +420,59 @@
 
   /* ─── shop, film, footer bits ───────────────────────────────────────────── */
 
+  /* ─── prices ────────────────────────────────────────────────────────────────
+     The one place prices live. Both the featured picker and every card in the
+     range read from here, so filling these in updates the whole page.
+
+     These are deliberately empty: the live catalogue could not be read from
+     this build environment, and guessing a shop's prices is worse than showing
+     none. To pull the real numbers from the Shopify storefront:
+
+       curl -s 'https://galwayroast.ie/products.json?limit=250' | jq -r \
+         '.products[] | .title as $t | .variants[][] | "\($t) / \(.title): \(.price)"'
+
+     Values are plain numbers in euro, e.g. 'blend-ground-200': 9.95.
+     A null renders as "on request" and leaves the buy link working.        */
+
+  const PRICES = {
+    'blend-ground-200': null,
+    'blend-bean-200':   null,
+    'blend-bean-1kg':   null,
+    'guatemala-200':    null,
+    'honduras-200':     null,
+    'condor-200':       null,
+    'decaf-200':        null,
+    'selection-box':    null,
+    'subscription':     null
+  };
+
+  const euro = v => (v == null ? null : '€' + Number(v).toFixed(2));
+
   function setupShop() {
+    /* the range cards */
+    $$('.card__price[data-sku]').forEach(el => {
+      const price = euro(PRICES[el.dataset.sku]);
+      el.textContent = price || 'On request';
+      el.classList.toggle('is-tbc', !price);
+    });
+
     const picker = $('#sizePicker');
     if (!picker) return;
-    const val = $('#priceVal'), unit = $('#priceUnit'), add = $('#addToBag');
+    const val = $('#priceVal');
+    const cur = $('.price__cur');
+    const unit = $('#priceUnit');
+    const buy = $('#buyLink');
+
+    const box = $('.price');
+    const show = (btn) => {
+      const price = PRICES[btn.dataset.sku];
+      const known = price != null;
+      box.classList.toggle('is-tbc', !known);
+      cur.style.display = known ? '' : 'none';
+      val.textContent = known ? Number(price).toFixed(2) : 'On request';
+      unit.textContent = `/ ${btn.dataset.size}`;
+      if (buy && btn.dataset.url) buy.href = btn.dataset.url;
+    };
 
     picker.addEventListener('click', (e) => {
       const btn = e.target.closest('button');
@@ -433,19 +482,10 @@
         b.classList.toggle('is-on', on);
         b.setAttribute('aria-checked', String(on));
       });
-      val.textContent = btn.dataset.price;
-      unit.textContent = `/ ${btn.dataset.size} pouch`;
+      show(btn);
     });
 
-    if (add) {
-      add.addEventListener('click', () => {
-        const label = add.querySelector('span');
-        const size = $('button.is-on', picker);
-        label.textContent = `Added — ${size ? size.dataset.size : ''}`;
-        add.disabled = true;
-        setTimeout(() => { label.textContent = 'Add to bag'; add.disabled = false; }, 2200);
-      });
-    }
+    show($('button.is-on', picker) || $('button', picker));
   }
 
   function setupFilm() {

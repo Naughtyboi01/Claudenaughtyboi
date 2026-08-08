@@ -348,9 +348,12 @@
         <span class="l"><span>Small batch,</span></span>
         <span class="l l--em"><span>west of Ireland</span></span>
       </h2>
-      <p class="lede reveal" data-delay="2">Drum roasted in quantities small enough to watch. Each batch is
-        tasted before it is bagged, and bagged in a resealable pouch within days of the roast — because
-        ground coffee has a short, bright life and we would rather you spent it.</p>
+      <p class="lede reveal" data-delay="2">It started with a one-kilo roaster carried back from Turkey,
+        a roasting course in London, and a café in Tuam that needed better coffee than it could buy. The
+        bigger machine arrived in December 2010, and The Galway Roast has been growing ever since.</p>
+      <p class="lede reveal" data-delay="3">Everything is still drum roasted in quantities small enough
+        to watch. Each batch is tasted before it is bagged — because ground coffee has a short, bright
+        life and we would rather you spent it.</p>
       <ul class="roastery__list">
         <li class="reveal" data-delay="1"><span>Hand-roasted</span><em>in small batches</em></li>
         <li class="reveal" data-delay="2"><span>Ground &amp; sealed</span><em>days after roasting</em></li>
@@ -413,29 +416,157 @@
         and filter, sealed in a resealable pouch.</p>
 
       <div class="picker reveal" data-delay="2">
-        <span class="picker__k">Size</span>
-        <div class="picker__opts" id="sizePicker" role="radiogroup" aria-label="Pouch size">
-          <button type="button" role="radio" aria-checked="false" data-price="9.50" data-size="227g">227<i>g</i></button>
-          <button type="button" role="radio" aria-checked="true"  data-price="17.00" data-size="500g" class="is-on">500<i>g</i></button>
-          <button type="button" role="radio" aria-checked="false" data-price="30.00" data-size="1kg">1<i>kg</i></button>
+        <span class="picker__k">Grind</span>
+        <div class="picker__opts" id="sizePicker" role="radiogroup" aria-label="Grind and size">
+          <button type="button" role="radio" aria-checked="true" class="is-on"
+                  data-sku="blend-ground-200" data-size="200g ground"
+                  data-url="https://galwayroast.ie/products/galway-roast-coffee-ground">Ground <i>200g</i></button>
+          <button type="button" role="radio" aria-checked="false"
+                  data-sku="blend-bean-200" data-size="200g whole bean"
+                  data-url="https://galwayroast.ie/products/galway-roast-coffee-whole-bean">Whole bean <i>200g</i></button>
+          <button type="button" role="radio" aria-checked="false"
+                  data-sku="blend-bean-1kg" data-size="1kg whole bean"
+                  data-url="https://galwayroast.ie/products/galway-roast-coffee-whole-bean">Whole bean <i>1kg</i></button>
         </div>
       </div>
 
       <div class="price reveal" data-delay="3">
-        <span class="price__cur">€</span><span class="price__val" id="priceVal">17.00</span>
-        <span class="price__unit" id="priceUnit">/ 500g pouch</span>
+        <span class="price__cur">€</span><span class="price__val" id="priceVal">—</span>
+        <span class="price__unit" id="priceUnit">/ 200g ground</span>
       </div>
 
       <div class="shop__actions reveal" data-delay="4">
-        <button class="btn btn--solid btn--wide magnetic" type="button" id="addToBag"><span>Add to bag</span></button>
+        <a class="btn btn--solid btn--wide magnetic" id="buyLink"
+           href="https://galwayroast.ie/products/galway-roast-coffee-ground"><span>Add to bag</span></a>
         <a class="btn btn--line magnetic" href="#ritual"><span>Brew guide</span></a>
       </div>
 
       <ul class="shop__notes reveal" data-delay="5">
-        <li>Roasted to order, shipped from Galway</li>
-        <li>Free Irish delivery over €35</li>
-        <li>Subscribe &amp; save 10%</li>
+        <li>Hand-roasted in small batches in Tuam, Co. Galway</li>
+        <li>Delivery included in the price, Ireland &amp; Northern Ireland</li>
+        <li>Ireland 1–2 days · Northern Ireland 2–3 days</li>
       </ul>
+    </div>
+  </div>
+
+  <!-- the rest of the range -->
+  <div class="wrap range">
+    <div class="range__head">
+      <p class="eyebrow reveal">09 — The range</p>
+      <h2 class="h2 split" data-reveal>
+        <span class="l"><span>The whole</span></span>
+        <span class="l l--em"><span>shelf</span></span>
+      </h2>
+    </div>
+
+    <ul class="range__grid">
+      <li class="card reveal" data-delay="1">
+        <span class="card__tag">Signature blend</span>
+        <h3 class="card__name">Galway Roast<br><em>Ground Coffee</em></h3>
+        <p class="card__note">Brazil · Guatemala · Honduras. Coarse ground for cafetière.</p>
+        <div class="card__foot">
+          <span class="card__size">200g</span>
+          <span class="card__price" data-sku="blend-ground-200">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/galway-roast-coffee-ground">
+          <span class="sr-only">Buy Galway Roast Ground Coffee</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="2">
+        <span class="card__tag">Signature blend</span>
+        <h3 class="card__name">Galway Roast<br><em>Whole Bean</em></h3>
+        <p class="card__note">The same three-bean blend, left whole for your own grinder.</p>
+        <div class="card__foot">
+          <span class="card__size">200g · 1kg</span>
+          <span class="card__price" data-sku="blend-bean-200">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/galway-roast-coffee-whole-bean">
+          <span class="sr-only">Buy Galway Roast Whole Bean</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="3">
+        <span class="card__tag">Single origin</span>
+        <h3 class="card__name">Guatemala<br><em>SHB</em></h3>
+        <p class="card__note">Strictly hard bean, grown high. Cocoa and a clean, bright edge. Beans or ground.</p>
+        <div class="card__foot">
+          <span class="card__size">200g</span>
+          <span class="card__price" data-sku="guatemala-200">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/guatemala-shb-single-origin-coffee-beans-or-ground">
+          <span class="sr-only">Buy Guatemala SHB</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="1">
+        <span class="card__tag">Single origin</span>
+        <h3 class="card__name">Honduras<br><em>SHG</em></h3>
+        <p class="card__note">Strictly high grown. Soft, sweet and rounded, with a caramel close. Beans or ground.</p>
+        <div class="card__foot">
+          <span class="card__size">200g</span>
+          <span class="card__price" data-sku="honduras-200">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/honduras-shg-single-origin-coffee-beans-or-ground">
+          <span class="sr-only">Buy Honduras SHG</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="2">
+        <span class="card__tag">Single origin</span>
+        <h3 class="card__name">Black Condor<br><em>Colombia</em></h3>
+        <p class="card__note">A darker Colombian, for anyone who takes it seriously black. Beans or ground.</p>
+        <div class="card__foot">
+          <span class="card__size">200g</span>
+          <span class="card__price" data-sku="condor-200">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/columbian-black-condor-coffee-ground-or-whole-bean">
+          <span class="sr-only">Buy Black Condor</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="3">
+        <span class="card__tag">Decaf</span>
+        <h3 class="card__name">Brazil<br><em>Swiss Water</em></h3>
+        <p class="card__note">Decaffeinated without solvents — water, time and nothing else. Beans or ground.</p>
+        <div class="card__foot">
+          <span class="card__size">200g</span>
+          <span class="card__price" data-sku="decaf-200">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/galway-roast-decaf-coffee-beans-or-ground">
+          <span class="sr-only">Buy Brazil Swiss Water Decaf</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="1">
+        <span class="card__tag">Gift</span>
+        <h3 class="card__name">The Selection<br><em>Box</em></h3>
+        <p class="card__note">Four 200g bags — the 3 Bean Blend, Guatemala, Honduras and Creamy
+          Bean Espresso. The whole roastery in one box.</p>
+        <div class="card__foot">
+          <span class="card__size">4 × 200g</span>
+          <span class="card__price" data-sku="selection-box">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/galway-roast-coffee-selection">
+          <span class="sr-only">Buy the Selection Box</span></a>
+      </li>
+
+      <li class="card reveal" data-delay="2">
+        <span class="card__tag">Subscription</span>
+        <h3 class="card__name">Three or six<br><em>months</em></h3>
+        <p class="card__note">A 205g bag of the blend through the door every month, roasted the week
+          it ships. Given as a gift or kept for yourself.</p>
+        <div class="card__foot">
+          <span class="card__size">205g / month</span>
+          <span class="card__price" data-sku="subscription">—</span>
+        </div>
+        <a class="card__link" href="https://galwayroast.ie/products/coffee-subscription-gift">
+          <span class="sr-only">Buy a coffee subscription</span></a>
+      </li>
+    </ul>
+
+    <div class="range__wholesale reveal" data-delay="2">
+      <div>
+        <h3>Wholesale</h3>
+        <p>Cafés, restaurants and offices across Ireland. Beans, grind and equipment,
+          with the roast dialled in for your machine.</p>
+      </div>
+      <a class="btn btn--line magnetic" href="https://galwayroast.ie/products/galway-roast-coffee-wholesale">
+        <span>Enquire</span></a>
     </div>
   </div>
 </section>
@@ -469,16 +600,44 @@
     </div>
 
     <div class="foot__cols">
-      <div><h3>Coffee</h3><a href="#shop">Ground Coffee</a><a href="#blend">The Blend</a><a href="#profile">Profile</a></div>
-      <div><h3>Learn</h3><a href="#ritual">Brew guide</a><a href="#roastery">Roastery</a><a href="#film">The film</a></div>
-      <div><h3>Company</h3><a href="#top">About</a><a href="#top">Stockists</a><a href="#top">Contact</a></div>
-      <div><h3>Follow</h3><a href="#top">Instagram</a><a href="#top">Facebook</a><a href="#top">TikTok</a></div>
+      <div>
+        <h3>Coffee</h3>
+        <a href="https://galwayroast.ie/products/galway-roast-coffee-ground">Ground Coffee</a>
+        <a href="https://galwayroast.ie/products/galway-roast-coffee-whole-bean">Whole Bean</a>
+        <a href="https://galwayroast.ie/collections/coffee-beans">All coffee</a>
+        <a href="https://galwayroast.ie/collections/coffee-subscription">Subscription</a>
+      </div>
+      <div>
+        <h3>Learn</h3>
+        <a href="#ritual">Brew guide</a>
+        <a href="#blend">The blend</a>
+        <a href="#roastery">The roastery</a>
+        <a href="#film">The film</a>
+      </div>
+      <div>
+        <h3>Trade</h3>
+        <a href="https://galwayroast.ie/products/galway-roast-coffee-wholesale">Wholesale</a>
+        <a href="https://galwayroast.ie/collections/wholesale-coffee-beans-ireland">Trade coffee</a>
+        <a href="https://galwayroast.ie/pages/contact">Contact</a>
+      </div>
+      <div class="foot__contact">
+        <h3>Find us</h3>
+        <address>
+          The Galway Roast<br>
+          40 Vicar Street, Townparks<br>
+          Tuam, Co. Galway<br>
+          H54&nbsp;F763, Ireland
+        </address>
+        <a href="mailto:info@galwayroast.ie">info@galwayroast.ie</a>
+        <a href="https://www.facebook.com/GalwayRoast/">Facebook</a>
+      </div>
     </div>
 
     <div class="foot__base">
       <p>© <span id="year">2026</span> The Galway Roast · Galway, Ireland</p>
-      <p class="foot__note">Concept landing page. Product photography is from the supplied brand film;
-        sizes, prices and delivery terms are placeholders for demonstration.</p>
+      <p class="foot__note">Concept landing page. Product photography is from the supplied brand film.
+        Product names, formats, delivery terms and contact details follow the live shop at
+        galwayroast.ie; prices are not yet filled in.</p>
     </div>
   </div>
 </footer>

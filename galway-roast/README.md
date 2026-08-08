@@ -101,11 +101,43 @@ If the count changes, update `FRAME_COUNT` in `main.js`.
 
 ## Content notes
 
-Product facts on the page come from the pouch itself: 100% Arabica, ground
-coffee, a blend of Brazilian Santos, Guatemalan and Honduras beans, medium
-strength, chocolate and caramel tasting notes, suited to cafetière and filter,
-Great Taste 2024.
+Product facts come from the pouch itself: 100% Arabica, ground coffee, a blend
+of Brazilian Santos, Guatemalan and Honduras beans, medium strength, chocolate
+and caramel tasting notes, suited to cafetière and filter, Great Taste 2024.
 
-**Sizes, prices and delivery terms are placeholders** invented for the demo, as
-is the brew guide's exact dosing. The footer says so. Swap them before this goes
-anywhere real.
+The range, formats, delivery terms, roastery history and contact details follow
+the live shop at [galwayroast.ie](https://galwayroast.ie). Every card in the
+range links to its real product page.
+
+### Prices — the one thing still missing
+
+`PRICES` at the top of `setupShop()` in `main.js` is the single source for every
+price on the page: the featured picker and all eight range cards read from it.
+Each key is currently `null`, which renders as "On request" and leaves the buy
+links working.
+
+They are empty rather than guessed: the build environment's network policy
+blocks `galwayroast.ie`, so the live catalogue could not be read, and inventing
+a shop's prices is worse than showing none. To fill them:
+
+```sh
+curl -s 'https://galwayroast.ie/products.json?limit=250' | jq -r \
+  '.products[] | .title as $t | .variants[] | "\($t) / \(.title): \(.price)"'
+```
+
+Then set plain euro numbers, e.g. `'blend-ground-200': 9.95`.
+
+### Still to confirm
+
+- **Phone number.** Deliberately omitted. Directory sites return two different
+  numbers for the Tuam address and neither could be checked against the
+  business's own pages, so none is published.
+- **Email.** `info@galwayroast.ie` is shown in the footer — worth a quick
+  confirmation against `galwayroast.ie/pages/contact`.
+- **Product name.** The live shop spells it *Columbian* Black Condor; the card
+  here uses *Colombia*. Match whichever the catalogue should use.
+- **Social links.** Only Facebook is linked, as it is the only account that
+  could be verified.
+
+The brew guide's exact dosing (30g to 500ml, four minutes) is a sensible
+house recipe, not a published one.

@@ -146,7 +146,7 @@ function loadFrames() {
   var set = pickSet();
   var pad = function (n) { return ('000' + n).slice(-4); };
   var srcOf = function (i) {
-    return EMBEDDED ? EMBEDDED[i] : 'assets/frames/' + set + '/' + pad(i + 1) + '.jpg';
+    return EMBEDDED ? EMBEDDED[i] : 'assets/frames/' + set + '/' + pad(i + 1) + '.webp';
   };
   var next = 0;
   var CONCURRENCY = 8;

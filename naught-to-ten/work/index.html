@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <title>Work — Naught to Ten, Web Design Studio in Galway</title>
-<meta name="description" content="Case study 01: this website. A scroll-scrubbed film hero, 1.1 MB to first paint on 3G, no cookies and no third-party requests. Every claim checkable in your browser.">
+<meta name="description" content="Case study 01: this website. A scroll-scrubbed film hero, 0.9 MB to first paint on 3G, no cookies and no third-party requests. Every claim checkable in your browser.">
 <link rel="canonical" href="https://ntt.ie/work/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 
@@ -112,9 +112,9 @@
   </section>
 
   <figure class="cs__gal" data-rev>
-    <img src="../assets/img/case/hero-start.jpg" alt="The hero at rest: the wordmark over an extreme close-up of glowing circuitry" loading="lazy" decoding="async" width="1000" height="1250">
-    <img src="../assets/img/case/hero-mid.jpg" alt="Mid-scroll: the camera has pulled back to a profile, with the method panel alongside" loading="lazy" decoding="async" width="1000" height="1250">
-    <img src="../assets/img/case/hero-end.jpg" alt="The end of the scroll: the full figure, and the counter reading ten" loading="lazy" decoding="async" width="1000" height="1250">
+    <img src="../assets/img/case/hero-start.webp" alt="The hero at rest: the wordmark over an extreme close-up of glowing circuitry" loading="lazy" decoding="async" width="1000" height="1250">
+    <img src="../assets/img/case/hero-mid.webp" alt="Mid-scroll: the camera has pulled back to a profile, with the method panel alongside" loading="lazy" decoding="async" width="1000" height="1250">
+    <img src="../assets/img/case/hero-end.webp" alt="The end of the scroll: the full figure, and the counter reading ten" loading="lazy" decoding="async" width="1000" height="1250">
     <figcaption>Three points in the hero. Scroll position drives the film, and the counter in the corner ticks 0.0 to 10.0 with it.</figcaption>
   </figure>
 
@@ -130,17 +130,17 @@
     <p class="sec__k"><i>—</i>The hard part</p>
     <h2>A 6 MB hero that still loads on a bad connection.</h2>
     <p>The first version held the page behind all 145 frames before showing anything. On a throttled 1.6 Mbps connection — a realistic Irish mobile floor — that took <strong>16.6 seconds</strong> and 3.3 MB before a visitor saw a single pixel. No amount of clever markup rescues a number like that.</p>
-    <p>The fix was to stop treating the sequence as one object. The loader now releases the page after the first 24 frames and keeps fetching the rest behind it, while the scrubber paints the nearest frame it already has, so scrubbing never blanks out.</p>
+    <p>The fix was to stop treating the sequence as one object. The loader now releases the page after the first 24 frames and keeps fetching the rest behind it, while the scrubber paints the nearest frame it already has, so scrubbing never blanks out. A second pass re-encoded all 290 stills as WebP, which took another fifth off the wire without a visible difference.</p>
     <div class="cs__metrics">
-      <div><span>Time to first paint</span><b>16.6s <i>→</i> 5.7s</b></div>
-      <div><span>Transferred before reveal</span><b>3.31 MB <i>→</i> 1.11 MB</b></div>
+      <div><span>Time to first paint</span><b>16.6s <i>→</i> 4.8s</b></div>
+      <div><span>Transferred before reveal</span><b>3.31 MB <i>→</i> 0.92 MB</b></div>
       <div><span>Requests before reveal</span><b>160 <i>→</i> 39</b></div>
     </div>
     <p class="cs__note">Measured in headless Chromium at 390×844 with the network throttled to 1.6 Mbps down and 150 ms latency.</p>
   </section>
 
   <figure class="cs__wide" data-rev>
-    <img src="../assets/img/case/scale.jpg" alt="The pinned services index, with the active row highlighted and a matching image alongside" loading="lazy" decoding="async" width="1000" height="1250">
+    <img src="../assets/img/case/scale.webp" alt="The pinned services index, with the active row highlighted and a matching image alongside" loading="lazy" decoding="async" width="1000" height="1250">
     <figcaption>The services index pins while you scroll, advancing one row at a time.</figcaption>
   </figure>
 

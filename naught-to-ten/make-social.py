@@ -29,7 +29,7 @@ def b64(path: Path, mime: str) -> str:
 
 
 def og_html() -> str:
-    frame = b64(ROOT / 'assets' / 'frames' / 'lg' / '0139.jpg', 'image/jpeg')
+    frame = b64(ROOT / 'assets' / 'frames' / 'lg' / '0139.webp', 'image/webp')
     inter = b64(ROOT / 'assets' / 'fonts' / 'inter-var.woff2', 'font/woff2')
     serif = b64(ROOT / 'assets' / 'fonts' / 'instrument-serif-400-italic.woff2', 'font/woff2')
     mono = b64(ROOT / 'assets' / 'fonts' / 'jetbrains-mono-var.woff2', 'font/woff2')

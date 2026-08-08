@@ -29,8 +29,8 @@ everywhere, at the cost of the upfront download.
 
 Supporting details:
 
-- **Two frame sets.** `assets/frames/lg` (1600px, 6.0 MB) for desktop,
-  `assets/frames/sm` (960px, 2.9 MB) served to narrow viewports, `saveData`
+- **Two frame sets, WebP.** `assets/frames/lg` (1600px, 4.3 MB) for desktop,
+  `assets/frames/sm` (960px, 2.5 MB) served to narrow viewports, `saveData`
   clients and 2G connections.
 - **Eased index.** The drawn frame lerps toward the scroll-derived target, so a
   fast flick reads as motion blur rather than a jump cut.
@@ -112,16 +112,31 @@ python3 set-domain.py example.ie         # apply, then rebuild the bundles
 
 ## Performance
 
-The loader used to hold the first paint until all 145 frames had decoded. It
-now releases after 24 and keeps fetching behind the revealed page;
+Two passes, both measured at 390×844 on a throttled 1.6 Mbps / 150 ms
+connection. Figures are at the moment the loader releases the page, not at
+`window.load` — the rest of the sequence keeps arriving behind it.
+
+| | Time to reveal | Requests | Transferred | Full load |
+|---|---|---|---|---|
+| Original | 16.6 s | 160 | 3.31 MB | 3.31 MB |
+| After the gate | 5.6 s | 39 | 1.11 MB | 3.26 MB |
+| After WebP | 4.8 s | 39 | 0.92 MB | 2.66 MB |
+
+**The gate.** The loader used to hold the first paint until all 145 frames had
+decoded. It now releases after 24 and keeps fetching behind the revealed page;
 `nearestReady()` already covered any gap the scrubber reached first.
 
-Measured at 390×844 on a throttled 1.6 Mbps / 150 ms connection:
+**WebP.** All 290 stills and every photograph re-encoded at quality 82 — a
+fifth off the wire with no visible difference at the size they are displayed.
+The frames are the whole payload here, so the format choice matters more than
+anything else on the page.
 
-| | Time to reveal | Requests | Transferred |
-|---|---|---|---|
-| Before | 16.6 s | 160 | 3.31 MB |
-| After | 5.7 s | 39 | 1.11 MB |
+One trap worth recording, because it cost a wrong number first time round:
+measuring to `window.load` measures the *entire* 145-frame sequence and reads
+about 13 s, which is not what a visitor experiences. The honest number is when
+`is-booting` comes off the body, and catching that needs an observer installed
+via `addInitScript` before any page script runs — attach it after `goto` and
+the class has often already changed.
 
 ## Structure
 

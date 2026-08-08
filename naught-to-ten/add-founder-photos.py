@@ -64,25 +64,25 @@ def target_size(src: Path, slot: str) -> tuple[int, int]:
     return even(tw * scale), even(th * scale)
 
 
-def crop(src: Path, slot: str) -> Path:
+def crop(src: Path, slot: str) -> tuple[Path, int, int]:
     w, h = target_size(src, slot)
     full_w, full_h = SPECS[slot][0], SPECS[slot][1]
     OUT.mkdir(parents=True, exist_ok=True)
-    dst = OUT / f'{slot}.jpg'
+    dst = OUT / f'{slot}.webp'
     cmd = [
         'ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', str(src),
         '-vf', f'scale={w}:{h}:force_original_aspect_ratio=increase:flags=lanczos,'
                f'crop={w}:{h}',
-        '-frames:v', '1', '-q:v', '4', str(dst),
+        '-frames:v', '1', '-c:v', 'libwebp', '-quality', '82', str(dst),
     ]
     subprocess.run(cmd, check=True)
     note = '' if (w, h) == (full_w, full_h) else f'  (source too small for {full_w}x{full_h})'
     print(f'  · {src.name} -> assets/img/founder/{dst.name} '
           f'({w}x{h}, {dst.stat().st_size/1e3:.0f} KB){note}')
-    return dst
+    return dst, w, h
 
 
-def fill_slot(page: str, slot: str) -> str:
+def fill_slot(page: str, slot: str, w: int, h: int) -> str:
     """Replace the empty frame for `slot` with an <img>, keeping the frame."""
     _, _, mod, alt = SPECS[slot]
     pattern = re.compile(
@@ -90,8 +90,13 @@ def fill_slot(page: str, slot: str) -> str:
         re.S)
     if not pattern.search(page):
         raise SystemExit(f'! no slot "{slot}" found in index.html')
-    img = (f'<img src="assets/img/founder/{slot}.jpg" '
-           f'alt="{htmlmod.escape(alt, quote=True)}" loading="lazy" decoding="async">')
+    # width/height are the actual crop output, not the slot's nominal size —
+    # a small source is scaled down rather than enlarged (see target_size),
+    # and a mismatched attribute would misreport the image's real aspect
+    # ratio to the browser instead of preventing the layout shift it is for.
+    img = (f'<img src="assets/img/founder/{slot}.webp" '
+           f'alt="{htmlmod.escape(alt, quote=True)}" loading="lazy" decoding="async" '
+           f'width="{w}" height="{h}">')
     return pattern.sub(lambda m: m.group(1) + img + m.group(2), page, count=1)
 
 
@@ -122,8 +127,8 @@ def main():
     page_path = ROOT / 'index.html'
     page = page_path.read_text()
     for slot, src in jobs:
-        crop(src, slot)
-        page = fill_slot(page, slot)
+        _, w, h = crop(src, slot)
+        page = fill_slot(page, slot, w, h)
     page_path.write_text(page)
 
     print(f'\n  → index.html updated ({len(jobs)} slot(s) filled)')

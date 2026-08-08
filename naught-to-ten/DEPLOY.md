@@ -150,7 +150,7 @@ are gone from the manifesto stat row. What replaced them is measurable:
 |---|---|
 | **10** services | The ten on `/services/` |
 | **0** cookies, trackers, third parties | Measured: zero third-party requests, zero cookies, zero storage entries |
-| **1.1 MB** before it appears | Measured on a throttled 1.6 Mbps connection, to first paint of the hero |
+| **0.9 MB** before it appears | Measured on a throttled 1.6 Mbps connection, to first paint of the hero |
 | **2** working days to a reply | A promise, not a measurement — so keep it |
 
 The middle two are true of the site as built. **If you ever add a font from

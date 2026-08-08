@@ -33,7 +33,7 @@ ROOT = Path(__file__).parent.resolve()
 
 MIME = {
     '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png',
-    '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.svg': 'image/svg+xml',
+    '.webp': 'image/webp', '.woff2': 'font/woff2', '.mp4': 'video/mp4', '.svg': 'image/svg+xml',
 }
 
 VIDEO = 'assets/media/naught-to-ten-loop.mp4'
@@ -97,18 +97,18 @@ def build(frame_set: str, out_name: str) -> None:
 
     # ── image references ─────────────────────────────────────────────────
     # Per attribute, not per tag — the <video> carries src and poster both.
-    refs = re.findall(r'\b(src|poster|data-img)="(assets/[^"]+\.(?:jpg|jpeg|png|svg))"', html)
+    refs = re.findall(r'\b(src|poster|data-img)="(assets/[^"]+\.(?:jpg|jpeg|png|svg|webp))"', html)
     for attr, src in sorted(set(refs)):
         html = html.replace(f'{attr}="{src}"', f'{attr}="{data_uri(ROOT / src)}"')
         print(f'  · inlined {src}')
 
     # inline style="background-image:url(...)" — either quote style, or none
-    html = re.sub(r"""url\((['"]?)(assets/[^)'"]+\.(?:jpg|jpeg|png|svg))\1\)""",
+    html = re.sub(r"""url\((['"]?)(assets/[^)'"]+\.(?:jpg|jpeg|png|svg|webp))\1\)""",
                   lambda m: f"url('{data_uri(ROOT / m.group(2))}')", html)
 
     # ── hero frame sequence ──────────────────────────────────────────────
     frame_dir = ROOT / 'assets' / 'frames' / frame_set
-    frames = sorted(frame_dir.glob('*.jpg'))
+    frames = sorted(frame_dir.glob('*.webp'))
     if not frames:
         raise SystemExit(f'no frames found in {frame_dir}')
     uris = [data_uri(f) for f in frames]

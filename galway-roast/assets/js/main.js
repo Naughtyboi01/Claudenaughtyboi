@@ -113,21 +113,93 @@
       loader.classList.add('is-done');
       body.classList.remove('is-loading');
       resize();
-      tick();
+      requestAnimationFrame(tick);
     });
   }
 
-  /* ─── canvas ────────────────────────────────────────────────────────────── */
+  /* ─── writing to the DOM ──────────────────────────────────────────────────
+     Every one of these runs inside the scroll loop, so each write is checked
+     against the last value first. Re-assigning an identical string still costs
+     a style invalidation, and there are enough of them here to matter. */
+
+  const written = new WeakMap();
+
+  function setStyle(el, prop, val) {
+    let last = written.get(el);
+    if (!last) written.set(el, last = {});
+    if (last[prop] === val) return;
+    last[prop] = val;
+    el.style[prop] = val;
+  }
+
+  function setText(el, val) {
+    if (el.__t === val) return;
+    el.__t = val;
+    el.textContent = val;
+  }
+
+  /* ─── geometry ────────────────────────────────────────────────────────────
+     Measured on resize, never in the loop. getBoundingClientRect() forces a
+     synchronous layout, and the old loop called it once for the hero, once for
+     the blend track and once per parallax element on every single frame.
+     offsetTop/offsetHeight are used rather than rects because they ignore the
+     transforms this code is itself applying. */
 
   let cw = 0, ch = 0;
+  let geomDirty = true;
+  let marqueeHalf = 1;
+  let docSpan = 1;
+  const geom = { vh: 0, heroTop: 0, heroSpan: 1, heroHeight: 0,
+                 blendTop: 0, blendSpan: 1, blendHeight: 0 };
+  const parallax = [];
+
+  const docTop = (el) => {
+    let t = 0;
+    for (let n = el; n; n = n.offsetParent) t += n.offsetTop;
+    return t;
+  };
+
+  function measure() {
+    geomDirty = false;
+    geom.vh = window.innerHeight;
+
+    geom.heroTop = docTop(heroTrack);
+    geom.heroHeight = heroTrack.offsetHeight;
+    geom.heroSpan = geom.heroHeight - geom.vh;
+
+    if (blendTrack) {
+      geom.blendTop = docTop(blendTrack);
+      geom.blendHeight = blendTrack.offsetHeight;
+      geom.blendSpan = geom.blendHeight - geom.vh;
+    }
+
+    parallax.length = 0;
+    for (const el of parallaxEls) {
+      parallax.push({ el, top: docTop(el), h: el.offsetHeight,
+                      f: parseFloat(el.dataset.parallax) || 0 });
+    }
+
+    marqueeHalf = marquee ? (marquee.scrollWidth / 2 || 1) : 1;
+    docSpan = document.documentElement.scrollHeight - geom.vh;
+  }
+
+  /* ─── canvas ──────────────────────────────────────────────────────────────
+     The frames are 1000px square and get drawn at roughly 900 CSS px, so a
+     device pixel ratio above ~1.5 is upscaling an upscale: it costs real fill
+     rate and buys nothing you can see. */
+
+  const DPR_CAP = 1.5;
 
   function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, DPR_CAP);
     cw = canvas.clientWidth;
     ch = canvas.clientHeight;
     canvas.width  = Math.round(cw * dpr);
     canvas.height = Math.round(ch * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    gradKey = '';       /* gradients are in canvas space; they must be rebuilt */
+    lastPaint = '';
+    geomDirty = true;
   }
 
   /* Nearest frame that has actually decoded — keeps the scrub smooth while the
@@ -142,13 +214,15 @@
   }
 
   const EDGE = '#140203';   /* sampled from the film's own frame edges */
+  const EDGE_CLEAR = 'rgba(20,2,3,0)';
+
+  let gradKey = '';
+  let grads = null;
+  let lastPaint = '';
 
   function paint(index, fit, zoom, shiftX, shiftY) {
     const img = usable(index);
     if (!img) return;
-
-    ctx.fillStyle = EDGE;
-    ctx.fillRect(0, 0, cw, ch);
 
     const iw = img.naturalWidth, ih = img.naturalHeight;
     const cover   = Math.max(cw / iw, ch / ih);
@@ -161,6 +235,19 @@
     const w = iw * scale, h = ih * scale;
     const x = (cw - w) / 2 + shiftX;
     const y = (ch - h) / 2 + shiftY;
+
+    /* Nothing moved and the same frame is up: the canvas already shows this. */
+    const key = index + '|' + (x | 0) + '|' + (y | 0) + '|' + w.toFixed(1) + '|' + h.toFixed(1);
+    if (key === lastPaint) return;
+    lastPaint = key;
+
+    /* Only clear where the picture will not reach. In the opening half it
+       covers the whole canvas, which makes this a free skip. */
+    if (x > 0 || y > 0 || x + w < cw || y + h < ch) {
+      ctx.fillStyle = EDGE;
+      ctx.fillRect(0, 0, cw, ch);
+    }
+
     ctx.drawImage(img, x, y, w, h);
 
     /* Feather the frame's own edges into the page rather than the canvas
@@ -169,17 +256,34 @@
        near-black burgundy, so the seam disappears completely. */
     const fx = Math.min(w, cw) * 0.14;
     const fy = Math.min(h, ch) * 0.12;
-    const band = (x0, y0, x1, y1, rx, ry, rw, rh) => {
-      const g = ctx.createLinearGradient(x0, y0, x1, y1);
-      g.addColorStop(0, EDGE);
-      g.addColorStop(1, 'rgba(20,2,3,0)');
-      ctx.fillStyle = g;
+
+    if (key !== gradKey) {
+      gradKey = key;
+      const g = (x0, y0, x1, y1) => {
+        const grd = ctx.createLinearGradient(x0, y0, x1, y1);
+        grd.addColorStop(0, EDGE);
+        grd.addColorStop(1, EDGE_CLEAR);
+        return grd;
+      };
+      grads = [
+        g(x, 0, x + fx, 0),
+        g(x + w, 0, x + w - fx, 0),
+        g(0, y, 0, y + fy),
+        g(0, y + h, 0, y + h - fy)
+      ];
+    }
+
+    /* Bands that fall entirely outside the canvas are skipped rather than
+       handed to the rasteriser to clip — in cover mode that is most of them. */
+    const band = (i, rx, ry, rw, rh) => {
+      if (rx > cw || ry > ch || rx + rw < 0 || ry + rh < 0) return;
+      ctx.fillStyle = grads[i];
       ctx.fillRect(rx, ry, rw, rh);
     };
-    band(x, 0, x + fx, 0, x, y, fx, h);                    /* left  */
-    band(x + w, 0, x + w - fx, 0, x + w - fx, y, fx, h);   /* right */
-    band(0, y, 0, y + fy, x, y, w, fy);                    /* top   */
-    band(0, y + h, 0, y + h - fy, x, y + h - fy, w, fy);   /* bottom*/
+    band(0, x, y, fx, h);                    /* left   */
+    band(1, x + w - fx, y, fx, h);           /* right  */
+    band(2, x, y, w, fy);                    /* top    */
+    band(3, x, y + h - fy, w, fy);           /* bottom */
   }
 
   /* ─── scroll-driven state ───────────────────────────────────────────────── */
@@ -202,11 +306,13 @@
     { el: beats[3], r: [ 0.72, 0.805, 2,    2.1   ], enterY: 52, exitY:   0, enterS: 1,    exitS:  0    }
   ];
 
-  function heroProgress() {
-    const rect = heroTrack.getBoundingClientRect();
-    const total = heroTrack.offsetHeight - window.innerHeight;
-    return clamp(-rect.top / (total || 1));
-  }
+  /* Exponential smoothing, normalised to elapsed time. The old version applied
+     a flat 0.18 per animation frame, which meant the scrub converged at a rate
+     that depended on the frame rate: exactly when frames were being dropped and
+     the image most needed to catch up, it caught up slowest. That compounding
+     is what read as lag. SMOOTH is the fraction closed in one 60fps frame. */
+  const SMOOTH = 0.34;
+  const approach = (dt) => 1 - Math.pow(1 - SMOOTH, dt / 16.667);
 
   /* Scroll distance is spent unevenly across the clip on purpose: linger on the
      opening macro, hurry through the flat white middle, and slow right down for
@@ -225,11 +331,13 @@
     return FRAME_COUNT - 1;
   }
 
-  function drawHero(p) {
+  function drawHero(p, dt) {
     state.frameTarget = frameAt(p);
     state.frame = REDUCED
       ? state.frameTarget
-      : lerp(state.frame, state.frameTarget, 0.18);
+      : state.frame + (state.frameTarget - state.frame) * approach(dt);
+    /* stop chasing once the difference is under half a frame */
+    if (Math.abs(state.frameTarget - state.frame) < 0.5) state.frame = state.frameTarget;
 
     const idx = clamp(Math.round(state.frame), 0, FRAME_COUNT - 1);
     const fit = smooth(p, 0.5, 0.94);
@@ -245,21 +353,25 @@
 
     paint(idx, fit, zoom, shiftX, shiftY);
 
-    canvasWrap.style.opacity = String(lerp(1, 0.92, smooth(p, 0.92, 1)));
-    heroWash.style.opacity = String(0.18 + 0.82 * smooth(p, 0.55, 0.82));
+    setStyle(canvasWrap, 'opacity', lerp(1, 0.92, smooth(p, 0.92, 1)).toFixed(3));
+    setStyle(heroWash, 'opacity', (0.18 + 0.82 * smooth(p, 0.55, 0.82)).toFixed(3));
 
-    hudFill.style.width = (p * 100).toFixed(1) + '%';
-    hudFrame.textContent = String(idx + 1).padStart(3, '0');
+    setStyle(hudFill, 'width', (p * 100).toFixed(1) + '%');
+    setText(hudFrame, String(idx + 1).padStart(3, '0'));
 
     for (const b of BEATS) {
       const inn = smooth(p, b.r[0], b.r[1]);
       const out = smooth(p, b.r[2], b.r[3]);
       const o  = inn * (1 - out);
+      const hidden = o < 0.004;
+      setStyle(b.el, 'visibility', hidden ? 'hidden' : 'visible');
+      if (hidden) continue;      /* nothing on screen to position */
+
       const ty = lerp(b.enterY, 0, inn) + b.exitY * out;
       const sc = lerp(b.enterS, 1, inn) + b.exitS * out;
-      b.el.style.opacity = o.toFixed(3);
-      b.el.style.transform = `translate3d(0, ${ty.toFixed(1)}px, 0) scale(${sc.toFixed(3)})`;
-      b.el.style.visibility = o < 0.004 ? 'hidden' : 'visible';
+      setStyle(b.el, 'opacity', o.toFixed(3));
+      setStyle(b.el, 'transform',
+        `translate3d(0, ${ty.toFixed(1)}px, 0) scale(${sc.toFixed(3)})`);
       /* inner staggers fire once the beat is properly on screen */
       b.el.classList.toggle('is-live', o > 0.45);
     }
@@ -269,12 +381,12 @@
 
   let blendIndex = -1;
 
-  function drawBlend() {
+  function drawBlend(y) {
     if (!blendTrack) return;
-    const rect = blendTrack.getBoundingClientRect();
-    const total = blendTrack.offsetHeight - window.innerHeight;
-    const q = clamp(-rect.top / (total || 1));
-    if (rect.top > window.innerHeight || rect.bottom < 0) return;
+    /* off screen: nothing to update */
+    if (y + geom.vh < geom.blendTop || y > geom.blendTop + geom.blendHeight) return;
+
+    const q = clamp((y - geom.blendTop) / (geom.blendSpan || 1));
 
     /* Three equal thirds, nudged so each panel settles before the next arrives */
     const i = q < 0.34 ? 0 : q < 0.67 ? 1 : 2;
@@ -284,49 +396,62 @@
       blendTicks.forEach((el, n) => el.classList.toggle('is-on', n <= i));
     }
     if (blendArt) {
-      blendArt.style.transform = `scale(${(1.06 + q * 0.1).toFixed(3)}) rotate(${(q * 14 - 7).toFixed(2)}deg)`;
+      setStyle(blendArt, 'transform',
+        `scale(${(1.06 + q * 0.1).toFixed(3)}) rotate(${(q * 14 - 7).toFixed(2)}deg)`);
     }
   }
 
   /* ─── parallax + marquee ────────────────────────────────────────────────── */
 
-  function drawParallax() {
-    const vh = window.innerHeight;
-    for (const el of parallaxEls) {
-      const r = el.getBoundingClientRect();
-      if (r.bottom < -200 || r.top > vh + 200) continue;
-      const centre = (r.top + r.height / 2 - vh / 2) / vh;
-      const f = parseFloat(el.dataset.parallax) || 0;
-      el.style.transform = `translate3d(0, ${(centre * f * vh).toFixed(1)}px, 0)`;
+  function drawParallax(y) {
+    const vh = geom.vh;
+    for (const p of parallax) {
+      const top = p.top - y;
+      if (top + p.h < -200 || top > vh + 200) continue;
+      const centre = (top + p.h / 2 - vh / 2) / vh;
+      setStyle(p.el, 'transform',
+        `translate3d(0, ${(centre * p.f * vh).toFixed(1)}px, 0)`);
     }
   }
 
-  function drawMarquee(dv) {
+  function drawMarquee(dv, dt) {
     if (!marquee) return;
-    state.marquee -= 0.45 + Math.min(Math.abs(dv) * 0.06, 6);
-    const half = marquee.scrollWidth / 2 || 1;
-    if (state.marquee <= -half) state.marquee += half;
-    marquee.style.transform = `translate3d(${state.marquee.toFixed(1)}px, 0, 0)`;
+    /* tie the drift to elapsed time, not to how often this happens to run */
+    const step = (0.45 + Math.min(Math.abs(dv) * 0.06, 6)) * (dt / 16.667);
+    state.marquee -= step;
+    if (state.marquee <= -marqueeHalf) state.marquee += marqueeHalf;
+    setStyle(marquee, 'transform', `translate3d(${state.marquee.toFixed(1)}px, 0, 0)`);
   }
 
   /* ─── the loop ──────────────────────────────────────────────────────────── */
 
-  function tick() {
-    const y = window.pageYOffset || document.documentElement.scrollTop;
+  let lastT = 0;
+
+  function tick(now) {
+    /* A dropped frame must not become a jump in everything time-based, so the
+       delta is clamped to about four frames' worth. */
+    const dt = lastT ? Math.min(now - lastT, 64) || 16.667 : 16.667;
+    lastT = now;
+
+    if (geomDirty) measure();
+
+    const y = window.scrollY;
     const dv = y - state.scrollLast;
     state.scrollLast = y;
 
-    const doc = document.documentElement.scrollHeight - window.innerHeight;
-    navProgress.style.width = clamp(y / (doc || 1)) * 100 + '%';
-    nav.classList.toggle('is-stuck', y > window.innerHeight * 0.6);
+    setStyle(navProgress, 'width', (clamp(y / (docSpan || 1)) * 100).toFixed(2) + '%');
+    nav.classList.toggle('is-stuck', y > geom.vh * 0.6);
 
-    const hp = heroProgress();
-    drawHero(hp);
+    const hp = clamp((y - geom.heroTop) / (geom.heroSpan || 1));
+    /* Once the hero has scrolled away there is nothing to scrub: skip the
+       canvas entirely rather than repainting a stage nobody can see. */
+    if (y < geom.heroTop + geom.heroHeight) drawHero(hp, dt);
     /* the rail would collide with the hero's closing copy, so it waits */
     railBox.classList.toggle('is-on', hp > 0.97);
-    drawBlend();
-    drawParallax();
-    drawMarquee(dv);
+
+    drawBlend(y);
+    drawParallax(y);
+    drawMarquee(dv, dt);
 
     requestAnimationFrame(tick);
   }
@@ -557,6 +682,12 @@
     resizeTimer = setTimeout(resize, 120);
     resize();
   }, { passive: true });
+
+  /* Reveals and lazy images change the page's height after load, which moves
+     every offset the loop relies on. Cheaper than re-measuring per frame. */
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => { geomDirty = true; }).observe(document.body);
+  }
 
   setupReveals();
   setupRail();

@@ -18,6 +18,7 @@ Output: assets/seq/{lg,sm}/0000.webp ... and assets/img/*.webp
 """
 
 import argparse
+import re
 import json
 import pathlib
 import shutil
@@ -44,12 +45,22 @@ STILLS = [
     ("product-d",        188,  PRODUCT_CROP,                      1400),
     ("worn-band",         62,  (0.280, 0.270, 0.500, 0.230),      1400),
     ("worn-portrait",     48,  (0.235, 0.000, 0.550, 1.000),      1100),
-    ("worn-three-q",      36,  (0.300, 0.020, 0.560, 0.960),      1100),
     ("macro-lens",         4,  (0.000, 0.060, 0.620, 0.800),      1400),
     # The brow, where the lens meets the frame — a different subject from
     # macro-lens, and above the printed mark rather than across it.
     ("macro-temple",      26,  (0.550, 0.170, 0.250, 0.275),       960),
     ("poster",             0,  (0.000, 0.000, 1.000, 1.000),      1500),
+]
+
+# A second film of the same product on a second model, so the Worn section
+# shows more than one face. Only its first act is usable here: it resolves to
+# a product turn on a near-black backdrop, which belongs to a different page
+# than this one. 1280x720 rather than 4K, so the crop is taken close to native
+# size — at the 364px it renders at, it holds up beside the 4K stills.
+SRC_ALT = "orley-worn-02.mp4"
+
+STILLS_ALT = [
+    ("worn-portrait-02",  72,  (0.295, 0.000, 0.450, 1.000),       576),
 ]
 
 # The photographed product carries another maker's marks on the lens and
@@ -418,10 +429,21 @@ def retouch(path, boxes):
     out.save(path, "WEBP", quality=86, method=5)
 
 
-def build_still(src, name, frame, crop, width):
+def probe_size(src):
+    proc = subprocess.run(
+        [FFMPEG, "-hide_banner", "-i", str(src)],
+        capture_output=True, text=True)
+    m = re.search(r"Video:.*?,\s*(\d{2,5})x(\d{2,5})", proc.stderr)
+    if not m:
+        sys.exit(f"could not read the frame size of {src}")
+    return int(m.group(1)), int(m.group(2))
+
+
+def build_still(src, name, frame, crop, width, size=None):
+    sw, sh = size or (SRC_W, SRC_H)
     x, y, w, h = crop
-    cw, ch = round(SRC_W * w), round(SRC_H * h)
-    cx, cy = round(SRC_W * x), round(SRC_H * y)
+    cw, ch = round(sw * w), round(sh * h)
+    cx, cy = round(sw * x), round(sh * y)
     # libwebp needs even dimensions after scaling; -2 handles the height.
     dest = HERE / "assets" / "img" / f"{name}.webp"
     run(["-i", str(src),
@@ -459,6 +481,14 @@ def main():
     print("stills")
     for name, frame, crop, width in STILLS:
         build_still(src, name, frame, crop, width)
+
+    alt = src.parent / SRC_ALT
+    if alt.exists():
+        size = probe_size(alt)
+        for name, frame, crop, width in STILLS_ALT:
+            build_still(alt, name, frame, crop, width, size=size)
+    else:
+        print(f"  (skipped {SRC_ALT}: not present)")
 
     print(f"\n{count} frames, sets: {', '.join(SEQ_SETS)}")
 

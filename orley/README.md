@@ -1,8 +1,8 @@
 # ORLEY Continuum — a shield built around one lens
 
-A single-page landing site for a shield sunglass, built from one eight-second
-product film. No framework, no build step for the site itself — open
-`index.html` and it runs.
+A single-page landing site for a shield sunglass, built from two short product
+films. No framework, no build step for the site itself — open `index.html` and
+it runs.
 
 ## The direction
 
@@ -90,9 +90,28 @@ rather than a sequence of steps.
 |---|---|
 | Light | An interactive transmission chart. The washed column is the light that arrives; the saturated one is what gets past the lens. Pointer or arrow keys read out any wavelength. |
 | Form | The product with four dots, keyed to a legend that highlights them on hover or focus. |
-| Worn | Full-bleed band, with the width axis running on the headline as it enters. |
+| Worn | Full-bleed band, with the width axis running on the headline as it enters, then two wearers flanking the fit copy. |
 | Materials | Three crops — mirror, brow, frame. |
 | Specification | Table and a reserve form with inline confirmation. |
+
+
+## A second film
+
+`source/orley-worn-02.mp4` is a second 8-second film of the same product on a
+second model, and the Worn section takes one portrait from it so the page shows
+more than one face — which is also what lets the fit copy beside it talk about
+the bridge adjustment covering a narrow face and a wide one.
+
+Only its first act is usable here. It resolves to a product turn on a
+near-black backdrop, which belongs to a different page than this high-key one.
+It is 1280x720 rather than 4K, so the crop is taken close to native size; at
+the 364px it renders at, it holds up beside the stills cut from the master.
+
+A third film was offered and left out on purpose: same product, but on a chrome
+android with glowing circuitry and a dark sci-fi vignette. The page argues that
+this is an honest object made of real materials obeying real optics, and a robot
+head undercuts that on contact. One bold move — the aperture — is the budget;
+a second, unrelated visual language spends it twice.
 
 ## Structure
 
@@ -101,6 +120,7 @@ index.html
 build-assets.py        derives everything below from source/
 source/
   orley-master.mp4     3840x2160 HEVC, 24fps, 193 frames
+  orley-worn-02.mp4    1280x720 H.264, second model, one still taken from it
 assets/
   css/fonts.css        self-hosted @font-face
   css/style.css

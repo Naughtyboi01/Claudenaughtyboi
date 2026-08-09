@@ -76,10 +76,35 @@ That page was warm — cream, bone, sand, taupe, an acid-yellow accent — on a
 - The build is byte-for-byte reproducible; verified by deleting all output and
   re-running.
 
+## A second film, and one turned down
+
+Two more clips arrived after the first build. Both are 1280x720 H.264, both
+8 seconds, both the same product.
+
+- **The male model clip is in.** One portrait from it (frame 72) replaced the
+  second female shot in Worn, so the section now shows two faces flanking the
+  fit copy — and the copy was rewritten to earn that, mentioning the four
+  millimetres of bridge adjustment that cover a narrow face and a wide one.
+  Only its first act is usable: it resolves to a product turn on a near-black
+  backdrop, which belongs to some other, darker page.
+- **The android clip is out.** Chrome skin, glowing circuit lines, dark sci-fi
+  vignette. It is a different campaign, not more footage of this one. The page
+  argues the product is an honest object obeying real optics, and cutting to a
+  robot head undercuts that on contact. The aperture is the one bold move this
+  design pays for; a second unrelated visual language spends that budget twice.
+
+The lens print is visible in the male clip too, but it is left in. At the 364px
+the portrait renders at, the print is about 38 CSS pixels of low-contrast
+smudge — and the existing female portrait carries the same one. Three fixes
+were tried and every one looked worse than the mark: the automatic detector
+over-expanded and streaked the lens, and both a tight hand-placed box and a
+lens-clamped fill sampled the bright rim sitting right beside the mark. Not
+every mark is worth removing; this one is smaller than its own patch.
+
 ## Known limitations
 
-- Playback of the source master itself was never verified in-browser — it is
-  4K HEVC and the page never plays it, only the derived stills.
+- Playback of the source masters themselves was never verified in-browser —
+  the 4K one is HEVC and the page never plays either, only derived stills.
 - An embossed ellipse on the frame near the hinge is left in the hero frames.
   It is a moulding rather than printed branding and reads as a hinge boss at
   viewing size; it *is* removed from the still crops, where a flat fill was

@@ -1,0 +1,1178 @@
+@import url("fonts.css");
+
+/* ============================================================
+   ORLEY — Continuum
+   High-key: the page is the bright environment, the lens is the
+   only place colour and depth pool. Every value below is sampled
+   from the source film rather than invented.
+   ============================================================ */
+
+:root {
+  /* Studio cyclorama, as lit in the film. It brightens from #949494 to
+     #E4E3E3 across the eight seconds; the page inherits that sweep across
+     the whole scroll via --sweep. */
+  --cyc-deep: #949494;
+  --cyc: #c6c6c6;
+  --cyc-hi: #e4e3e3;
+
+  --page-lo: #c9c9cb;
+  --page-hi: #f4f4f5;
+
+  --ink: #101114;
+  --ink-2: #4a4c52;
+  --ink-3: #7c7f86;
+  --rule: rgba(16, 17, 20, 0.16);
+  --rule-soft: rgba(16, 17, 20, 0.08);
+
+  /* The mirror. Clustered from the saturated pixels of the master:
+     hue 197-209 with a violet excursion at 227. The only chroma allowed
+     anywhere on this page. */
+  --iri-ice: #a7efff;
+  --iri: #0e95f0;
+  --iri-deep: #005a96;
+  --iri-violet: #3c5bcd;
+
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  --mono: "Martian Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gut: clamp(20px, 5vw, 88px);
+  --max: 1680px;
+  --measure: 62ch;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* 0 at the top of the document, 1 at the bottom. Set by main.js. */
+  --sweep: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body);
+  font-size: clamp(0.95rem, 0.82rem + 0.34vw, 1.1rem);
+  line-height: 1.55;
+  color: var(--ink);
+  background: color-mix(in oklab, var(--page-hi) calc(var(--sweep) * 100%), var(--page-lo));
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+/* Older engines without color-mix still get a sane, on-palette background. */
+@supports not (background: color-mix(in oklab, red, blue)) {
+  body {
+    background: var(--page-lo);
+  }
+}
+
+img,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Every <img> carries width/height attributes so the layout does not jump
+   while they load. Those attributes are presentational hints that make the
+   used height definite, which makes the browser ignore any aspect-ratio set
+   in CSS. Anything that wants its own height sets one below. */
+img {
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--iri-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--iri);
+  color: #fff;
+}
+
+/* ---------- shared type roles ---------- */
+
+.label {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  font-stretch: 87.5%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 500;
+  font-stretch: 100%;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.lede {
+  max-width: var(--measure);
+  font-size: clamp(1.05rem, 0.9rem + 0.55vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+.band {
+  padding-block: clamp(88px, 13vh, 190px);
+}
+
+/* ============================================================
+   Masthead
+   ============================================================ */
+
+.masthead {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px var(--gut);
+  mix-blend-mode: difference;
+  color: #fff;
+  pointer-events: none;
+}
+
+.masthead a,
+.masthead button {
+  pointer-events: auto;
+}
+
+.masthead__mark {
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 125%;
+  font-size: 0.95rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-left: 0.42em;
+}
+
+.masthead__meta {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .masthead__meta {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Hero — the aperture
+   The film is painted to a canvas clipped by the lens silhouette.
+   That silhouette opens to fill the viewport, then closes again.
+   ============================================================ */
+
+.hero {
+  position: relative;
+}
+
+.hero__track {
+  height: 620vh;
+}
+
+.hero__stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  /* Behind the aperture sits the film's own backdrop, sampled per frame and
+     fed in as --stage-bg, so the shield reads as a window cut into the same
+     studio rather than a card pasted over a different grey. The falloff is
+     the cyclorama's own. */
+  --stage-bg: var(--cyc);
+  background: var(--stage-bg);
+}
+
+@supports (background: color-mix(in srgb, red, blue)) {
+  .hero__stage {
+    background: radial-gradient(
+      118% 76% at 50% 36%,
+      color-mix(in srgb, var(--stage-bg) 86%, #fff) 0%,
+      var(--stage-bg) 60%,
+      color-mix(in srgb, var(--stage-bg) 90%, #000) 100%
+    );
+  }
+}
+
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Type layer. Beats are positioned per-beat; opacity/transform come from JS. */
+.hero__type {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.beat {
+  grid-area: 1 / 1;
+  width: 100%;
+  padding-inline: var(--gut);
+  text-align: center;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Once the film is showing the product alone, the type moves off it and
+   into the space the film's own captions used to occupy. */
+.beat--top {
+  align-self: start;
+  padding-top: clamp(74px, 15vh, 158px);
+}
+
+.beat--bottom {
+  align-self: end;
+  padding-bottom: clamp(52px, 11vh, 124px);
+}
+
+.beat__word {
+  font-family: var(--display);
+  font-weight: 600;
+  /* Sized to sit inside the closed aperture on a phone as well as a desktop. */
+  font-size: clamp(2.1rem, 12.5vw, 12rem);
+  line-height: 0.86;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  /* font-stretch and letter-spacing are driven by scroll in main.js —
+     the wordmark physically widens as the aperture opens. */
+  font-stretch: 62%;
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 40px rgba(16, 17, 20, 0.28);
+}
+
+.beat__line {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 6.4vw, 5.4rem);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 auto;
+  max-width: 16ch;
+  text-shadow: 0 2px 46px rgba(16, 17, 20, 0.42);
+}
+
+.beat__line--ink {
+  color: var(--ink);
+  text-shadow: 0 2px 40px rgba(244, 244, 245, 0.7);
+}
+
+.beat__sub {
+  font-family: var(--mono);
+  font-size: clamp(0.625rem, 0.55rem + 0.2vw, 0.75rem);
+  font-stretch: 87.5%;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 22px 0 0;
+  /* Can fall just outside the aperture onto light backdrop on small screens. */
+  text-shadow: 0 1px 16px rgba(16, 17, 20, 0.62);
+}
+
+.beat__sub--ink {
+  color: var(--ink-2);
+}
+
+.beat--end .beat__word {
+  font-size: clamp(1.9rem, 8vw, 6.4rem);
+  color: var(--ink);
+  font-stretch: 112%;
+  letter-spacing: 0.02em;
+  text-shadow: none;
+}
+
+/* The scroll cue sits under the closed aperture on arrival. */
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(22px, 5vh, 48px);
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  transition: opacity 0.5s var(--ease);
+}
+
+.hero__cue-rail {
+  width: 54px;
+  height: 1px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__cue-rail::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--iri-deep);
+  transform: translateX(-100%);
+  animation: cue 2.6s var(--ease-io) infinite;
+}
+
+@keyframes cue {
+  0% {
+    transform: translateX(-100%);
+  }
+  55%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Preloader */
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  background: var(--cyc-hi);
+  transition: opacity 0.7s var(--ease), visibility 0.7s;
+}
+
+.boot[hidden] {
+  display: grid;
+}
+
+.boot.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.boot__inner {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+}
+
+.boot__mark {
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 125%;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  padding-left: 0.5em;
+  margin: 0;
+}
+
+.boot__rail {
+  width: min(220px, 46vw);
+  height: 1px;
+  background: var(--rule);
+  overflow: hidden;
+}
+
+.boot__fill {
+  height: 100%;
+  width: 0%;
+  background: var(--iri-deep);
+  transition: width 0.25s linear;
+}
+
+.boot__pct {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.24em;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* ============================================================
+   Section marker — the aperture again, opening a little further
+   at each section. This is the page's structural device; there
+   are no 01 / 02 / 03 numbers, because the sections are an
+   argument rather than a sequence of steps.
+   ============================================================ */
+
+.marker {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: clamp(28px, 5vh, 54px);
+}
+
+.marker__glyph {
+  width: 46px;
+  height: 22px;
+  flex: none;
+  overflow: visible;
+}
+
+.marker__glyph path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.marker__glyph .marker__iris {
+  fill: var(--iri-deep);
+  stroke: none;
+}
+
+.marker__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* ============================================================
+   Light — the transmission section
+   ============================================================ */
+
+.light__head {
+  display: grid;
+  gap: clamp(20px, 3vw, 40px);
+  grid-template-columns: 1fr;
+  align-items: end;
+  margin-bottom: clamp(40px, 6vh, 76px);
+}
+
+@media (min-width: 900px) {
+  .light__head {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  }
+}
+
+.light__title {
+  font-size: clamp(2.4rem, 7.4vw, 6.2rem);
+  font-stretch: 88%;
+}
+
+.spectrum {
+  position: relative;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding-block: clamp(18px, 3vh, 30px);
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+
+.spectrum__canvas {
+  width: 100%;
+  height: clamp(210px, 34vh, 340px);
+}
+
+.spectrum__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin: 0;
+}
+
+.readout b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.readout__val {
+  font-variant-numeric: tabular-nums;
+}
+
+.light__notes {
+  display: grid;
+  gap: clamp(24px, 4vw, 48px);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: clamp(40px, 6vh, 72px);
+}
+
+.note__k {
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 112%;
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  line-height: 1;
+  margin: 0 0 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.note__t {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+  max-width: 34ch;
+}
+
+/* ============================================================
+   Form — the drafting overlay
+   ============================================================ */
+
+.form-sec__grid {
+  display: grid;
+  gap: clamp(28px, 4vw, 60px);
+  grid-template-columns: 1fr;
+  align-items: center;
+}
+
+@media (min-width: 960px) {
+  .form-sec__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr);
+  }
+}
+
+.form-sec__title {
+  font-size: clamp(2.2rem, 5.6vw, 4.4rem);
+  font-stretch: 82%;
+  margin-bottom: 20px;
+}
+
+.draft {
+  position: relative;
+  margin: 0;
+}
+
+.draft__img {
+  width: 100%;
+  height: auto;
+  /* The still's own flat backdrop is a slightly different grey from the page
+     at this scroll position, which draws a visible box around the product.
+     Fading only the margins dissolves that edge; the fades stop short of the
+     product, which spans 13-83% across and 17-88% down. A radial gradient
+     cannot do this — it would eat the temple tips before it reached the
+     corners. */
+  --fade-x: linear-gradient(
+    to right, transparent 0%, #000 8%, #000 92%, transparent 100%
+  );
+  --fade-y: linear-gradient(
+    to bottom, transparent 0%, #000 9%, #000 91%, transparent 100%
+  );
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
+  mask-image: var(--fade-x), var(--fade-y);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.draft__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.draft__dot {
+  fill: var(--iri-deep);
+  /* Reads against both the white frame and the dark lens. */
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 2.5;
+  transition: transform 0.35s var(--ease);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.draft__ring {
+  fill: none;
+  stroke: var(--iri-deep);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.45);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.draft__mk.is-active .draft__ring {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.draft__mk.is-active .draft__dot {
+  transform: scale(1.25);
+}
+
+/* ---------- legend, keyed to the dots ---------- */
+
+.legend {
+  list-style: none;
+  margin: clamp(28px, 4vh, 44px) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.legend__row {
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.legend__btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 16px 0;
+  cursor: pointer;
+}
+
+.legend__t {
+  display: block;
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 108%;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  transition: color 0.25s var(--ease);
+}
+
+.legend__d {
+  display: block;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  max-width: 46ch;
+}
+
+.legend__btn:hover .legend__t,
+.legend__btn:focus-visible .legend__t {
+  color: var(--iri-deep);
+}
+
+/* ============================================================
+   Worn — full-bleed editorial
+   ============================================================ */
+
+.worn {
+  position: relative;
+}
+
+.worn__band {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1400 / 497;
+  overflow: hidden;
+}
+
+.worn__band img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.worn__over {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: var(--gut);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: linear-gradient(
+    to top,
+    rgba(16, 17, 20, 0.46),
+    rgba(16, 17, 20, 0) 76%
+  );
+}
+
+.worn__line {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 4.4vw, 3.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  max-width: 18ch;
+}
+
+.worn__cap {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+  text-align: right;
+}
+
+/* The band is a wide strip on a desktop; on a phone that collapses to about
+   a hundred pixels tall with two lines of type sitting on it, so it crops to
+   a taller frame and the overlay stacks. */
+@media (max-width: 760px) {
+  .worn__band {
+    aspect-ratio: 5 / 4;
+  }
+
+  .worn__over {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .worn__cap {
+    text-align: left;
+  }
+}
+
+.worn__pair {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 34px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-top: clamp(16px, 2.4vw, 34px);
+}
+
+.worn__pair img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: 4 / 5;
+}
+
+.worn__say {
+  align-self: center;
+  padding: clamp(20px, 4vw, 56px);
+}
+
+.worn__say .display {
+  font-size: clamp(1.5rem, 3.2vw, 2.8rem);
+  font-stretch: 78%;
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   Detail — material crops
+   ============================================================ */
+
+.detail__grid {
+  display: grid;
+  gap: clamp(20px, 3vw, 44px);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.crop {
+  margin: 0;
+}
+
+.crop img {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  object-fit: cover;
+}
+
+.crop figcaption {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+
+.crop__t {
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 108%;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+
+.crop__d {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   Specification + reserve
+   ============================================================ */
+
+.spec__grid {
+  display: grid;
+  gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 960px) {
+  .spec__grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+}
+
+.spec__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.925rem;
+}
+
+.spec__table th,
+.spec__table td {
+  text-align: left;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: baseline;
+}
+
+.spec__table th {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-stretch: 87.5%;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  width: 42%;
+  padding-right: 20px;
+}
+
+.spec__table td {
+  font-variant-numeric: tabular-nums;
+}
+
+.spec__table tr:hover th,
+.spec__table tr:hover td {
+  color: var(--ink);
+}
+
+.reserve {
+  border: 1px solid var(--rule);
+  padding: clamp(22px, 3vw, 38px);
+  align-self: start;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.reserve__price {
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 112%;
+  font-size: clamp(2rem, 4.4vw, 3.2rem);
+  line-height: 1;
+  margin: 0 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.reserve__field {
+  display: grid;
+  gap: 8px;
+  margin: 26px 0 18px;
+}
+
+.reserve__label {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.reserve__input {
+  font: inherit;
+  color: inherit;
+  padding: 13px 14px;
+  border: 1px solid var(--rule);
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 0;
+  width: 100%;
+  transition: border-color 0.2s var(--ease);
+}
+
+.reserve__input:focus {
+  border-color: var(--iri-deep);
+}
+
+.btn {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-stretch: 87.5%;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 15px 22px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease),
+    border-color 0.25s var(--ease);
+}
+
+.btn:hover {
+  background: var(--iri-deep);
+  border-color: var(--iri-deep);
+}
+
+.reserve__note {
+  margin: 14px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+}
+
+.reserve__ok {
+  margin: 14px 0 0;
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--iri-deep);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+
+.foot {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(40px, 6vh, 72px) clamp(28px, 4vh, 44px);
+}
+
+.foot__grid {
+  display: grid;
+  gap: clamp(24px, 4vw, 56px);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: start;
+}
+
+.foot__mark {
+  font-family: var(--display);
+  font-weight: 600;
+  font-stretch: 125%;
+  font-size: 1.05rem;
+  letter-spacing: 0.44em;
+  text-transform: uppercase;
+  margin: 0;
+  padding-left: 0.44em;
+}
+
+.foot__small {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  max-width: 40ch;
+}
+
+.foot__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.foot__list a {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-stretch: 87.5%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-2);
+  transition: color 0.2s var(--ease);
+}
+
+.foot__list a:hover {
+  color: var(--ink);
+}
+
+/* ============================================================
+   Reveal — one class, applied by IntersectionObserver
+   ============================================================ */
+
+.rise {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.rise.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.rise--d1 {
+  transition-delay: 0.09s;
+}
+.rise--d2 {
+  transition-delay: 0.18s;
+}
+.rise--d3 {
+  transition-delay: 0.27s;
+}
+
+/* ============================================================
+   Reduced motion and no-JS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .rise {
+    opacity: 1;
+    transform: none;
+  }
+
+  .hero__cue-rail::after {
+    transform: none;
+  }
+}
+
+.no-js .hero__track {
+  height: auto;
+}
+
+.no-js .hero__stage {
+  position: relative;
+  height: auto;
+  min-height: 62vh;
+}
+
+.no-js .hero__canvas,
+.no-js .boot,
+.no-js .hero__cue {
+  display: none;
+}
+
+.no-js .hero__poster {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hero__poster {
+  display: none;
+}
+
+/* Without JS the four beats have nothing to sequence them, so the grid that
+   normally stacks them into one cell has to be undone or they land on top of
+   each other. They become a plain column under the poster. */
+.no-js .hero__type {
+  position: static;
+  display: block;
+}
+
+.no-js .beat {
+  grid-area: auto;
+  position: static;
+  align-self: auto;
+  opacity: 1;
+  transform: none;
+  padding-block: clamp(26px, 5vh, 52px);
+}
+
+.no-js .beat__word,
+.no-js .beat__line {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+.no-js .beat__word {
+  font-stretch: 100%;
+  letter-spacing: 0.02em;
+}
+
+.no-js .beat__sub {
+  color: var(--ink-2);
+  text-shadow: none;
+}
+
+.no-js .rise {
+  opacity: 1;
+  transform: none;
+}
+
+.no-js .spectrum {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

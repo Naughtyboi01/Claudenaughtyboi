@@ -1,3 +1,7 @@
+> Two product studies live in this repo. This file documents the first; see
+> [`orley/README.md`](orley/README.md) for **ORLEY Continuum**, a shield
+> sunglass page built the same way from a different film.
+
 # AIR MAX 95 — The Anatomy of Air
 
 A single-page luxury landing page built around a scroll-scrubbed product film.

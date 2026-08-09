@@ -1,4 +1,118 @@
-# Session notes — Air Max 95 landing page
+# Session notes
+
+Two builds so far, newest first. Both start from a single short product film
+and turn it into a one-page site with a scroll-driven hero.
+
+---
+
+# ORLEY Continuum landing page
+
+**Date:** 2026-08-08
+**Branch:** `claude/anthropic-frontend-design-plugin-nmxjzr`
+**Lives in:** `orley/`
+
+Starting point was one 8-second 4K HEVC clip of a white shield sunglass with a
+blue mirror lens: macro on the lens, pull back to the model putting them on, a
+pixel-mosaic dissolve, then the product floating with a wordmark.
+
+No pull request was opened. Say the word if you want one.
+
+## Deliberately not a re-skin of the Air Max page
+
+That page was warm — cream, bone, sand, taupe, an acid-yellow accent — on a
+700vh sticky scrub with a live HUD. This one had to be its own thing:
+
+- **High-key instead of dark.** Neutral greys plus a single blue ramp sampled
+  from the mirror in the footage. Nothing else on the page is saturated.
+- **The hero is an aperture, not just a scrub.** The film is clipped by the
+  product's own lens silhouette, which opens to full bleed and closes again.
+  That shape is also the section marker, opening further at each section, which
+  replaced `01 / 02 / 03` numbering.
+- **The HUD is gone.** It was the last project's tic.
+- **The page brightens as you scroll**, following the film's own cyclorama
+  sweep from `#949494` to near white.
+- **Different typefaces on purpose**: Archivo (variable `wdth` 62–125),
+  Instrument Sans, Martian Mono — none of Instrument Serif / Inter /
+  JetBrains Mono. Archivo's width axis is animated on scroll, which is where
+  the "dynamic type" in the brief actually lives.
+
+## What went wrong, and what fixed it
+
+- **Frame-to-frame tracking of the lens mark drifted.** Adaptive-template NCC
+  followed the mark for a while and then wandered, smearing patches across the
+  lens and once across the model's cheek. Replaced with: the mark is *printed
+  on the lens*, so anchor a search window to the lens bounding box and detect
+  it there as pixels darker than the local gradient. No drift, no state.
+- **A first geometric attempt over-covered.** A box wide enough to be safe for
+  every viewing angle flattened a quarter of the lens. Detection inside the
+  window fixed that; the box is now only as big as the mark.
+- **Filling across the lens rim smears white into the lens.** The rim has a
+  bright specular edge. Where a mark sits on it, move the crop instead of
+  patching — that is why the "brow" material shot is framed where it is.
+- **`aspect-ratio` was being ignored on the material crops.** The `width` and
+  `height` HTML attributes are presentational hints that make the used height
+  definite, and `aspect-ratio` only applies when a dimension is auto. Fixed
+  with a global `img { height: auto }`.
+- **The aperture became a portrait box mid-transition on phones.** Width and
+  height were lerping to `W` and `H` independently. Now the shape keeps its
+  2.9:1 ratio and grows until it covers the viewport.
+- **The no-JS hero stacked all four type beats on top of each other.**
+  `position: static` does not undo `grid-area: 1/1`; the grid itself had to be
+  unset.
+- **The end card read as a white slab** until the area outside the aperture
+  started tracking the film's own backdrop colour per frame.
+
+## Worth remembering
+
+- ffmpeg's image muxer numbers from 1; `-start_number 0` makes a file name
+  equal its source frame number.
+- WebP beat JPEG comfortably here: 34 KB vs 49 KB at 1500px, same quality.
+- The backdrop track ships as a **script**, not JSON, so `fetch()` is never
+  needed and `file://` keeps working. Its array length doubles as the frame
+  count, so there is no second place to keep in sync.
+- Google Fonts' CSS API is reachable in this sandbox even when direct guesses
+  at gstatic URLs 404 — request the CSS with a modern UA and read the real
+  URLs out of it. Ask for the full axis range or you get a flattened instance.
+- The build is byte-for-byte reproducible; verified by deleting all output and
+  re-running.
+
+## A second film, and one turned down
+
+Two more clips arrived after the first build. Both are 1280x720 H.264, both
+8 seconds, both the same product.
+
+- **The male model clip is in.** One portrait from it (frame 72) replaced the
+  second female shot in Worn, so the section now shows two faces flanking the
+  fit copy — and the copy was rewritten to earn that, mentioning the four
+  millimetres of bridge adjustment that cover a narrow face and a wide one.
+  Only its first act is usable: it resolves to a product turn on a near-black
+  backdrop, which belongs to some other, darker page.
+- **The android clip is out.** Chrome skin, glowing circuit lines, dark sci-fi
+  vignette. It is a different campaign, not more footage of this one. The page
+  argues the product is an honest object obeying real optics, and cutting to a
+  robot head undercuts that on contact. The aperture is the one bold move this
+  design pays for; a second unrelated visual language spends that budget twice.
+
+The lens print is visible in the male clip too, but it is left in. At the 364px
+the portrait renders at, the print is about 38 CSS pixels of low-contrast
+smudge — and the existing female portrait carries the same one. Three fixes
+were tried and every one looked worse than the mark: the automatic detector
+over-expanded and streaked the lens, and both a tight hand-placed box and a
+lens-clamped fill sampled the bright rim sitting right beside the mark. Not
+every mark is worth removing; this one is smaller than its own patch.
+
+## Known limitations
+
+- Playback of the source masters themselves was never verified in-browser —
+  the 4K one is HEVC and the page never plays either, only derived stills.
+- An embossed ellipse on the frame near the hinge is left in the hero frames.
+  It is a moulding rather than printed branding and reads as a hinge boss at
+  viewing size; it *is* removed from the still crops, where a flat fill was
+  safe. That inconsistency is deliberate.
+
+---
+
+# Air Max 95 landing page
 
 **Date:** 2026-08-06
 **Branch:** `claude/air-max-95-landing-page-fdory9` (all work pushed, tree clean)

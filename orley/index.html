@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORLEY Continuum — a shield built around one lens</title>
+<meta name="description" content="ORLEY Continuum: a single-lens shield with a 24-layer dielectric mirror. 12% transmission, 22 grams, no rim across your view.">
+<meta name="theme-color" content="#e4e3e3">
+<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/instrument-sans-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 22'%3E%3Cpath d='M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z' fill='%230e95f0'/%3E%3C/svg%3E">
+<script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body>
+
+<div class="boot" id="boot">
+  <div class="boot__inner">
+    <p class="boot__mark">Orley</p>
+    <div class="boot__rail"><div class="boot__fill" id="bootFill"></div></div>
+    <p class="boot__pct" id="bootPct">0%</p>
+  </div>
+</div>
+
+<header class="masthead">
+  <a class="masthead__mark" href="#top">Orley</a>
+  <p class="masthead__meta">Continuum — Meridian Blue</p>
+</header>
+
+<main id="top">
+
+  <!-- ============================================================
+       Hero. The film is painted to a canvas clipped by the lens
+       silhouette. That aperture opens to fill the viewport as you
+       scroll in, and closes back to a band around the product.
+       ============================================================ -->
+  <section class="hero" aria-label="Orley Continuum film">
+    <div class="hero__track" id="heroTrack">
+      <div class="hero__stage">
+        <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+        <img class="hero__poster" src="assets/img/poster.webp" alt="An Orley Continuum shield in matte white with a blue mirror lens, worn." width="1500" height="844">
+
+        <div class="hero__type">
+          <div class="beat" id="beat1">
+            <h1 class="beat__word" id="heroWord">Orley</h1>
+            <p class="beat__sub">Continuum — shield optic</p>
+          </div>
+
+          <div class="beat" id="beat2">
+            <p class="beat__line">Nothing crosses your view</p>
+          </div>
+
+          <div class="beat beat--top" id="beat3">
+            <p class="beat__line beat__line--ink">Mirror out.<br>Clear in.</p>
+          </div>
+
+          <div class="beat beat--end beat--bottom" id="beat4">
+            <p class="beat__word">Continuum</p>
+            <p class="beat__sub beat__sub--ink">Meridian Blue · base 8 · 22 g</p>
+          </div>
+        </div>
+
+        <div class="hero__cue" id="heroCue">
+          <span>Scroll</span>
+          <span class="hero__cue-rail"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Light
+       ============================================================ -->
+  <section class="band" id="light">
+    <div class="shell">
+      <div class="marker rise">
+        <svg class="marker__glyph" viewBox="0 0 46 22" aria-hidden="true">
+          <path d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z"/>
+          <path class="marker__iris" d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z" transform="translate(23 11) scale(.2) translate(-23 -11)"/>
+        </svg>
+        <p class="label">Light</p>
+        <span class="marker__rule"></span>
+      </div>
+
+      <div class="light__head">
+        <h2 class="display light__title rise">What it<br>takes out</h2>
+        <p class="lede rise rise--d1">A lens is a subtraction. This one stops everything below 400&nbsp;nanometres outright, damps the blue that scatters into haze, and leaves the long wavelengths — the ones you judge distance and edges with — largely alone.</p>
+      </div>
+
+      <p class="visually-hidden" id="spectrumDesc">Transmission across the visible spectrum. Nothing passes below 400 nanometres. Transmission stays under 8 percent through the violet and blue, dips again at 585 nanometres, and rises to about 21 percent in the deep red.</p>
+
+      <div class="spectrum rise rise--d1" id="spectrum"
+           tabindex="0" role="slider" aria-label="Wavelength"
+           aria-describedby="spectrumDesc"
+           aria-valuemin="380" aria-valuemax="700" aria-valuenow="452"
+           aria-valuetext="452 nanometres, transmits 6.6 percent, reflects 74 percent">
+        <canvas class="spectrum__canvas" id="spectrumCanvas" aria-hidden="true"></canvas>
+        <div class="spectrum__foot">
+          <p class="readout" id="readout">
+            <span>Wavelength <b class="readout__val" id="roNm">—</b></span>
+            <span>Transmits <b class="readout__val" id="roT">—</b></span>
+            <span>Reflects <b class="readout__val" id="roR">—</b></span>
+          </p>
+          <p class="label">Drag across the spectrum, or use the arrow keys</p>
+        </div>
+      </div>
+
+      <div class="light__notes">
+        <div class="rise">
+          <p class="note__k">12%</p>
+          <p class="note__t">Visible light transmission. Category 3 — full sun, and legal to drive in daylight.</p>
+        </div>
+        <div class="rise rise--d1">
+          <p class="note__k">400 nm</p>
+          <p class="note__t">Everything shorter is stopped outright: UVA, UVB and UVC, at every angle the shield covers.</p>
+        </div>
+        <div class="rise rise--d2">
+          <p class="note__k">24</p>
+          <p class="note__t">Layers in the mirror. The blue you see is interference between them, not pigment — it is the light being sent back.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Form
+       ============================================================ -->
+  <section class="band" id="form">
+    <div class="shell">
+      <div class="marker rise">
+        <svg class="marker__glyph" viewBox="0 0 46 22" aria-hidden="true">
+          <path d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z"/>
+          <path class="marker__iris" d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z" transform="translate(23 11) scale(.37) translate(-23 -11)"/>
+        </svg>
+        <p class="label">Form</p>
+        <span class="marker__rule"></span>
+      </div>
+
+      <div class="form-sec__grid">
+        <div>
+          <h2 class="display form-sec__title rise">One lens,<br>edge to edge</h2>
+          <p class="lede rise rise--d1">The shield is a single sheet, curved to base 8 and cut to the orbit. Nothing bridges the middle but four millimetres of nose, and no rim crosses your sight line — which is the entire reason it looks like this.</p>
+
+          <ul class="legend rise rise--d2" id="legend">
+            <li class="legend__row">
+              <button class="legend__btn" type="button" data-dot="0">
+                <span class="legend__t">The mirror</span>
+                <span class="legend__d">Twenty-four dielectric layers, vacuum-deposited over polycarbonate.</span>
+              </button>
+            </li>
+            <li class="legend__row">
+              <button class="legend__btn" type="button" data-dot="1">
+                <span class="legend__t">The bridge</span>
+                <span class="legend__d">Four millimetres, adjustable. The only thing between the two halves of your view.</span>
+              </button>
+            </li>
+            <li class="legend__row">
+              <button class="legend__btn" type="button" data-dot="2">
+                <span class="legend__t">The rimless edge</span>
+                <span class="legend__d">The lens carries its own bottom edge. There is no frame under your cheekbone.</span>
+              </button>
+            </li>
+            <li class="legend__row">
+              <button class="legend__btn" type="button" data-dot="3">
+                <span class="legend__t">The temple</span>
+                <span class="legend__d">Unibody to the tip, then a co-moulded grip that holds harder as you sweat.</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <figure class="draft rise rise--d1" id="draft">
+          <img class="draft__img" src="assets/img/product-b.webp" alt="Three-quarter view of the Orley Continuum: a one-piece blue mirror lens in a matte white frame with dark temple tips." width="1400" height="458">
+          <svg class="draft__svg" viewBox="0 0 1400 458" fill="none" aria-hidden="true">
+            <g class="draft__mk" data-dot="0">
+              <circle class="draft__dot" cx="300" cy="175" r="9"/>
+              <circle class="draft__ring" cx="300" cy="175" r="24"/>
+            </g>
+            <g class="draft__mk" data-dot="1">
+              <circle class="draft__dot" cx="348" cy="318" r="9"/>
+              <circle class="draft__ring" cx="348" cy="318" r="24"/>
+            </g>
+            <g class="draft__mk" data-dot="2">
+              <circle class="draft__dot" cx="600" cy="384" r="9"/>
+              <circle class="draft__ring" cx="600" cy="384" r="24"/>
+            </g>
+            <g class="draft__mk" data-dot="3">
+              <circle class="draft__dot" cx="1052" cy="172" r="9"/>
+              <circle class="draft__ring" cx="1052" cy="172" r="24"/>
+            </g>
+          </svg>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Worn
+       ============================================================ -->
+  <section class="band worn" id="worn">
+    <div class="shell">
+      <div class="marker rise">
+        <svg class="marker__glyph" viewBox="0 0 46 22" aria-hidden="true">
+          <path d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z"/>
+          <path class="marker__iris" d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z" transform="translate(23 11) scale(.54) translate(-23 -11)"/>
+        </svg>
+        <p class="label">Worn</p>
+        <span class="marker__rule"></span>
+      </div>
+    </div>
+
+    <div class="worn__band rise">
+      <img src="assets/img/worn-band.webp" alt="Close view of the shield on the face: the mirror reads solid blue from outside, with the eye just visible through it." width="1400" height="362" loading="lazy">
+      <div class="worn__over">
+        <p class="worn__line" id="wornLine">Worn, it disappears</p>
+        <p class="worn__cap">22 g · three-point contact</p>
+      </div>
+    </div>
+
+    <div class="shell">
+      <div class="worn__pair">
+        <img src="assets/img/worn-portrait.webp" alt="The shield being settled onto the face with one hand at the temple." width="1100" height="1126" loading="lazy" class="rise">
+        <div class="worn__say rise rise--d1">
+          <h2 class="display">Three points,<br>no clamp</h2>
+          <p class="lede">The bridge and two temple tips carry all 22 grams between them. Four millimetres of bridge adjustment covers a narrow face and a wide one. Nothing pinches at the hinge, and there is no pressure band after four hours.</p>
+        </div>
+        <img src="assets/img/worn-portrait-02.webp" alt="The same shield on a second wearer, hand at the temple, showing the fit across a wider face." width="576" height="720" loading="lazy" class="rise rise--d2">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Materials
+       ============================================================ -->
+  <section class="band" id="materials">
+    <div class="shell">
+      <div class="marker rise">
+        <svg class="marker__glyph" viewBox="0 0 46 22" aria-hidden="true">
+          <path d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z"/>
+          <path class="marker__iris" d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z" transform="translate(23 11) scale(.71) translate(-23 -11)"/>
+        </svg>
+        <p class="label" aria-hidden="true">Materials</p>
+        <span class="marker__rule"></span>
+      </div>
+      <h2 class="visually-hidden">Materials</h2>
+
+      <div class="detail__grid">
+        <figure class="crop rise">
+          <img src="assets/img/macro-lens.webp" alt="Macro of the lens surface, violet flare shading into cyan." width="1400" height="1016" loading="lazy">
+          <figcaption>
+            <p class="crop__t">The mirror</p>
+            <p class="crop__d">Violet at a glancing angle, cyan straight on. Interference shifts with the angle you hold it at, which is how you can tell a coating from a tint.</p>
+          </figcaption>
+        </figure>
+        <figure class="crop rise rise--d1">
+          <img src="assets/img/macro-temple.webp" alt="Macro of the brow, where the top of the lens seats into the frame." width="960" height="594" loading="lazy">
+          <figcaption>
+            <p class="crop__t">The brow</p>
+            <p class="crop__d">The lens seats into a channel rather than a rim, so the frame never breaks the surface. The line you see is the seat, not an edge of glass.</p>
+          </figcaption>
+        </figure>
+        <figure class="crop rise rise--d2">
+          <img src="assets/img/product-d.webp" alt="The frame in matte white, viewed from behind the lens." width="1400" height="458" loading="lazy">
+          <figcaption>
+            <p class="crop__t">The frame</p>
+            <p class="crop__d">Injected nylon, matte white through the full section. A scratch takes the finish off and shows the same colour underneath.</p>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Specification and reserve
+       ============================================================ -->
+  <section class="band" id="specification">
+    <div class="shell">
+      <div class="marker rise">
+        <svg class="marker__glyph" viewBox="0 0 46 22" aria-hidden="true">
+          <path d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z"/>
+          <path class="marker__iris" d="M2 6.4C2 3.3 4.1 2 8.2 2L38 2C42.1 2 44 3.3 44 6.4C44 13 39.2 19.4 32 20.2L25.6 20.2L23 17L20.4 20.2L14 20.2C6.8 19.4 2 13 2 6.4Z" transform="translate(23 11) scale(.88) translate(-23 -11)"/>
+        </svg>
+        <p class="label" aria-hidden="true">Specification</p>
+        <span class="marker__rule"></span>
+      </div>
+      <h2 class="visually-hidden">Specification</h2>
+
+      <div class="spec__grid">
+        <div class="rise">
+          <table class="spec__table">
+            <caption class="visually-hidden">Orley Continuum specification</caption>
+            <tbody>
+              <tr><th scope="row">Model</th><td>Continuum</td></tr>
+              <tr><th scope="row">Colourway</th><td>Matte White / Meridian Blue</td></tr>
+              <tr><th scope="row">Lens</th><td>Polycarbonate, single piece, base 8</td></tr>
+              <tr><th scope="row">Coating</th><td>24-layer dielectric mirror, hydrophobic outer</td></tr>
+              <tr><th scope="row">Transmission</th><td>12% · Category 3</td></tr>
+              <tr><th scope="row">Ultraviolet</th><td>100% stopped below 400 nm</td></tr>
+              <tr><th scope="row">Frame</th><td>Injected nylon, co-moulded temple tips</td></tr>
+              <tr><th scope="row">Mass</th><td>22 g</td></tr>
+              <tr><th scope="row">Fit</th><td>Standard to wide · 4 mm adjustable bridge</td></tr>
+              <tr><th scope="row">In the box</th><td>Microfibre case, leash, spare bridge</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="reserve rise rise--d1">
+          <p class="label">Reserve</p>
+          <p class="reserve__price">£340</p>
+          <p class="reserve__note">First run of 500. Ships from the Meridian workshop in March.</p>
+
+          <form id="reserveForm" novalidate>
+            <div class="reserve__field">
+              <label class="reserve__label" for="email">Email</label>
+              <input class="reserve__input" id="email" name="email" type="email"
+                     autocomplete="email" placeholder="you@example.com" required>
+            </div>
+            <button class="btn" type="submit">Reserve a pair</button>
+            <p class="reserve__note" id="reserveNote">We email once, when it ships. Nothing else.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="foot__grid">
+      <div>
+        <p class="foot__mark">Orley</p>
+        <p class="foot__small">Continuum — Meridian Blue</p>
+      </div>
+      <ul class="foot__list">
+        <li><a href="#light">Light</a></li>
+        <li><a href="#form">Form</a></li>
+        <li><a href="#worn">Worn</a></li>
+        <li><a href="#materials">Materials</a></li>
+        <li><a href="#specification">Specification</a></li>
+      </ul>
+      <div>
+        <p class="foot__small">An independent design study. ORLEY is not a real brand and is not affiliated with or endorsed by any eyewear maker. Product film supplied by the project owner; the specifications on this page are written for the study and are not measurements of a real product.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/backdrop.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

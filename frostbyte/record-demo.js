@@ -17,10 +17,14 @@
 const { chromium } = require('/opt/node22/lib/node_modules/playwright');
 const path = require('path');
 
-const FILE = process.argv[2] || path.join(__dirname, 'frostbyte-offline.html');
+const FILE = path.resolve(process.argv[2] || path.join(__dirname, 'frostbyte-offline.html'));
 const W = parseInt(process.argv[3] || '1440', 10);
 const H = parseInt(process.argv[4] || '900', 10);
 const OUT = process.argv[5] || path.join(__dirname, 'demo');
+/* Pace multiplier. 2 halves every travel and hold, which is a true 2x cut at
+   the full frame rate — speeding the finished file up with setpts would throw
+   away every other frame and make the eased travel visibly choppy. */
+const SPEED = parseFloat(process.argv[6] || '1');
 
 (async () => {
   const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
@@ -80,6 +84,12 @@ const OUT = process.argv[5] || path.join(__dirname, 'demo');
       { label: 'footer',          y: docMax,                travel: 2600, hold: 2600 },
     ].map(s => ({ ...s, y: Math.round(s.y) }));
   }, H);
+
+  for (const s of stops) {
+    s.travel = Math.round(s.travel / SPEED);
+    s.hold = Math.round(s.hold / SPEED);
+  }
+  console.log(`pace: ${SPEED}x  (holds ${Math.round(3400 / SPEED)}ms at each callout)`);
 
   // ── drive it ───────────────────────────────────────────────────────────
   const headMs = Date.now() - t0;

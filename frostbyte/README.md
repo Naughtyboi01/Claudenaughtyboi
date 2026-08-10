@@ -144,20 +144,27 @@ Two things worth knowing about the build:
 
 ## Demo
 
-`demo/frostbyte-demo.mp4` — a 63-second walkthrough at 1440×900, recorded off
+`demo/frostbyte-demo.mp4` — a 34-second walkthrough at 1440×900, recorded off
 the offline file rather than a served copy. `demo/frostbyte-demo-720p.mp4` is
 the same cut at 1152×720.
 
 ```bash
-node record-demo.js                                   # -> demo/*.webm
-node record-demo.js frostbyte-offline.html 1440 900   # explicit
+node record-demo.js                                     # 1x, ~63s
+node record-demo.js frostbyte-offline.html 1440 900 demo 2   # 2x, ~34s
 ```
+
+The last argument is a pace multiplier that divides every travel and hold. Get
+a faster cut this way rather than speeding the finished file up with
+`setpts` — at 25fps that would throw away every other frame and leave the eased
+travel visibly choppy. Re-recording keeps all 25 unique frames per second
+(839 frames over 33.6s in the shipped cut).
 
 The scroll is an eased timeline whose stops are measured from the page's own
 geometry, so each one lands where it should. It comes to a **full stop wherever
 product information appears** — the Obsidian Signet callout at 40% of the hero
-pin, the Sanguine Signet at 70%, then each row of the collection grid — and
-holds 3.4s at each, long enough to read the name and the price.
+pin, the Sanguine Signet at 70%, then each row of the collection grid. At 1x
+those holds are 3.4s; the shipped 2x cut holds 1.7s, which is brisk for reading
+a name and a price. Re-record at 1x if the stops need to breathe.
 
 The script prints a `trim:` value on exit. That is the dead air at the head
 while the film decodes; pass it to `ffmpeg -ss` when encoding.

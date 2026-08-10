@@ -1,0 +1,21 @@
+/* Self-hosted type — latin subset. No third-party requests at runtime. */
+
+/* Display / editorial sans */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('../fonts/archivo-var.woff2') format('woff2-variations'),
+       url('../fonts/archivo-var.woff2') format('woff2');
+}
+
+/* Body / neutral */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/inter-var.woff2') format('woff2-variations'),
+       url('../fonts/inter-var.woff2') format('woff2');
+}

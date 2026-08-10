@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FrostByte® — Statement Rings</title>
+<meta name="description" content="FrostByte® — sculptural silver, black onyx and deep red garnet. Statement rings, made one at a time.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/media/poster.jpg" as="image">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>
+  /* Decide before anything downloads: iOS/iPadOS WebKit cannot scrub a video
+     reliably, and reduced-motion users have asked us not to. Both get the
+     static poster frame — so the 5 MB film is never fetched for them. */
+  (function () {
+    var ua = navigator.userAgent;
+    var webkitOnly = /AppleWebKit/.test(ua) && !/Chrome|Chromium|Edg|OPR|Firefox/.test(ua);
+    var iOSish = /iP(hone|od|ad)/.test(ua) || (webkitOnly && navigator.maxTouchPoints > 1);
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var cls = ['js'];
+    if (reduced) cls.push('reduced-motion');
+    if (reduced || iOSish) cls.push('static-hero');
+    document.documentElement.className = cls.join(' ');
+  })();
+</script>
+</head>
+<body>
+
+<a class="skip" href="#collection">Skip to the collection</a>
+
+<!-- ─────────────────────────────  HERO  ───────────────────────────── -->
+<section class="hero" id="hero" aria-label="FrostByte campaign film">
+  <div class="hero__pin">
+
+    <div class="hero__stage">
+      <div class="hero__frame">
+        <video
+          class="hero__video"
+          id="heroVideo"
+          poster="assets/media/poster.jpg"
+          preload="auto"
+          muted
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          disableremoteplayback
+          aria-hidden="true"
+          tabindex="-1"
+          data-src="assets/media/hero.mp4"
+          data-src-webm="assets/media/hero.webm"></video>
+        <div class="hero__scrim" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <!-- Two layers of one wordmark. The lower is near-black for the paper it
+         crosses; the upper is white and clipped to exactly the width of the
+         film plate, so the letters flip to white the moment they cross onto
+         the knit. A difference blend would do this in one layer, but it
+         turns teal over skin tones — this stays strictly monochrome. -->
+    <h1 class="wordmark" id="heroWordmark">
+      <span class="wordmark__layer wordmark__layer--ink">FrostByte<sup>®</sup></span>
+      <span class="wordmark__layer wordmark__layer--paper" aria-hidden="true">FrostByte<sup>®</sup></span>
+    </h1>
+
+    <div class="hero__chrome" id="heroChrome">
+      <header class="topbar">
+        <p class="topbar__mark">AW26 — Hand Study</p>
+        <nav class="nav" aria-label="Primary">
+          <ul>
+            <li><a href="#collection">Collection</a></li>
+            <li><a href="#craft">Atelier</a></li>
+            <li><a href="#stockists">Stockists</a></li>
+          </ul>
+          <a class="cart" href="#cart" aria-label="Cart, 0 items">
+            <svg viewBox="0 0 16 18" width="15" height="17" fill="none" aria-hidden="true" focusable="false">
+              <path d="M.5 5.5h15v12H.5z" stroke="currentColor"></path>
+              <path d="M5 5.5V4a3 3 0 0 1 6 0v1.5" stroke="currentColor"></path>
+            </svg>
+            <span class="cart__count">0</span>
+          </a>
+        </nav>
+      </header>
+
+      <p class="hero__cue" aria-hidden="true"><span>Scroll</span></p>
+    </div>
+
+    <!-- Ring callouts — real text, never baked into the film -->
+    <figure class="callout callout--onyx" data-callout aria-hidden="true">
+      <span class="callout__rule"></span>
+      <figcaption class="callout__body">
+        <span class="callout__idx">01</span>
+        <span class="callout__name">Obsidian Signet</span>
+        <span class="callout__meta">Sterling silver · black onyx</span>
+        <span class="callout__price">£1,480</span>
+      </figcaption>
+    </figure>
+
+    <figure class="callout callout--garnet" data-callout aria-hidden="true">
+      <span class="callout__rule"></span>
+      <figcaption class="callout__body">
+        <span class="callout__idx">04</span>
+        <span class="callout__name">Sanguine Signet</span>
+        <span class="callout__meta">Sterling silver · Bohemian garnet</span>
+        <span class="callout__price">£2,340</span>
+      </figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ─────────────────────────────  STATEMENT  ───────────────────────────── -->
+<section class="statement" aria-labelledby="statement-h">
+  <p class="eyebrow">FrostByte® — Est. 2019, London</p>
+  <h2 class="statement__h" id="statement-h">
+    Silver worn like armour.<br>
+    Stones cut for the dark.
+  </h2>
+  <p class="statement__p">
+    Every piece is raised by hand from sterling, then set with black onyx or Bohemian
+    garnet. No castings pulled from a catalogue. No two the same.
+  </p>
+</section>
+
+<!-- ─────────────────────────────  COLLECTION  ───────────────────────────── -->
+<section class="collection" id="collection" aria-labelledby="collection-h">
+  <div class="section-head">
+    <h2 class="section-head__h" id="collection-h">The Collection</h2>
+    <p class="section-head__n">Six pieces</p>
+  </div>
+
+  <ul class="grid">
+    <li class="card">
+      <a href="#obsidian-signet">
+        <span class="card__media"><img src="assets/img/obsidian-signet.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Black onyx signet ring with granulated silver shoulders, worn on the index finger."></span>
+        <span class="card__name">Obsidian Signet</span>
+        <span class="card__price">£1,480</span>
+      </a>
+    </li>
+    <li class="card">
+      <a href="#triple-coil">
+        <span class="card__media"><img src="assets/img/triple-coil.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Three-pass coiled sterling silver band on the middle finger."></span>
+        <span class="card__name">Triple Coil</span>
+        <span class="card__price">£620</span>
+      </a>
+    </li>
+    <li class="card">
+      <a href="#sanguine-oval">
+        <span class="card__media"><img src="assets/img/sanguine-oval.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Oval-cut garnet set in a filigree silver shank."></span>
+        <span class="card__name">Sanguine Oval</span>
+        <span class="card__price">£1,950</span>
+      </a>
+    </li>
+    <li class="card">
+      <a href="#sanguine-signet">
+        <span class="card__media"><img src="assets/img/sanguine-signet.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Domed silver signet with granulated surface and a kite-set garnet."></span>
+        <span class="card__name">Sanguine Signet</span>
+        <span class="card__price">£2,340</span>
+      </a>
+    </li>
+    <li class="card">
+      <a href="#obsidian-stack">
+        <span class="card__media"><img src="assets/img/obsidian-stack.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Obsidian signet worn alongside the triple coil band."></span>
+        <span class="card__name">Obsidian Stack</span>
+        <span class="card__price">£1,980</span>
+      </a>
+    </li>
+    <li class="card">
+      <a href="#sanguine-stack">
+        <span class="card__media"><img src="assets/img/sanguine-stack.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Sanguine oval, triple coil and sanguine signet worn together."></span>
+        <span class="card__name">Sanguine Stack</span>
+        <span class="card__price">£3,760</span>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<!-- ─────────────────────────────  CRAFT  ───────────────────────────── -->
+<section class="craft" id="craft" aria-labelledby="craft-h">
+  <div class="section-head">
+    <h2 class="section-head__h" id="craft-h">The Atelier</h2>
+    <p class="section-head__n">Three disciplines</p>
+  </div>
+
+  <div class="craft__body">
+    <figure class="craft__fig craft__fig--tall">
+      <img src="assets/img/craft-hands.jpg" width="900" height="1125" loading="lazy" decoding="async" alt="Two hands wearing the collection, photographed against a cold white studio wall.">
+    </figure>
+
+    <div class="craft__notes">
+      <article class="note">
+        <p class="note__n">01</p>
+        <h3 class="note__h">Metalwork</h3>
+        <p class="note__p">
+          Each shank is raised from sterling sheet and forged down over a steel mandrel — never
+          cast from a master. Granulation is applied one bead at a time and fused, not soldered,
+          which is why no two surfaces catch the light the same way.
+        </p>
+      </article>
+      <article class="note">
+        <p class="note__n">02</p>
+        <h3 class="note__h">Stone setting</h3>
+        <p class="note__p">
+          Onyx is cut as a flat table and closed in a rub-over bezel, so the stone sits flush with
+          the metal and takes the knocks. Garnet is claw-set high and left open underneath, so
+          light passes through the pavilion and the red stays alive against the silver.
+        </p>
+      </article>
+      <article class="note">
+        <p class="note__n">03</p>
+        <h3 class="note__h">One of one</h3>
+        <p class="note__p">
+          Pieces are made to order in a single size and finished by hand. Lead time is six weeks.
+          The stone you are shown is the stone you receive — each is photographed and logged
+          before it leaves the bench.
+        </p>
+      </article>
+    </div>
+
+    <figure class="craft__fig craft__fig--wide">
+      <img src="assets/img/craft-macro.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Macro detail of the granulated silver dome and kite-set garnet.">
+      <figcaption>Sanguine Signet — granulated dome, kite-set garnet, 12mm across the table.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  FOOTER  ───────────────────────────── -->
+<footer class="footer" id="stockists">
+  <div class="footer__grid">
+    <div class="footer__col">
+      <p class="footer__label">Stockists</p>
+      <ul>
+        <li>Dover Street, London</li>
+        <li>Palais-Royal, Paris</li>
+        <li>Aoyama, Tokyo</li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__label">Client</p>
+      <ul>
+        <li><a href="#care">Care &amp; repair</a></li>
+        <li><a href="#sizing">Sizing</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__label">Enquiries</p>
+      <ul>
+        <li><a href="mailto:atelier@frostbyte.example">atelier@frostbyte.example</a></li>
+        <li>+44 20 7000 0000</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="footer__mark" aria-hidden="true">FrostByte<sup>®</sup></p>
+
+  <p class="footer__fine">
+    © 2026 FrostByte®. An independent design study — the label, prices and stockists are fictional.
+  </p>
+</footer>
+
+<noscript>
+  <style>
+    .hero{height:100svh}
+    .hero__pin{position:relative}
+    .hero__chrome,.callout{opacity:1}
+    .callout{position:static;margin:0 auto}
+    .hero__video{display:none}
+    .hero__frame{background:#fff url(assets/media/poster.jpg) center/cover no-repeat}
+  </style>
+</noscript>
+
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+/* ═══════════════════════════════════════════════════════════════════
+   FrostByte® — statement rings
+   High-contrast monochrome. One accent, sampled from the garnet in the
+   campaign film (#6F1B29). No radii, no gradients, no shadows.
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ink:        #0b0b0c;   /* near-black */
+  --ink-2:      #4a4a50;   /* secondary text */
+  --ink-3:      #8c8c93;   /* tertiary / meta */
+  --paper:      #ffffff;   /* pure white */
+  --paper-2:    #f4f4f6;   /* plate ground, sampled from the studio wall */
+  --rule:       #e3e3e6;   /* hairline */
+  --garnet:     #6f1b29;   /* sampled from the garnet cabochon */
+
+  --pad:        clamp(1.125rem, 3.6vw, 3.25rem);
+  --gutter:     clamp(1.25rem, 3vw, 3rem);
+
+  --display:    'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --body:       'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* The campaign film is 1080 × 1934 (0.5584:1). The plate is sized as a
+     fraction of viewport height rather than the raw ratio, so cover trims
+     the dead white above her head and the dead black below the hem while
+     keeping both hands — and therefore both rings — inside the frame. */
+  --film-ratio: 0.55843;
+  --plate-k:    0.62;
+  --plate-w:    min(100vw, calc(100svh * 0.62));
+
+  --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+ul { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3, p, figure, figcaption { margin: 0; }
+
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--garnet); color: var(--paper); }
+
+:focus-visible {
+  outline: 1px solid var(--garnet);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transform: translateY(-110%);
+}
+.skip:focus { transform: translateY(0); }
+
+/* ── shared type ─────────────────────────────────────────────────── */
+
+.eyebrow,
+.topbar__mark,
+.nav a,
+.callout__idx,
+.callout__meta,
+.card__name,
+.card__price,
+.section-head__n,
+.note__n,
+.footer__label,
+.footer__fine,
+.hero__cue {
+  font-family: var(--body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* ═══════════════════════  HERO  ═══════════════════════════════════ */
+
+.hero {
+  position: relative;
+  /* 100vh of pin + 300vh of scroll travel */
+  height: 400svh;
+  background: var(--paper);
+}
+
+.hero__pin {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* Stage: the film sits as a full-height portrait plate. On viewports
+   narrower than the film's own aspect (phones, portrait tablets) the plate
+   is the whole viewport and object-fit: cover crops it, exactly as intended.
+   On wide viewports the plate keeps the film's ratio so both hands — and
+   therefore both rings the callouts point at — stay in frame. */
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+}
+
+.hero__frame {
+  position: relative;
+  height: 100%;
+  width: var(--plate-w);
+  margin-inline: auto;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: var(--paper-2);
+}
+
+/* Scrim — inside the plate only, never over the paper. The film's hem is
+   mostly the black roll-neck already; this settles the light gaps beside it
+   so the white half of the wordmark reads across the whole plate. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(11,11,12,0.82) 0,
+    rgba(11,11,12,0.46) 10%,
+    rgba(11,11,12,0) 22%);
+}
+
+/* ── chrome: nav, cart ───────────────────────────────────────────── */
+
+.hero__chrome {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--pad);
+  padding-top: max(var(--pad), env(safe-area-inset-top));
+  padding-bottom: max(var(--pad), env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+.hero__chrome a { pointer-events: auto; }
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.topbar__mark {
+  color: var(--ink-2);
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.75rem);
+}
+
+.nav ul {
+  display: flex;
+  gap: clamp(1.25rem, 2.6vw, 2.5rem);
+}
+
+.nav a {
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
+  color: var(--ink);
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.35s var(--ease), color 0.35s var(--ease);
+}
+.nav a:hover { border-color: var(--garnet); color: var(--garnet); }
+
+.cart {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  color: var(--ink);
+  transition: color 0.35s var(--ease);
+}
+.cart:hover { color: var(--garnet); }
+.cart svg { shape-rendering: crispEdges; }
+.cart__count {
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The wordmark. Two stacked copies of the same string: near-black
+   underneath for the paper, pure white on top clipped to the film plate. */
+.wordmark {
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: max(var(--pad), env(safe-area-inset-bottom));
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(3rem, 14.5vw, 13.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.045em;
+  pointer-events: none;
+  /* line-height 0.82 puts the descenders outside the line box; without the
+     slack the tail of the 'y' is clipped by the pin's overflow */
+  padding-bottom: 0.2em;
+}
+
+.wordmark__layer { display: block; }
+
+.wordmark__layer--ink { color: var(--ink); }
+
+.wordmark__layer--paper {
+  position: absolute;
+  inset: 0;
+  color: var(--paper);
+  /* Clipped to the plate, then held off a further 14% of the plate's width.
+     Measured across the whole scrub, the plate's leftmost 14% at this height
+     is the lit studio wall behind her arm — the one part of the film where
+     white type would disappear. The ink layer shows through there instead,
+     so the flip lands between the 't' and the 'B'. */
+  clip-path: inset(
+    -50%
+    calc(50% - var(--plate-w) / 2)
+    -50%
+    calc(50% - var(--plate-w) / 2 + var(--plate-w) * 0.14)
+  );
+}
+
+/* Portrait viewports: the plate is the whole screen and the wordmark sits in
+   the bottom band, which is roll-neck all the way across. All white. */
+@media (max-aspect-ratio: 62 / 100) {
+  .wordmark__layer--paper { clip-path: none; }
+}
+
+/* The date mark has nowhere to go once the nav needs the full width */
+@media (max-width: 48rem) {
+  .topbar__mark { display: none; }
+  .topbar { justify-content: flex-end; }
+}
+
+.wordmark sup {
+  font-size: 0.22em;
+  font-weight: 400;
+  letter-spacing: 0;
+  top: -1.9em;
+  vertical-align: super;
+}
+
+/* No clip-path — fall back to a single wordmark and a hem dark enough to
+   carry it right across the plate */
+@supports not (clip-path: inset(0 1px 0)) {
+  .wordmark__layer--paper { display: none; }
+  .hero__scrim {
+    inset: 0 -100vw;
+    background: linear-gradient(to top, rgba(11,11,12,0.94) 0, rgba(11,11,12,0) 26%);
+  }
+  .wordmark__layer--ink { color: var(--paper); }
+}
+
+.hero__cue {
+  position: absolute;
+  right: var(--pad);
+  bottom: max(var(--pad), env(safe-area-inset-bottom));
+  color: var(--ink-2);
+  font-size: 0.5625rem;
+  letter-spacing: 0.28em;
+}
+.hero__cue span::after {
+  content: '';
+  display: inline-block;
+  width: 2.25rem;
+  height: 1px;
+  margin-left: 0.75rem;
+  vertical-align: 0.28em;
+  background: currentColor;
+  transform-origin: left center;
+  animation: cue 2.6s var(--ease) infinite;
+}
+@keyframes cue {
+  0%, 100% { transform: scaleX(0.35); opacity: 0.4; }
+  50%      { transform: scaleX(1);    opacity: 1; }
+}
+
+/* ── ring callouts ───────────────────────────────────────────────── */
+
+.callout {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.callout__rule {
+  flex: 0 0 auto;
+  width: clamp(2rem, 9vw, 9rem);
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+}
+
+.callout__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: max-content;
+  max-width: min(42vw, 15rem);
+}
+
+.callout__idx   { color: var(--ink-3); font-size: 0.5625rem; letter-spacing: 0.26em; }
+.callout__meta  { color: var(--ink-2); font-size: 0.5625rem; letter-spacing: 0.14em; }
+.callout__price { color: var(--garnet); font-size: 0.625rem; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
+
+.callout__name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(0.95rem, 1.7vw, 1.3rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.15;
+  margin-top: 0.15rem;
+  margin-bottom: 0.15rem;
+}
+
+/* 01 — black onyx, upper hand: sits at the right frame edge, level with
+   the ring on her index finger and clear of both hands and nails */
+.callout--onyx {
+  top: 21%;
+  right: var(--pad);
+  flex-direction: row;
+  text-align: right;
+}
+.callout--onyx .callout__body { align-items: flex-end; }
+.callout--onyx .callout__rule { transform-origin: left center; }
+
+/* 04 — garnet signet, lower hand: left frame edge, held above the wordmark's
+   cap line so the two never sit on top of each other */
+.callout--garnet {
+  top: 54%;
+  left: var(--pad);
+  flex-direction: row-reverse;
+  text-align: left;
+}
+.callout--garnet .callout__body { align-items: flex-start; }
+.callout--garnet .callout__rule { transform-origin: right center; }
+
+/* Portrait: the film covers the whole screen, so there is no paper margin to
+   set the callouts against. Both drop into one slot on the roll-neck — the
+   only band that stays reliably dark right across the scrub — and flip to
+   white. They never coincide, so one slot is enough for both. */
+@media (max-aspect-ratio: 62 / 100) {
+  .callout {
+    /* measured: from 52% down, this strip stays under 60/255 at every point
+       in the scrub, which is what makes one white slot safe for both */
+    top: 53%;
+    left: var(--pad);
+    right: auto;
+    flex-direction: row-reverse;
+    text-align: left;
+    color: var(--paper);
+  }
+  .callout--onyx .callout__body,
+  .callout--garnet .callout__body { align-items: flex-start; max-width: 48vw; }
+  .callout--onyx .callout__rule,
+  .callout--garnet .callout__rule { background: var(--paper); transform-origin: right center; }
+  .callout__idx  { color: rgba(255, 255, 255, 0.55); }
+  .callout__meta { color: rgba(255, 255, 255, 0.72); }
+  /* the sampled garnet is too dark to read on the knit — same hue, lifted */
+  .callout__price { color: #c9414f; }
+
+  .hero__cue { color: rgba(255, 255, 255, 0.7); }
+}
+
+/* ═══════════════════════  STATEMENT  ══════════════════════════════ */
+
+.statement {
+  padding: clamp(6rem, 18vh, 14rem) var(--pad) clamp(5rem, 14vh, 11rem);
+  max-width: 92rem;
+  margin-inline: auto;
+}
+
+.eyebrow { color: var(--ink-3); margin-bottom: clamp(2rem, 6vw, 4rem); }
+
+.statement__h {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 6vw, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  max-width: 20ch;
+}
+
+.statement__p {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  margin-left: auto;
+  max-width: 38ch;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+/* ═══════════════════════  SECTION HEADS  ══════════════════════════ */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: clamp(2.5rem, 7vw, 5rem);
+}
+
+.section-head__h {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.6vw, 2rem);
+  letter-spacing: -0.025em;
+}
+
+.section-head__n { color: var(--ink-3); }
+
+/* ═══════════════════════  COLLECTION  ═════════════════════════════ */
+
+.collection {
+  padding: 0 var(--pad) clamp(6rem, 16vh, 12rem);
+  max-width: 92rem;
+  margin-inline: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(3rem, 7vw, 5.5rem) var(--gutter);
+}
+
+@media (min-width: 48rem) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.card a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  column-gap: 1rem;
+  row-gap: clamp(0.9rem, 1.6vw, 1.35rem);
+}
+
+.card__media {
+  grid-column: 1 / -1;
+  display: block;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+
+.card__media img {
+  width: 100%;
+  height: auto;
+  transform: scale(1);
+  transition: transform 0.9s var(--ease);
+}
+
+@media (hover: hover) {
+  .card a:hover .card__media img { transform: scale(1.028); }
+  .card a:hover .card__name { color: var(--garnet); }
+}
+
+.card__name {
+  letter-spacing: 0.16em;
+  transition: color 0.35s var(--ease);
+}
+
+.card__price {
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ═══════════════════════  CRAFT  ══════════════════════════════════ */
+
+.craft {
+  padding: 0 var(--pad) clamp(6rem, 16vh, 12rem);
+  max-width: 92rem;
+  margin-inline: auto;
+}
+
+.craft__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(3rem, 8vw, 6rem) var(--gutter);
+}
+
+.craft__fig img { width: 100%; height: auto; background: var(--paper-2); }
+
+.craft__fig figcaption {
+  margin-top: 1rem;
+  color: var(--ink-3);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  max-width: 32ch;
+}
+
+.craft__notes {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  align-content: start;
+}
+
+.note__n { color: var(--ink-3); margin-bottom: 0.9rem; }
+
+.note__h {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.7rem;
+}
+
+.note__p {
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  max-width: 46ch;
+}
+
+@media (min-width: 62rem) {
+  .craft__body {
+    grid-template-columns: repeat(12, 1fr);
+    align-items: start;
+  }
+  .craft__fig--tall { grid-column: 1 / span 4; }
+  .craft__notes    { grid-column: 6 / span 4; }
+  .craft__fig--wide{ grid-column: 10 / span 3; margin-top: 18vh; }
+}
+
+/* ═══════════════════════  FOOTER  ═════════════════════════════════ */
+
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: clamp(3rem, 8vw, 5rem) var(--pad) clamp(1.5rem, 3vw, 2.5rem);
+  max-width: 92rem;
+  margin-inline: auto;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2.5rem, 5vw, 3rem) var(--gutter);
+}
+
+@media (min-width: 48rem) {
+  .footer__grid { grid-template-columns: repeat(3, minmax(0, 16rem)); }
+}
+
+.footer__label { color: var(--ink-3); margin-bottom: 1.1rem; }
+
+.footer__col li {
+  font-size: 0.875rem;
+  line-height: 1.9;
+  color: var(--ink-2);
+}
+.footer__col a {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.35s var(--ease), color 0.35s var(--ease);
+}
+.footer__col a:hover { color: var(--garnet); border-color: var(--garnet); }
+
+.footer__mark {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(3rem, 15.5vw, 15rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  margin: clamp(3.5rem, 10vw, 7rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--ink);
+}
+.footer__mark sup {
+  font-size: 0.22em;
+  font-weight: 400;
+  top: -1.9em;
+  vertical-align: super;
+}
+
+.footer__fine {
+  color: var(--ink-3);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  border-top: 1px solid var(--rule);
+  padding-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* ═══════════════════════  STATE  ══════════════════════════════════ */
+
+/* applied by JS only while an element is actually being animated */
+.is-animating { will-change: transform; }
+
+/* Scrub unavailable — reduced motion, iOS WebKit, or a decoder that will
+   not seek. The poster frame stands in and the text choreography plays on
+   over it exactly as designed. */
+.static-hero .hero__video { visibility: hidden; }
+.static-hero .hero__frame {
+  background-image: url('../media/poster.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ═══════════════════════  REDUCED MOTION  ═════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .hero__cue span::after { animation: none; transform: scaleX(1); opacity: 1; }
+
+  .card__media img { transition: none; }
+  .card a:hover .card__media img { transform: none; }
+}

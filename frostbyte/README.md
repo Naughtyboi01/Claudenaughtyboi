@@ -107,18 +107,54 @@ moving.
 - GSAP is vendored from npm rather than a CDN, so the page makes no
   third-party requests.
 
+## Offline
+
+The folder already works with no connection, since the page makes no network
+requests at runtime. For a version you can email, carry on a stick, or open
+with nothing else beside it, there are two single-file builds:
+
+| File | Size | Contents |
+|---|---|---|
+| `frostbyte-offline.html` | 13.5 MB | 1080w H.264 **and** VP9, full-size stills |
+| `frostbyte-offline-mobile.html` | 3.3 MB | 720w H.264 only, 560w stills |
+
+Rebuild after any edit:
+
+```bash
+python3 build-offline.py                   # both
+python3 build-offline.py --profile mobile  # just the light one
+```
+
+The desktop build carries both codecs because an offline file can end up
+anywhere, including a browser built without the proprietary ones. The mobile
+build drops VP9: every phone decodes H.264 in hardware, and that copy would
+otherwise be the largest single thing in the file.
+
+Two things worth knowing about the build:
+
+- The film goes in as base64 on `window.__FROSTBYTE_MEDIA` and is handed to the
+  video element as a **Blob URL**, not a `data:` URI. Media elements want
+  byte-range requests to seek — the same requirement as the served site — and a
+  `data:` source will not scrub reliably. Blob URLs seek fine, and the offline
+  build was checked at 0/40/70/100% off `file://`: identical timings to the
+  served page.
+- `main.js` checks for that global and skips its path-based loading when it is
+  present, so both builds share one codebase with no forked copy to keep in
+  sync.
+
 ## Structure
 
 ```
 index.html
+build-offline.py
 assets/
   css/fonts.css     self-hosted @font-face
   css/style.css
   js/main.js
   vendor/           gsap.min.js, ScrollTrigger.min.js
   fonts/            Archivo (display), Inter (body)
-  media/            hero.mp4, hero.webm, poster.jpg
-  img/              collection and atelier stills
+  media/            hero.mp4, hero.webm, poster.jpg + 720w -sm variants
+  img/              collection and atelier stills, sm/ for the light build
 ```
 
 ## Imagery

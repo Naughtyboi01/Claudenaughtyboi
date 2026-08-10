@@ -46,6 +46,37 @@
   var seekStartedAt = 0;
   var seekFailures = 0;
   var rafId = 0;
+  var blobURL = '';
+
+  /* The offline build defines window.__FROSTBYTE_MEDIA with the film as
+     base64 instead of shipping files beside the page. It is handed over as a
+     Blob URL rather than a data: URI — media elements want byte-range
+     requests to seek, and a data: source will not scrub reliably. */
+  function toBlobURL(b64, type) {
+    var bin = atob(b64);
+    var bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return URL.createObjectURL(new Blob([bytes], { type: type }));
+  }
+
+  function filmSource() {
+    /* H.264 first — it has hardware decode almost everywhere, which is what
+       makes seeking cheap. VP9 covers builds shipped without the proprietary
+       codecs (Chromium on Linux, most notably). */
+    var canMp4 = video.canPlayType('video/mp4; codecs="avc1.4d401f"');
+    var preferMp4 = (canMp4 === 'probably' || canMp4 === 'maybe');
+    var inline = window.__FROSTBYTE_MEDIA;
+
+    if (inline) {
+      if (preferMp4 && inline.mp4)  blobURL = toBlobURL(inline.mp4, 'video/mp4');
+      else if (inline.webm)         blobURL = toBlobURL(inline.webm, 'video/webm');
+      else if (inline.mp4)          blobURL = toBlobURL(inline.mp4, 'video/mp4');
+      return blobURL;
+    }
+    return preferMp4
+      ? video.getAttribute('data-src')
+      : video.getAttribute('data-src-webm');
+  }
 
   function goStatic(reason) {
     if (!scrubEnabled) return;
@@ -53,6 +84,7 @@
     root.classList.add('static-hero');
     if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     if (video) { video.removeAttribute('src'); video.load(); }
+    if (blobURL) { URL.revokeObjectURL(blobURL); blobURL = ''; }
     if (window.console && console.info) {
       console.info('[FrostByte] scrub disabled — ' + reason + '; showing the poster frame.');
     }
@@ -96,13 +128,7 @@
       }
     };
 
-    /* H.264 first — it has hardware decode almost everywhere, which is what
-       makes seeking cheap. VP9 covers builds shipped without the
-       proprietary codecs (Chromium on Linux, most notably). */
-    var mp4 = video.canPlayType('video/mp4; codecs="avc1.4d401f"');
-    video.src = (mp4 === 'probably' || mp4 === 'maybe')
-      ? video.getAttribute('data-src')
-      : video.getAttribute('data-src-webm');
+    video.src = filmSource();
     video.load();
     rafId = requestAnimationFrame(pump);
   }

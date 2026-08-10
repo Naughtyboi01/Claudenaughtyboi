@@ -142,6 +142,37 @@ Two things worth knowing about the build:
   present, so both builds share one codebase with no forked copy to keep in
   sync.
 
+## Demo
+
+`demo/frostbyte-demo.mp4` — a 63-second walkthrough at 1440×900, recorded off
+the offline file rather than a served copy. `demo/frostbyte-demo-720p.mp4` is
+the same cut at 1152×720.
+
+```bash
+node record-demo.js                                   # -> demo/*.webm
+node record-demo.js frostbyte-offline.html 1440 900   # explicit
+```
+
+The scroll is an eased timeline whose stops are measured from the page's own
+geometry, so each one lands where it should. It comes to a **full stop wherever
+product information appears** — the Obsidian Signet callout at 40% of the hero
+pin, the Sanguine Signet at 70%, then each row of the collection grid — and
+holds 3.4s at each, long enough to read the name and the price.
+
+The script prints a `trim:` value on exit. That is the dead air at the head
+while the film decodes; pass it to `ffmpeg -ss` when encoding.
+
+Both cuts carry a **silent AAC track**, bt709 tags and Main/4.0 — video-only
+MP4s are refused by a fair number of players. `frostbyte-demo.html` and
+`frostbyte-demo-720p.html` wrap the same footage as self-contained player
+pages, with a Save button that writes the .mp4 back out, for when a desktop
+player is being difficult.
+
+One caveat: the hero film in the recording plays from the **VP9** copy, because
+the Chromium used to record has no H.264 decoder. In a normal browser the page
+uses the H.264 copy. This is also why the mobile build cannot be recorded — it
+ships H.264 only, so it would record as the static poster.
+
 ## Structure
 
 ```

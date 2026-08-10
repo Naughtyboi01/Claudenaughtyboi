@@ -52,7 +52,7 @@ PAGE = """<!DOCTYPE html>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' fill='%23d7ff3b' text-anchor='middle'%3E95%3C/text%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0b0c'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='17' fill='%23{accent_uri}' text-anchor='middle'%3E{mark}%3C/text%3E%3C/svg%3E" />
 <style>
 @font-face {{ font-family:'Instrument Serif'; font-style:normal; font-weight:400; font-display:swap;
   src:url('{serif}') format('woff2'); }}
@@ -74,8 +74,8 @@ h1 {{ font-family:'Instrument Serif',Georgia,serif; font-weight:400;
   font-size:clamp(26px,3.4vw,46px); line-height:1; letter-spacing:-.02em; }}
 h1 em {{ font-style:italic; color:#c6b49b; }}
 .meta {{ font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:#8a8175; }}
-.dot {{ display:inline-block; width:5px; height:5px; border-radius:50%; background:#d7ff3b;
-  box-shadow:0 0 0 3px rgba(215,255,59,.18); margin-right:8px; }}
+.dot {{ display:inline-block; width:5px; height:5px; border-radius:50%; background:#{accent};
+  box-shadow:0 0 0 3px #{accent}30; margin-right:8px; }}
 
 figure {{ max-width:1400px; width:100%; margin-inline:auto; }}
 video {{ width:100%; height:auto; display:block; background:#000;
@@ -100,7 +100,7 @@ video {{ width:100%; height:auto; display:block; background:#000;
 <body>
 
 <header>
-  <h1>Air Max 95 — <em>demo</em></h1>
+  <h1>{heading}</h1>
   <span class="meta"><i class="dot"></i>{label} · {duration} · {size}</span>
 </header>
 
@@ -157,6 +157,10 @@ def main():
     ap.add_argument('video', help='path to the .mp4 to wrap')
     ap.add_argument('-o', '--out', help='output .html (defaults alongside the video)')
     ap.add_argument('--label', default='', help='short label shown in the header')
+    ap.add_argument('--title', default='Air Max 95 — demo', help='page title')
+    ap.add_argument('--heading', default='', help='header HTML (defaults to the title, em after the dash)')
+    ap.add_argument('--accent', default='d7ff3b', help='accent colour, hex without the hash')
+    ap.add_argument('--mark', default='95', help='one or two characters for the favicon')
     args = ap.parse_args()
 
     video = Path(args.video).resolve()
@@ -185,7 +189,11 @@ def main():
     poster = poster_frame(video)
 
     page = PAGE.format(
-        title=f'Air Max 95 — demo',
+        title=args.title,
+        heading=args.heading or args.title.replace(' — ', ' — <em>') + ('</em>' if ' — ' in args.title else ''),
+        accent=args.accent.lstrip('#'),
+        accent_uri=args.accent.lstrip('#'),
+        mark=args.mark,
         label=args.label or video.stem,
         duration=duration,
         size=f'{size_mb:.1f} MB',

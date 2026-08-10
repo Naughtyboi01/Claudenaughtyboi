@@ -21,10 +21,13 @@ const FILE = path.resolve(process.argv[2] || path.join(__dirname, 'frostbyte-off
 const W = parseInt(process.argv[3] || '1440', 10);
 const H = parseInt(process.argv[4] || '900', 10);
 const OUT = process.argv[5] || path.join(__dirname, 'demo');
-/* Pace multiplier. 2 halves every travel and hold, which is a true 2x cut at
-   the full frame rate — speeding the finished file up with setpts would throw
-   away every other frame and make the eased travel visibly choppy. */
+/* Pace multipliers, travel and hold kept separate. Getting a faster cut this
+   way rather than speeding the finished file up with setpts matters: at 25fps
+   setpts throws away every other frame and leaves the eased travel choppy.
+   Splitting the two lets the scroll move briskly while the stops still hold
+   long enough to read a name and a price. Holds default to the travel pace. */
 const SPEED = parseFloat(process.argv[6] || '1');
+const HOLD_SPEED = parseFloat(process.argv[7] || String(SPEED));
 
 (async () => {
   const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
@@ -87,9 +90,10 @@ const SPEED = parseFloat(process.argv[6] || '1');
 
   for (const s of stops) {
     s.travel = Math.round(s.travel / SPEED);
-    s.hold = Math.round(s.hold / SPEED);
+    s.hold = Math.round(s.hold / HOLD_SPEED);
   }
-  console.log(`pace: ${SPEED}x  (holds ${Math.round(3400 / SPEED)}ms at each callout)`);
+  console.log(`pace: travel ${SPEED}x, holds ${HOLD_SPEED}x ` +
+              `(${Math.round(3400 / HOLD_SPEED)}ms at each callout)`);
 
   // ── drive it ───────────────────────────────────────────────────────────
   const headMs = Date.now() - t0;

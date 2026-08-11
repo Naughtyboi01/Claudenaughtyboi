@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    FrostByte® — statement rings
-   High-contrast monochrome. One accent, sampled from the garnet in the
-   campaign film (#6F1B29). No radii, no gradients, no shadows.
+   High-contrast monochrome. One accent, sampled from the dress in the
+   campaign film (#902C5B). No radii, no gradients, no shadows.
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -9,9 +9,9 @@
   --ink-2:      #4a4a50;   /* secondary text */
   --ink-3:      #8c8c93;   /* tertiary / meta */
   --paper:      #ffffff;   /* pure white */
-  --paper-2:    #f4f4f6;   /* plate ground, sampled from the studio wall */
+  --paper-2:    #e7ecef;   /* plate ground, sampled from the studio wall */
   --rule:       #e3e3e6;   /* hairline */
-  --garnet:     #6f1b29;   /* sampled from the garnet cabochon */
+  --accent:     #902c5b;   /* sampled from the dress — 7.8:1 on white */
 
   --pad:        clamp(1.125rem, 3.6vw, 3.25rem);
   --gutter:     clamp(1.25rem, 3vw, 3rem);
@@ -19,13 +19,16 @@
   --display:    'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --body:       'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  /* The campaign film is 1080 × 1934 (0.5584:1). The plate is sized as a
-     fraction of viewport height rather than the raw ratio, so cover trims
-     the dead white above her head and the dead black below the hem while
-     keeping both hands — and therefore both rings — inside the frame. */
-  --film-ratio: 0.55843;
-  --plate-k:    0.62;
-  --plate-w:    min(100vw, calc(100svh * 0.62));
+  /* The campaign film is 1280 × 656 (1.951:1) once the watermark strip is
+     cropped off the bottom. Landscape footage fills a landscape viewport
+     outright, so the plate only needs constraining on portrait screens —
+     capping its height there keeps roughly the middle half of the film's
+     width visible, which is exactly the span the rings occupy. */
+  --film-ratio: 1.9512;
+  /* svh, not %: the frame is a centred grid item, so a percentage height has
+     no definite basis to resolve against and the film falls back to its own
+     intrinsic ratio — letterboxing a viewport it should be filling. */
+  --plate-h:    min(100svh, calc(100vw * 1.025));
 
   --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -57,10 +60,10 @@ h1, h2, h3, p, figure, figcaption { margin: 0; }
 
 a { color: inherit; text-decoration: none; }
 
-::selection { background: var(--garnet); color: var(--paper); }
+::selection { background: var(--accent); color: var(--paper); }
 
 :focus-visible {
-  outline: 1px solid var(--garnet);
+  outline: 1px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -115,22 +118,25 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-/* Stage: the film sits as a full-height portrait plate. On viewports
-   narrower than the film's own aspect (phones, portrait tablets) the plate
-   is the whole viewport and object-fit: cover crops it, exactly as intended.
-   On wide viewports the plate keeps the film's ratio so both hands — and
-   therefore both rings the callouts point at — stay in frame. */
+/* Stage: the film is landscape, so on a landscape viewport it simply fills
+   it — object-fit: cover, object-position: center, full bleed, no letterbox.
+   Portrait screens are the awkward case: covering a phone would show only the
+   middle quarter of the film's width and cut the outer rings off both hands.
+   There the plate's height is capped instead, so it becomes a full-width band
+   with paper above and below, holding roughly the middle half of the width —
+   the exact span the rings occupy. */
 .hero__stage {
   position: absolute;
   inset: 0;
+  display: grid;
+  align-content: center;
   background: var(--paper);
 }
 
 .hero__frame {
   position: relative;
-  height: 100%;
-  width: var(--plate-w);
-  margin-inline: auto;
+  width: 100%;
+  height: var(--plate-h);
   background: var(--paper-2);
   overflow: hidden;
 }
@@ -143,17 +149,20 @@ a { color: inherit; text-decoration: none; }
   background: var(--paper-2);
 }
 
-/* Scrim — inside the plate only, never over the paper. The film's hem is
-   mostly the black roll-neck already; this settles the light gaps beside it
-   so the white half of the wordmark reads across the whole plate. */
+/* Scrim — inside the plate only, never over the paper. This film is high-key
+   throughout, so the wordmark is near-black and the scrim lifts rather than
+   darkens: the one place dark type struggles is the saturated fold of the
+   dress along the hem, which a white wash takes from 2.8:1 to about 10:1.
+   It also lets the film dissolve into the page below instead of butting
+   against it. */
 .hero__scrim {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(to top,
-    rgba(11,11,12,0.82) 0,
-    rgba(11,11,12,0.46) 10%,
-    rgba(11,11,12,0) 22%);
+    rgba(255,255,255,0.72) 0,
+    rgba(255,255,255,0.5) 10%,
+    rgba(255,255,255,0) 26%);
 }
 
 /* ── chrome: nav, cart ───────────────────────────────────────────── */
@@ -203,7 +212,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid transparent;
   transition: border-color 0.35s var(--ease), color 0.35s var(--ease);
 }
-.nav a:hover { border-color: var(--garnet); color: var(--garnet); }
+.nav a:hover { border-color: var(--accent); color: var(--accent); }
 
 .cart {
   display: flex;
@@ -212,7 +221,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink);
   transition: color 0.35s var(--ease);
 }
-.cart:hover { color: var(--garnet); }
+.cart:hover { color: var(--accent); }
 .cart svg { shape-rendering: crispEdges; }
 .cart__count {
   font-size: 0.5625rem;
@@ -222,8 +231,11 @@ a { color: inherit; text-decoration: none; }
   font-variant-numeric: tabular-nums;
 }
 
-/* The wordmark. Two stacked copies of the same string: near-black
-   underneath for the paper, pure white on top clipped to the film plate. */
+/* The wordmark. The previous film was a dark roll-neck against a lit wall and
+   needed two clipped layers to stay legible across the seam. This one is
+   high-key end to end — pale backdrop, blush dress, blonde hair — so a single
+   near-black setting reads everywhere, with the hem scrim covering the one
+   saturated fold that would otherwise drop under 3:1. */
 .wordmark {
   position: absolute;
   left: var(--pad);
@@ -241,32 +253,7 @@ a { color: inherit; text-decoration: none; }
   padding-bottom: 0.2em;
 }
 
-.wordmark__layer { display: block; }
-
-.wordmark__layer--ink { color: var(--ink); }
-
-.wordmark__layer--paper {
-  position: absolute;
-  inset: 0;
-  color: var(--paper);
-  /* Clipped to the plate, then held off a further 14% of the plate's width.
-     Measured across the whole scrub, the plate's leftmost 14% at this height
-     is the lit studio wall behind her arm — the one part of the film where
-     white type would disappear. The ink layer shows through there instead,
-     so the flip lands between the 't' and the 'B'. */
-  clip-path: inset(
-    -50%
-    calc(50% - var(--plate-w) / 2)
-    -50%
-    calc(50% - var(--plate-w) / 2 + var(--plate-w) * 0.14)
-  );
-}
-
-/* Portrait viewports: the plate is the whole screen and the wordmark sits in
-   the bottom band, which is roll-neck all the way across. All white. */
-@media (max-aspect-ratio: 62 / 100) {
-  .wordmark__layer--paper { clip-path: none; }
-}
+.wordmark__layer { display: block; color: var(--ink); }
 
 /* The date mark has nowhere to go once the nav needs the full width */
 @media (max-width: 48rem) {
@@ -346,7 +333,7 @@ a { color: inherit; text-decoration: none; }
 
 .callout__idx   { color: var(--ink-3); font-size: 0.5625rem; letter-spacing: 0.26em; }
 .callout__meta  { color: var(--ink-2); font-size: 0.5625rem; letter-spacing: 0.14em; }
-.callout__price { color: var(--garnet); font-size: 0.625rem; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
+.callout__price { color: var(--accent); font-size: 0.625rem; letter-spacing: 0.14em; font-variant-numeric: tabular-nums; }
 
 .callout__name {
   font-family: var(--display);
@@ -359,54 +346,43 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 0.15rem;
 }
 
-/* 01 — black onyx, upper hand: sits at the right frame edge, level with
-   the ring on her index finger and clear of both hands and nails */
-.callout--onyx {
-  top: 21%;
-  right: var(--pad);
-  flex-direction: row;
-  text-align: right;
-}
-.callout--onyx .callout__body { align-items: flex-end; }
-.callout--onyx .callout__rule { transform-origin: left center; }
+/* The hands rise into the middle of the frame and converge, so the clear
+   space is no longer a band down each side — at ring height the arms leave
+   only about a sixth of the width free, too narrow to set a name and a price
+   in. What is genuinely open is the backdrop either side of her head. Both
+   callouts sit up there on landscape screens, flanking her, each with a rule
+   running inward toward the hand it names.
 
-/* 04 — garnet signet, lower hand: left frame edge, held above the wordmark's
-   cap line so the two never sit on top of each other */
-.callout--garnet {
-  top: 54%;
+   Portrait is the opposite case: the film is a band with paper above and
+   below, so the callouts go on the paper and never touch the film at all. */
+
+.callout--papillon {
+  top: 12%;
   left: var(--pad);
   flex-direction: row-reverse;
   text-align: left;
 }
-.callout--garnet .callout__body { align-items: flex-start; }
-.callout--garnet .callout__rule { transform-origin: right center; }
+.callout--papillon .callout__body { align-items: flex-start; }
+.callout--papillon .callout__rule { transform-origin: right center; }
 
-/* Portrait: the film covers the whole screen, so there is no paper margin to
-   set the callouts against. Both drop into one slot on the roll-neck — the
-   only band that stays reliably dark right across the scrub — and flip to
-   white. They never coincide, so one slot is enough for both. */
-@media (max-aspect-ratio: 62 / 100) {
-  .callout {
-    /* measured: from 52% down, this strip stays under 60/255 at every point
-       in the scrub, which is what makes one white slot safe for both */
-    top: 53%;
-    left: var(--pad);
-    right: auto;
-    flex-direction: row-reverse;
-    text-align: left;
-    color: var(--paper);
-  }
-  .callout--onyx .callout__body,
-  .callout--garnet .callout__body { align-items: flex-start; max-width: 48vw; }
-  .callout--onyx .callout__rule,
-  .callout--garnet .callout__rule { background: var(--paper); transform-origin: right center; }
-  .callout__idx  { color: rgba(255, 255, 255, 0.55); }
-  .callout__meta { color: rgba(255, 255, 255, 0.72); }
-  /* the sampled garnet is too dark to read on the knit — same hue, lifted */
-  .callout__price { color: #c9414f; }
-
-  .hero__cue { color: rgba(255, 255, 255, 0.7); }
+.callout--rose {
+  top: 76%;
+  right: var(--pad);
+  flex-direction: row;
+  text-align: right;
 }
+.callout--rose .callout__body { align-items: flex-end; }
+.callout--rose .callout__rule { transform-origin: left center; }
+
+@media (min-aspect-ratio: 39 / 40) {
+  .callout--papillon { top: 17%; }
+  /* clear of the nav above it, clear of her hair to the right */
+  .callout--rose { top: 17%; }
+}
+/* Everything the film sits on is near-white, and the callouts now land on the
+   backdrop or on the paper rather than on a dark knit, so they keep the
+   page's own ink and accent throughout — no inverted portrait variant, and no
+   lifted stand-in for an accent that was too dark to read. */
 
 /* ═══════════════════════  STATEMENT  ══════════════════════════════ */
 
@@ -499,7 +475,7 @@ a { color: inherit; text-decoration: none; }
 
 @media (hover: hover) {
   .card a:hover .card__media img { transform: scale(1.028); }
-  .card a:hover .card__name { color: var(--garnet); }
+  .card a:hover .card__name { color: var(--accent); }
 }
 
 .card__name {
@@ -601,7 +577,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 1px solid transparent;
   transition: border-color 0.35s var(--ease), color 0.35s var(--ease);
 }
-.footer__col a:hover { color: var(--garnet); border-color: var(--garnet); }
+.footer__col a:hover { color: var(--accent); border-color: var(--accent); }
 
 .footer__mark {
   font-family: var(--display);
@@ -637,7 +613,13 @@ a { color: inherit; text-decoration: none; }
    over it exactly as designed. */
 .static-hero .hero__video { visibility: hidden; }
 .static-hero .hero__frame {
-  background-image: url('../media/poster.jpg');
+  /* Not frame 0. The hands start below the frame on this film and rise into
+     it, so the opening frame has no rings in it at all — and the callouts
+     still play here. The static fallback uses the settled frame instead, the
+     one moment that carries every piece the labels name. The <video> element
+     keeps frame 0 as its poster, so the scrubbing path still opens on the
+     same image it is about to show. */
+  background-image: url('../media/poster-static.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

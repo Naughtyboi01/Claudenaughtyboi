@@ -18,7 +18,7 @@ move. Python's `http.server` is the common offender. Every real static host
 
 `.hero` is 400svh tall. GSAP ScrollTrigger pins `.hero__pin` from the top of
 that section to its bottom — 300svh of travel — and maps the range onto the
-film's full 0–5.042s with `scrub: true`.
+film's full 0–3.042s with `scrub: true`.
 
 Seeks are applied on a `requestAnimationFrame` pump rather than straight out of
 the scroll handler. Assigning `currentTime` faster than the decoder can answer
@@ -27,18 +27,25 @@ target and issues one seek at a time, gated on `seeked`.
 
 ### The film
 
-Re-encoded from the 2152×3852 / 24fps source:
+Re-encoded from the 1280×720 / 24fps source:
 
 ```bash
-ffmpeg -i input.mp4 -vf scale=1080:-2 -c:v libx264 -crf 23 -g 1 \
-       -pix_fmt yuv420p -movflags +faststart hero.mp4
+ffmpeg -i input.mp4 -vf crop=1280:656:0:0 -c:v libx264 -crf 23 -g 1 \
+       -pix_fmt yuv420p -movflags +faststart -an hero.mp4
 ffmpeg -i hero.mp4 -vf "select=eq(n\,0)" -vframes 1 poster.jpg
 ```
 
 `-g 1` makes every frame a keyframe, which is what lets the browser land on any
 requested time instead of snapping to the nearest I-frame. `+faststart` moves
 the moov atom to the front so playback can begin before the download finishes.
-The cost is size: 5.0 MB for 5 seconds.
+At 3 seconds and 1280 wide that costs 1.5 MB — a third of what the previous
+portrait film did.
+
+**The crop is not cosmetic.** The supplied clip carries a KlingAI watermark
+across the bottom right, y≈664–702. Cutting the frame to 656 removes it with
+8px to spare, and costs nothing that matters: the watermark sits on flat
+backdrop in every frame, and the gesture is well clear of it. `-an` drops the
+audio track, which a muted, scroll-driven hero has no use for.
 
 A VP9 `.webm` ships alongside it, chosen via `canPlayType` for builds without
 the proprietary codecs. H.264 is preferred where available — hardware decode is
@@ -46,44 +53,55 @@ what makes seeking cheap.
 
 ### Framing
 
-The film is portrait, 0.5584:1. Covering a 16:9 desktop viewport with it would
-show a horizontal band about 35% of the frame's height — which cuts off the
-onyx ring on the upper hand *and* the garnet signet on the lower one, the two
-things the scroll choreography exists to point at.
+The film is landscape, 1.951:1, so a landscape viewport it simply fills —
+`object-fit: cover`, `object-position: center`, full bleed, no letterbox. A
+1440×900 screen shows the middle 82% of the width, and every ring lives well
+inside that.
 
-So the video element is a full-height plate, `0.62 × viewport height` wide,
-centred on paper. `object-fit: cover` with `object-position: center` is still
-what fills it: on portrait viewports the plate *is* the viewport and the film
-crops as intended, and on wide viewports the plate's own ratio means cover trims
-only the dead white above her head and the dead black below the hem. Both hands
-stay in frame at every width.
+Portrait screens are the awkward case. Covering a 390×844 phone would show only
+the middle **quarter** of the film's width, cutting the outer rings off both
+hands. So the plate's height is capped there instead —
+`min(100svh, 100vw × 1.025)` — which turns it into a full-width band with paper
+above and below, holding roughly the middle half of the width. That is exactly
+the span the rings occupy.
+
+One trap worth recording: the frame is a centred grid item, so a *percentage*
+height has no definite basis to resolve against and the film silently falls back
+to its own intrinsic ratio — letterboxing a viewport it should be filling. The
+cap has to be in `svh`.
 
 ### Typography over the film
 
-The wordmark crosses the plate's left edge, so it has to be legible on paper and
-on a black roll-neck at once. It ships as two stacked copies: near-black
-underneath, white on top clipped to the plate — inset by a further 14% of the
-plate width, because that leftmost strip is the lit studio wall behind her arm
-at every point in the scrub. The flip lands between the `t` and the `B`.
+This film is high-key end to end — pale backdrop, blush dress, blonde hair — so
+the wordmark is a single near-black setting and reads over all of it. The one
+exception is the saturated fold of the dress along the hem, where near-black
+falls to about 2.8:1; a white scrim over the bottom 26% of the plate lifts that
+to roughly 10:1 and lets the film dissolve into the page below rather than
+butting against it.
 
-A `mix-blend-mode: difference` layer does this in one element, and was the first
-attempt. It turns teal over skin tones, which is out of key for a page with one
-accent colour.
-
-On portrait viewports the plate fills the screen, the wordmark sits in the
-bottom band — roll-neck all the way across — and the whole thing goes white.
+The previous portrait film needed considerably more than this — two clipped
+copies of the wordmark to survive the seam between a lit wall and a black
+roll-neck. None of that machinery survives the swap, which is the point: the
+footage changed, so the fix it demanded went with it.
 
 ### Callouts
 
-Ring labels are real HTML text, never baked into the film. Both resolve exactly
-on their cue: `01 Obsidian Signet` at 40% of the pin, `04 Sanguine Signet` at
-70%, each fading and sliding in over the 10% before it.
+Ring labels are real HTML text, never baked into the film.
 
-On wide viewports they sit at opposite frame edges, clear of the hands and the
-nails. On portrait there is no paper margin to sit against, so they share one
-slot on the roll-neck and flip to white — measured across the scrub, the strip
-from 52% down stays under 60/255 at every point, which is what makes one slot
-safe for both. They never coincide in time, so one is enough.
+The hands start *below* the frame here and rise through it, which moves the
+cues. At 40% of the pin the left hand is still low and its butterfly sits behind
+the wordmark's cap line, so a label there would point at something you cannot
+see; measured across the scrub it clears at about 52%. The right hand is settled
+by 70%, so that checkpoint stands as briefed. `01 Papillon` resolves at 52%,
+`04 Rose Cabochon` at 70%.
+
+Placement moved too. The hands converge in the middle of the frame and their
+arms leave only about a sixth of the width free at ring height — too narrow to
+set a name and a price in. What *is* open is the backdrop either side of her
+head, so on landscape screens both callouts sit up there flanking her, each with
+a rule running inward toward the hand it names. On portrait the film is a band
+with paper above and below, so they go on the paper and never touch the film at
+all.
 
 ## Degradation
 
@@ -115,8 +133,8 @@ with nothing else beside it, there are two single-file builds:
 
 | File | Size | Contents |
 |---|---|---|
-| `frostbyte-offline.html` | 13.5 MB | 1080w H.264 **and** VP9, full-size stills |
-| `frostbyte-offline-mobile.html` | 3.3 MB | 720w H.264 only, 560w stills |
+| `frostbyte-offline.html` | 5.0 MB | 1280w H.264 **and** VP9, full-size stills |
+| `frostbyte-offline-mobile.html` | 1.5 MB | 854w H.264 only, 560w stills |
 
 Rebuild after any edit:
 
@@ -162,13 +180,14 @@ Holds default to the travel pace when omitted.
 Get a faster cut this way rather than speeding the finished file up with
 `setpts` — at 25fps that would throw away every other frame and leave the eased
 travel visibly choppy. Re-recording keeps all 25 unique frames per second
-(1207 frames over 48.3s in the shipped cut).
+(1197 frames over 47.9s in the shipped cut).
 
 The scroll is an eased timeline whose stops are measured from the page's own
 geometry, so each one lands where it should. It comes to a **full stop wherever
-product information appears** — the Obsidian Signet callout at 40% of the hero
-pin, the Sanguine Signet at 70%, then each row of the collection grid — holding
-3.4s at each.
+product information appears** — the Papillon callout at 52% of the hero pin, the
+Rose Cabochon at 70%, then each row of the collection grid — holding 3.4s at
+each. The two hero stops are read off the same checkpoints as `main.js`; move
+one and the other has to follow.
 
 The script prints a `trim:` value on exit. That is the dead air at the head
 while the film decodes; pass it to `ffmpeg -ss` when encoding.
@@ -195,17 +214,21 @@ assets/
   js/main.js
   vendor/           gsap.min.js, ScrollTrigger.min.js
   fonts/            Archivo (display), Inter (body)
-  media/            hero.mp4, hero.webm, poster.jpg + 720w -sm variants
+  media/            hero.mp4, hero.webm, poster.jpg + 854w -sm variants
   img/              collection and atelier stills, sm/ for the light build
 ```
 
 ## Imagery
 
-Every still on the page is cut from the campaign film at native resolution, so
-the grid and the editorial sections carry the same cold, even studio light as
-the hero. Two of the six collection tiles fall against her black roll-neck
-rather than the white wall — that is where those rings are worn, and the grid
-reads the better for the rhythm.
+Every still on the page is cut from the campaign film, so the grid and the
+editorial sections carry the same cold, even studio light as the hero.
+
+Worth knowing before you enlarge anything: this source is 1280×720, against the
+2152×3852 of the film it replaced. Tight ring crops are therefore upscaled about
+2× to reach 720×900, which holds up at the size the grid actually renders them
+but will not survive a lightbox or a print. If those tiles ever need to be
+sharp, they need shooting — no amount of re-cutting gets detail back out of a
+720p master.
 
 ## Credits
 

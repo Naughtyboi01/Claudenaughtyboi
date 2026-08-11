@@ -73,10 +73,11 @@ const HOLD_SPEED = parseFloat(process.argv[7] || String(SPEED));
     const cards = [...document.querySelectorAll('.card')];
 
     return [
-      // the hero holds at 40% and 70% — where the timeline resolves each callout
+      // the hero holds where the timeline resolves each callout — 52% and 70%.
+      // Keep these in step with the checkpoints in main.js.
       { label: 'wordmark',        y: 0,                     travel: 0,    hold: 1900 },
-      { label: 'onyx callout',    y: heroTravel * 0.40,     travel: 4200, hold: 3400 },
-      { label: 'garnet callout',  y: heroTravel * 0.70,     travel: 3600, hold: 3400 },
+      { label: 'papillon',        y: heroTravel * 0.52,     travel: 4200, hold: 3400 },
+      { label: 'rose cabochon',   y: heroTravel * 0.70,     travel: 3600, hold: 3400 },
       { label: 'hero release',    y: heroTravel,            travel: 3000, hold: 1200 },
       { label: 'statement',       y: centre('.statement'),  travel: 2600, hold: 2400 },
       { label: 'collection head', y: below('.collection .section-head', 0.30), travel: 2400, hold: 1400 },

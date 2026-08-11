@@ -2,7 +2,7 @@
    FrostByte® — scroll choreography
 
    The hero pins for 300vh and maps that range onto the campaign film's
-   full 0–5.04s. Nothing here animates a layout property: the film is
+   full 0–3.04s. Nothing here animates a layout property: the film is
    driven by currentTime, everything else by transform and opacity only.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -26,7 +26,7 @@
 
   /* Nominal duration of the supplied clip; replaced by the real value as
      soon as metadata lands. */
-  var FILM_DURATION = 5.041667;
+  var FILM_DURATION = 3.041667;
 
   /* ── will-change, applied only while something is actually moving ── */
 
@@ -135,9 +135,9 @@
 
   /* ═══════════════  hero timeline  ══════════════════════════════════ */
 
-  var onyx = hero.querySelector('.callout--onyx');
-  var garnet = hero.querySelector('.callout--garnet');
-  var movers = [chrome, wordmark, onyx, garnet];
+  var papillon = hero.querySelector('.callout--papillon');
+  var rose = hero.querySelector('.callout--rose');
+  var movers = [chrome, wordmark, papillon, rose];
 
   var slide = reduced ? 0 : 1;   /* reduced motion keeps the cue, drops the travel */
 
@@ -161,29 +161,34 @@
     }
   });
 
-  /* Chrome and wordmark hold, then leave over the final 20% of the pin.
-     The wordmark is tweened on its own so nothing wraps it in an extra
-     stacking context — that would isolate its difference blend. */
+  /* Chrome and wordmark hold, then leave over the final 20% of the pin. */
   tl.to(chrome, { opacity: 0, duration: 0.2 }, 0.8)
     .to(wordmark, { opacity: 0, duration: 0.2 }, 0.8);
 
-  /* 01 — black onyx, upper hand. Fully resolved at 40% progress. */
-  tl.fromTo(onyx,
-      { opacity: 0, x: 18 * slide },
-      { opacity: 1, x: 0, duration: 0.1 }, 0.30)
-    .fromTo(onyx.querySelector('.callout__rule'),
-      { scaleX: 0 },
-      { scaleX: 1, duration: 0.1 }, 0.32)
-    .to(onyx, { opacity: 0, x: 14 * slide, duration: 0.06 }, 0.52);
+  /* Both labels resolve as their ring becomes readable, which is what the
+     brief asks for — but on this film that is not the same instant it was on
+     the last one. The hands start below the frame and rise through it, so at
+     40% the left hand is still low and its butterfly sits behind the
+     wordmark's cap line. Measured across the scrub, it clears at about 52%.
+     The right hand is settled by 70%, so that checkpoint stands as briefed.
 
-  /* 04 — garnet signet, lower hand. Fully resolved at 70% progress. */
-  tl.fromTo(garnet,
+     01 — Papillon, her left hand. Fully resolved at 52% progress. */
+  tl.fromTo(papillon,
       { opacity: 0, x: -18 * slide },
-      { opacity: 1, x: 0, duration: 0.1 }, 0.60)
-    .fromTo(garnet.querySelector('.callout__rule'),
+      { opacity: 1, x: 0, duration: 0.1 }, 0.42)
+    .fromTo(papillon.querySelector('.callout__rule'),
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.1 }, 0.62)
-    .to(garnet, { opacity: 0, x: -14 * slide, duration: 0.06 }, 0.84);
+      { scaleX: 1, duration: 0.1 }, 0.44)
+    .to(papillon, { opacity: 0, x: -14 * slide, duration: 0.06 }, 0.58);
+
+  /* 04 — Rose Cabochon, her right hand. Fully resolved at 70% progress. */
+  tl.fromTo(rose,
+      { opacity: 0, x: 18 * slide },
+      { opacity: 1, x: 0, duration: 0.1 }, 0.62)
+    .fromTo(rose.querySelector('.callout__rule'),
+      { scaleX: 0 },
+      { scaleX: 1, duration: 0.1 }, 0.64)
+    .to(rose, { opacity: 0, x: 14 * slide, duration: 0.06 }, 0.86);
 
   /* ═══════════════  section reveals  ════════════════════════════════ */
 

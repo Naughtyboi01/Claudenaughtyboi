@@ -33,6 +33,7 @@ PROFILES = {
         "out": "frostbyte-offline.html",
         "img": ASSETS / "img",
         "poster": ASSETS / "media" / "poster.jpg",
+        "poster-static": ASSETS / "media" / "poster-static.jpg",
         # both codecs: an offline file may be opened anywhere, including
         # browsers built without the proprietary ones
         "film": [("mp4", ASSETS / "media" / "hero.mp4"),
@@ -42,6 +43,7 @@ PROFILES = {
         "out": "frostbyte-offline-mobile.html",
         "img": ASSETS / "img" / "sm",
         "poster": ASSETS / "media" / "poster-sm.jpg",
+        "poster-static": ASSETS / "media" / "poster-static-sm.jpg",
         # H.264 only: every phone decodes it in hardware, and the VP9 copy
         # would be the single largest thing in the file
         "film": [("mp4", ASSETS / "media" / "hero-sm.mp4")],
@@ -60,7 +62,7 @@ def data_uri(path: Path) -> str:
     return f"data:{mime};base64,{b64(path)}"
 
 
-def inline_css(css_path: Path, poster: Path) -> str:
+def inline_css(css_path: Path, posters: dict) -> str:
     """Inline a stylesheet's own url() references."""
     css = css_path.read_text(encoding="utf-8")
 
@@ -68,8 +70,9 @@ def inline_css(css_path: Path, poster: Path) -> str:
         raw = match.group(1).strip("'\"")
         if raw.startswith(("data:", "http:", "https:")):
             return match.group(0)
-        # poster.jpg is swapped for the profile's own copy
-        target = poster if Path(raw).name.startswith("poster") else (css_path.parent / raw).resolve()
+        # posters are swapped for the profile's own copies, by stem
+        stem = Path(raw).stem
+        target = posters[stem] if stem in posters else (css_path.parent / raw).resolve()
         if not target.exists():
             sys.exit(f"missing asset referenced by {css_path.name}: {raw}")
         return f"url('{data_uri(target)}')"
@@ -86,13 +89,15 @@ def build(profile_name: str) -> Path:
     p = PROFILES[profile_name]
     html = (HERE / "index.html").read_text(encoding="utf-8")
 
-    for path in [p["poster"], *(f for _, f in p["film"])]:
+    posters = {"poster": p["poster"], "poster-static": p["poster-static"]}
+
+    for path in [*posters.values(), *(f for _, f in p["film"])]:
         if not path.exists():
             sys.exit(f"missing media for the {profile_name} profile: {path.relative_to(HERE)}")
 
     # ── stylesheets ──────────────────────────────────────────────────────
     styles = "\n".join(
-        inline_css(ASSETS / "css" / name, p["poster"]) for name in ("fonts.css", "style.css")
+        inline_css(ASSETS / "css" / name, posters) for name in ("fonts.css", "style.css")
     )
     html = re.sub(
         r'<link rel="stylesheet" href="assets/css/fonts\.css">\s*'
